@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLL CMS | Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <div>
+          <h1>MLL CMS</h1>
+          <p>Content Management Dashboard</p>
+        </div>
+      </div>
+      <button id="logout-btn" class="btn btn-ghost hidden" type="button">Log out</button>
+    </header>
+
+    <main class="content">
+      <section id="login-section" class="panel login-panel">
+        <h2>Sign in</h2>
+        <p class="muted">Access is restricted to authorized team members.</p>
+        <div id="login-error" class="message error hidden" role="alert"></div>
+        <form id="login-form" class="stack">
+          <label class="field">
+            <span>Username</span>
+            <input type="text" id="username" required>
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input type="password" id="password" required>
+          </label>
+          <button type="submit" class="btn btn-primary">Sign in</button>
+        </form>
+      </section>
+
+      <section id="admin-section" class="panel hidden">
+        <h2>Manage Content</h2>
+        <p class="muted">Choose a section below to manage records on dedicated pages.</p>
+        <div class="card-grid dashboard-grid">
+          <article class="attorney-item">
+            <h3>Attorneys</h3>
+            <p class="meta">View attorney list, filter by last-name letter, and edit records on a dedicated page.</p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="/admin/attorneys">Open Attorneys</a>
+            </div>
+          </article>
+          <article class="attorney-item">
+            <h3>Practice Areas</h3>
+            <p class="meta">Manage practice entries and edit each record on its own page.</p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="/admin/practices">Open Practice Areas</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/js/pages/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLL CMS | Attorney Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <div>
+          <h1>MLL CMS</h1>
+          <p>Attorney Editor</p>
+        </div>
+      </div>
+      <button id="logout-btn" class="btn btn-ghost" type="button">Log out</button>
+    </header>
+
+    <main class="content">
+      <section class="panel">
+        <a class="back-link" href="/admin/attorneys" aria-label="Back to attorneys">&#8592;</a>
+        <h2 id="form-title">Add Attorney</h2>
+        <div id="page-message" class="message hidden" role="alert"></div>
+
+        <form id="attorney-form" class="grid-form">
+          <input type="hidden" id="attorney-id">
+          <input type="hidden" id="photo-url">
+          <input type="hidden" id="practice-areas-json">
+
+          <label class="field field-half">
+            <span>Name</span>
+            <input type="text" id="name" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Title</span>
+            <input type="text" id="title" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Display Order (CMS only)</span>
+            <input type="number" id="display-order" min="0" step="1" value="100" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Specialty</span>
+            <input type="text" id="specialty" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Office Location</span>
+            <select id="location" required>
+              <option value="">Select office</option>
+              <option value="Milwaukee, WI">Milwaukee, WI</option>
+              <option value="Portland, ME">Portland, ME</option>
+              <option value="Albuqueque, NM">Albuqueque, NM</option>
+              <option value="Kansas City, KS">Kansas City, KS</option>
+              <option value="San Antonio, TX">San Antonio, TX</option>
+              <option value="Ann Arbor, MI">Ann Arbor, MI</option>
+              <option value="Chicago, IL">Chicago, IL</option>
+              <option value="Jacksonville, FL">Jacksonville, FL</option>
+              <option value="San Diego, CA">San Diego, CA</option>
+            </select>
+          </label>
+
+          <label class="field field-half">
+            <span>Photo</span>
+            <input type="file" id="photo" accept="image/*">
+          </label>
+
+          <div class="field field-half photo-preview-field">
+            <span>Current / Selected Photo</span>
+            <div class="photo-preview-wrap">
+              <img id="photo-preview" class="photo-preview hidden" alt="Attorney preview">
+              <p id="photo-preview-empty" class="muted">No image selected yet.</p>
+            </div>
+          </div>
+
+          <label class="field field-half inline-field">
+            <span>Entry Status</span>
+            <label class="toggle-row">
+              <input type="checkbox" id="attorney-active" checked>
+              <span>Active (visible on site)</span>
+            </label>
+          </label>
+
+          <label class="field field-full">
+            <span>Areas of Practice</span>
+            <div class="practice-editor">
+              <div class="practice-input-row">
+                <input type="text" id="practice-area-input" placeholder="Add area (e.g., Personal Injury)">
+                <button id="add-practice-area" type="button" class="btn btn-ghost">Add</button>
+              </div>
+              <div id="practice-areas-list" class="practice-areas-list"></div>
+            </div>
+          </label>
+
+          <label class="field field-full">
+            <span>Bio</span>
+            <textarea id="bio" rows="6" required></textarea>
+          </label>
+
+          <div class="form-actions field-full">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-ghost" href="/admin/attorneys">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/js/pages/attorneys/form.js"></script>
+</body>
+</html>

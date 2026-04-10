@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLL CMS | Practice Area Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <div>
+          <h1>MLL CMS</h1>
+          <p>Practice Area Editor</p>
+        </div>
+      </div>
+      <button id="logout-btn" class="btn btn-ghost" type="button">Log out</button>
+    </header>
+
+    <main class="content">
+      <section class="panel">
+        <a class="back-link" href="/admin/practices" aria-label="Back to practice areas">&#8592;</a>
+        <h2 id="form-title">Add Practice Area</h2>
+        <div id="page-message" class="message hidden" role="alert"></div>
+
+        <form id="practice-form" class="grid-form">
+          <input type="hidden" id="practice-id">
+
+          <label class="field field-half">
+            <span>Slug</span>
+            <input type="text" id="practice-slug" placeholder="fire-explosion" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Title</span>
+            <input type="text" id="practice-title" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Image URL</span>
+            <input type="url" id="practice-image-url" placeholder="https://...">
+          </label>
+
+          <label class="field field-half">
+            <span>CTA Button Text</span>
+            <input type="text" id="practice-button-text" value="Free Case Review">
+          </label>
+
+          <label class="field field-half inline-field">
+            <span>Entry Status</span>
+            <label class="toggle-row">
+              <input type="checkbox" id="practice-active" checked>
+              <span>Active (visible on site)</span>
+            </label>
+          </label>
+
+          <label class="field field-full">
+            <span>Short Description</span>
+            <textarea id="practice-description" rows="3" required></textarea>
+          </label>
+
+          <label class="field field-full">
+            <span>Page Content</span>
+            <textarea id="practice-content" rows="7" required></textarea>
+          </label>
+
+          <div class="form-actions field-full">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-ghost" href="/admin/practices">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/js/pages/practices/form.js"></script>
+</body>
+</html>

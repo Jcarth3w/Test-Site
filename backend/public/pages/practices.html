@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLL CMS | Practice Areas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <div>
+          <h1>MLL CMS</h1>
+          <p>Practice Areas</p>
+        </div>
+      </div>
+      <button id="logout-btn" class="btn btn-ghost" type="button">Log out</button>
+    </header>
+
+    <main class="content">
+      <section class="panel">
+        <a class="back-link" href="/admin" aria-label="Back to dashboard">&#8592;</a>
+        <div class="panel-head">
+          <div>
+            <h2>Practice Areas</h2>
+            <p class="muted">Manage practice entries and publish/deactivate as needed.</p>
+          </div>
+          <a class="btn btn-primary" href="/admin/practices/form">Add Practice Area</a>
+        </div>
+
+        <div id="page-message" class="message hidden" role="alert"></div>
+        <div id="practice-list" class="card-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/js/pages/practices/list.js"></script>
+</body>
+</html>
