@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
+import { getApiBaseUrl } from '../../services/apiBaseUrl';
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+const API_BASE_URL = getApiBaseUrl();
 
 function slugifyName(name = '') {
   return name

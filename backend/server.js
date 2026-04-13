@@ -25,6 +25,33 @@ const PORT = getPort();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'jcarthew@mlllaw.com';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'MLLlaw2026!';
+const DB_PATH = process.env.SQLITE_PATH || path.join(__dirname, 'attorneys.db');
+const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, 'uploads');
+
+function parseCsvEnv(value = '') {
+  return String(value)
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+const ALLOWED_ORIGINS = parseCsvEnv(process.env.ALLOWED_ORIGINS);
+
+function corsOriginHandler(origin, callback) {
+  // Allow non-browser requests (curl, health checks, same-origin server calls).
+  if (!origin) return callback(null, true);
+
+  if (ALLOWED_ORIGINS.length === 0) {
+    // Keep local setup simple if no explicit allowlist is provided.
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('CORS origin denied'));
+  }
+
+  if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+  return callback(new Error('CORS origin denied'));
+}
 
 const logsDir = path.join(__dirname, 'logs');
 if (!fs.existsSync(logsDir)) {
@@ -32,6 +59,15 @@ if (!fs.existsSync(logsDir)) {
 }
 
 const opsLogPath = path.join(logsDir, 'operations.log');
+
+const dbDir = path.dirname(DB_PATH);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
+
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
 
 function logLine(line) {
   const timestamp = new Date().toISOString();
@@ -172,7 +208,11 @@ function ensureColumn(table, column, definition) {
 }
 
 // Middleware
-app.use(cors());
+app.set('trust proxy', 1);
+app.use(cors({
+  origin: corsOriginHandler,
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.static('public'));
 app.use((req, res, next) => {
@@ -184,7 +224,7 @@ app.use((req, res, next) => {
 });
 
 // Database setup
-const db = new sqlite3.Database('./attorneys.db', (err) => {
+const db = new sqlite3.Database(DB_PATH, (err) => {
   if (err) {
     console.error('Error opening database:', err.message);
     logOperation('DB_CONNECT_ERROR', { error: err.message });
@@ -614,11 +654,7 @@ app.delete('/api/practices/:id', authenticateToken, (req, res) => {
 // File upload setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = 'uploads/';
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir);
-    }
-    cb(null, uploadDir);
+    cb(null, UPLOAD_DIR);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -635,7 +671,7 @@ app.post('/api/upload', authenticateToken, upload.single('photo'), (req, res) =>
 });
 
 // Serve uploaded files
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(UPLOAD_DIR));
 
 // Serve admin interface pages
 app.get('/admin', (req, res) => {

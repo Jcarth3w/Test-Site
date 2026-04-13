@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicAttorneys } from '../../../services/attorneysApi';
+import { getApiBaseUrl } from '../../../services/apiBaseUrl';
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+const API_BASE_URL = getApiBaseUrl();
 
 function getLastName(name = '') {
   const parts = name.trim().split(/\s+/);

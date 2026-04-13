@@ -1,29 +1,42 @@
 .hero-slider {
   position: relative;
-  height: min(78vh, 760px);
+  height: min(72vh, 700px);
   min-height: 540px;
   overflow: hidden;
   isolation: isolate;
 }
 
 .slides {
-  display: flex;
+  position: relative;
   height: 100%;
-  transition: transform 0.55s ease;
 }
 
 .slide {
-  min-width: 100%;
-  position: relative;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
+  opacity: 0;
+  transition: opacity 700ms ease;
+  pointer-events: none;
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero-image-slide {
+  background-image: var(--hero-slide-image);
+  background-size: cover;
+  background-position: center;
 }
 
 .slide::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.2), transparent 38%);
+  background: radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.22), transparent 42%);
   pointer-events: none;
 }
 
@@ -31,45 +44,25 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, rgba(9, 21, 40, 0.88) 0%, rgba(9, 21, 40, 0.72) 50%, rgba(9, 21, 40, 0.34) 100%);
+  background: linear-gradient(105deg, rgba(9, 21, 40, 0.78) 0%, rgba(9, 21, 40, 0.62) 55%, rgba(9, 21, 40, 0.45) 100%);
   pointer-events: none;
 }
 
-.hero-theme-fire {
-  background:
-    linear-gradient(120deg, #1e3452 0%, #2f5e89 45%, #6f8db0 100%),
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 12px);
-}
-
-.hero-theme-litigation {
-  background:
-    linear-gradient(130deg, #15253c 0%, #1f496f 48%, #47739d 100%),
-    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 14px);
-}
-
-.hero-theme-results {
-  background:
-    linear-gradient(125deg, #10243d 0%, #2b5f8f 46%, #6389b3 100%),
-    repeating-linear-gradient(38deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 10px);
-}
-
-.slide-content {
+.hero-banner-content {
   position: absolute;
   z-index: 2;
-  inset: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   max-width: 1200px;
-  margin: 0 auto;
-  padding: clamp(4.5rem, 8vh, 6rem) 2rem 2.5rem;
-  display: grid;
-  align-content: center;
-  justify-items: start;
-  text-align: left;
+  width: min(92%, 1040px);
+  padding: 1.2rem 0.6rem;
+  text-align: center;
   color: white;
-  max-width: 760px;
 }
 
 .hero-eyebrow {
-  margin: 0 0 0.8rem;
+  margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.78rem;
@@ -77,24 +70,35 @@
   color: rgba(255, 255, 255, 0.82);
 }
 
-.slide-content h1 {
-  margin: 0;
-  font-size: clamp(2rem, 4.6vw, 3.45rem);
+.hero-banner-content h1 {
+  margin: 0.62rem 0 0;
+  font-size: clamp(2rem, 5vw, 3.65rem);
   letter-spacing: -0.02em;
-  line-height: 1.05;
+  line-height: 1.03;
   color: #f7fbff;
+  text-shadow: 0 10px 26px rgba(4, 11, 20, 0.7);
 }
 
-.slide-content p {
-  margin: 1rem 0 0;
-  font-size: clamp(1rem, 1.4vw, 1.16rem);
-  line-height: 1.55;
-  color: rgba(236, 243, 251, 0.92);
+.hero-image-caption {
+  position: absolute;
+  bottom: 1.35rem;
+  left: 1.35rem;
+  z-index: 2;
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(235, 243, 251, 0.9);
+  border: 1px solid rgba(235, 243, 251, 0.26);
+  border-radius: 999px;
+  background: rgba(11, 26, 45, 0.44);
+  padding: 0.34rem 0.7rem;
 }
 
 .hero-actions {
-  margin-top: 1.55rem;
+  margin-top: 1.25rem;
   display: flex;
+  justify-content: center;
   gap: 0.8rem;
   flex-wrap: wrap;
 }
@@ -179,18 +183,17 @@
 
 @media (max-width: 768px) {
   .hero-slider {
-    min-height: 500px;
-    height: 76vh;
+    min-height: 480px;
+    height: 68vh;
   }
 
-  .slide-content {
-    padding: 4rem 1.15rem 2.3rem;
-    justify-items: center;
-    text-align: center;
+  .hero-banner-content {
+    width: min(94%, 760px);
+    padding: 1rem 0.45rem;
   }
 
-  .hero-actions {
-    justify-content: center;
+  .hero-banner-content h1 {
+    font-size: clamp(1.7rem, 8vw, 2.45rem);
   }
 
   .prev,
@@ -198,11 +201,9 @@
     display: none;
   }
 
-  .slide-content h1 {
-    font-size: clamp(1.75rem, 7vw, 2.4rem);
-  }
-
-  .slide-content p {
-    font-size: 0.96rem;
+  .hero-image-caption {
+    bottom: 0.9rem;
+    left: 0.9rem;
+    font-size: 0.72rem;
   }
 }

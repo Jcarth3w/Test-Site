@@ -1,0 +1,36 @@
+.home-eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #3b638c;
+}
+
+.home-pill-link {
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid #aec5dd;
+  color: #2f5e89;
+  background: #f8fbff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.58rem 1.1rem;
+}
+
+.home-pill-link:hover {
+  background: #ecf4fd;
+}
+
+.home-section-head.align-left {
+  margin: 0 0 1.45rem;
+  text-align: left;
+}
+
+.home-section-head h2 {
+  margin: 0.45rem 0 0;
+  font-size: clamp(1.65rem, 3.2vw, 2.45rem);
+  color: #1f476f;
+  line-height: 1.18;
+}

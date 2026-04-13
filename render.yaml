@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: test-site-backend
+    env: node
+    rootDir: backend
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/public/practices
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://test-site-frontend.onrender.com
+      - key: SQLITE_PATH
+        value: /var/data/attorneys.db
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+    disks:
+      - name: app-data
+        mountPath: /var/data
+        sizeGB: 1
+
+  - type: static
+    name: test-site-frontend
+    rootDir: .
+    buildCommand: npm install ; npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: VITE_API_BASE_URL
+        value: https://test-site-backend.onrender.com

@@ -1,0 +1,84 @@
+.home-scroll-sections {
+  padding: 3.4rem 2rem 2.2rem;
+  background: #f9fcff;
+}
+
+.home-scroll-sections .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.scroll-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.15rem;
+  align-items: center;
+  margin-bottom: 1.4rem;
+}
+
+.scroll-story:last-child {
+  margin-bottom: 0;
+}
+
+.scroll-story.reverse {
+  direction: rtl;
+}
+
+.scroll-story.reverse > * {
+  direction: ltr;
+}
+
+.scroll-story-copy {
+  border: 1px solid #d7e5f2;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(31, 71, 111, 0.08);
+  padding: 1.35rem;
+  text-align: left;
+}
+
+.scroll-story-copy h2 {
+  margin: 0.45rem 0 0;
+  color: #214e78;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  line-height: 1.2;
+}
+
+.scroll-story-copy p {
+  margin-top: 0.65rem;
+  color: #577089;
+  line-height: 1.62;
+}
+
+.scroll-story-copy .home-pill-link {
+  margin-top: 0.9rem;
+}
+
+.scroll-story-image {
+  min-height: 290px;
+  border-radius: 16px;
+  border: 1px solid #d2e1ef;
+  box-shadow: 0 16px 34px rgba(31, 71, 111, 0.13);
+  background-image:
+    linear-gradient(145deg, rgba(17, 50, 84, 0.2), rgba(17, 50, 84, 0.4)),
+    var(--scroll-story-image);
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 1024px) {
+  .scroll-story {
+    grid-template-columns: 1fr;
+  }
+
+  .scroll-story.reverse {
+    direction: ltr;
+  }
+}
+
+@media (max-width: 680px) {
+  .home-scroll-sections {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

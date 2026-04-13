@@ -23,8 +23,8 @@ The server will run on http://localhost:5000
 
 ## Default Login
 
-- Username: `admin`
-- Password: `admin123`
+- Username: `ADMIN_USERNAME` env var value
+- Password: `ADMIN_PASSWORD` env var value
 
 ## API Endpoints
 
@@ -51,7 +51,30 @@ The app uses SQLite (`attorneys.db`) which will be created automatically on firs
 
 ## Security Notes
 
-- Change the default password in production
-- Use environment variables for JWT_SECRET
-- Add proper CORS configuration for production
+- Set strong values for `ADMIN_PASSWORD` and `JWT_SECRET` in production
+- Set `ALLOWED_ORIGINS` to your frontend domain(s)
 - Consider using a more robust database like PostgreSQL for production
+
+## Render Deployment (Web Service)
+
+Use these settings:
+
+- Root Directory: `backend`
+- Build Command: `npm install`
+- Start Command: `npm start`
+- Disk mount (recommended): `/var/data`
+
+Required env vars:
+
+- `JWT_SECRET=<strong random value>`
+- `ADMIN_USERNAME=<admin email>`
+- `ADMIN_PASSWORD=<strong password>`
+- `ALLOWED_ORIGINS=https://<your-frontend>.onrender.com`
+- `SQLITE_PATH=/var/data/attorneys.db`
+- `UPLOAD_DIR=/var/data/uploads`
+
+You can provide multiple origins as CSV:
+
+```
+ALLOWED_ORIGINS=https://www.yourdomain.com,https://your-frontend.onrender.com
+```

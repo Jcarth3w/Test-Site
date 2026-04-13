@@ -3,7 +3,7 @@ import '../styles/HeroSlider.css';
 import { homeContent } from '../content/homeContent';
 
 const HeroSlider = () => {
-  const slides = homeContent.heroSlides;
+  const slides = homeContent.heroImageSlides;
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -18,21 +18,27 @@ const HeroSlider = () => {
 
   return (
     <section className="hero-slider">
-      <div className="slides" style={{ transform: `translateX(-${current * 100}%)` }}>
+      <div className="slides">
         {slides.map((slide, index) => (
-          <div key={index} className={`slide ${slide.theme}`}>
-            <div className="slide-content">
-              <p className="hero-eyebrow">{slide.eyebrow}</p>
-              <h1>{slide.title}</h1>
-              <p>{slide.subtitle}</p>
-              <div className="hero-actions">
-                <a href={slide.ctaLink} className="hero-btn hero-btn-primary">{slide.ctaLabel}</a>
-                <a href={homeContent.heroSecondaryCta.link} className="hero-btn hero-btn-secondary">{homeContent.heroSecondaryCta.label}</a>
-              </div>
-            </div>
+          <div
+            key={index}
+            className={`slide hero-image-slide ${index === current ? 'active' : ''}`}
+            style={{ '--hero-slide-image': `url("${slide.image}")` }}
+          >
+            <p className="hero-image-caption">{slide.caption}</p>
           </div>
         ))}
       </div>
+
+      <div className="hero-banner-content">
+        <p className="hero-eyebrow">{homeContent.heroBanner.eyebrow}</p>
+        <h1>{homeContent.heroBanner.tagline}</h1>
+        <div className="hero-actions">
+          <a href={homeContent.heroBanner.primaryCtaLink} className="hero-btn hero-btn-primary">{homeContent.heroBanner.primaryCtaLabel}</a>
+          <a href={homeContent.heroBanner.secondaryCtaLink} className="hero-btn hero-btn-secondary">{homeContent.heroBanner.secondaryCtaLabel}</a>
+        </div>
+      </div>
+
       <button className="prev" onClick={prevSlide}>❮</button>
       <button className="next" onClick={nextSlide}>❯</button>
       <div className="indicators">
