@@ -6,12 +6,19 @@ import './styles/PracticeAreas.css';
 const PracticeAreas = () => {
   const [practices, setPractices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
-      const data = await fetchPracticeAreas();
-      setPractices(data);
-      setLoading(false);
+      try {
+        const data = await fetchPracticeAreas();
+        setPractices(data);
+      } catch (error) {
+        setErrorMessage('Unable to load practice areas right now. Please try again shortly.');
+        setPractices([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadData();
@@ -28,6 +35,8 @@ const PracticeAreas = () => {
       <section className="practices-grid">
         <div className="container">
           {loading && <p>Loading practice areas...</p>}
+          {!loading && errorMessage && <p>{errorMessage}</p>}
+          {!loading && !errorMessage && practices.length === 0 && <p>No practice areas are currently published.</p>}
           <div className="grid">
             {practices.map((practice) => (
               <div key={practice.slug} className="practice-card">

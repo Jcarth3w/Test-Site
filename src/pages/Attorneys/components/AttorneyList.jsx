@@ -31,6 +31,7 @@ const AttorneyList = () => {
   const [selectedPosition, setSelectedPosition] = useState('all');
   const [selectedPracticeArea, setSelectedPracticeArea] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
@@ -52,6 +53,7 @@ const AttorneyList = () => {
         });
         setAttorneys(sorted);
       } catch (error) {
+        setErrorMessage('Unable to load attorneys right now. Please try again shortly.');
         setAttorneys([]);
       } finally {
         setLoading(false);
@@ -130,7 +132,8 @@ const AttorneyList = () => {
     <section className="attorney-list">
       <div className="container">
         {loading && <p>Loading attorneys...</p>}
-        {!loading && attorneys.length === 0 && <p>No attorneys are currently published.</p>}
+        {!loading && errorMessage && <p>{errorMessage}</p>}
+        {!loading && !errorMessage && attorneys.length === 0 && <p>No attorneys are currently published.</p>}
         {!loading && attorneys.length > 0 && (
           <div className="attorney-layout">
             <aside className="attorney-filters" aria-label="Attorney filters">

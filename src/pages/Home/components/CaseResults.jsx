@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import '../styles/CaseResults.css';
 import { homeContent } from '../content/homeContent';
 
@@ -18,7 +19,7 @@ const CaseResults = () => {
           ))}
         </div>
         <div className="results-cta">
-          <a href={results.ctaLink} className="btn btn-outline">{results.ctaLabel}</a>
+          <Link to={results.ctaLink} className="btn btn-outline">{results.ctaLabel}</Link>
         </div>
       </div>
     </section>

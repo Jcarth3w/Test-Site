@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/HeroSlider.css';
 import { homeContent } from '../content/homeContent';
 
@@ -34,8 +35,8 @@ const HeroSlider = () => {
         <p className="hero-eyebrow">{homeContent.heroBanner.eyebrow}</p>
         <h1>{homeContent.heroBanner.tagline}</h1>
         <div className="hero-actions">
-          <a href={homeContent.heroBanner.primaryCtaLink} className="hero-btn hero-btn-primary">{homeContent.heroBanner.primaryCtaLabel}</a>
-          <a href={homeContent.heroBanner.secondaryCtaLink} className="hero-btn hero-btn-secondary">{homeContent.heroBanner.secondaryCtaLabel}</a>
+          <Link to={homeContent.heroBanner.primaryCtaLink} className="hero-btn hero-btn-primary">{homeContent.heroBanner.primaryCtaLabel}</Link>
+          <Link to={homeContent.heroBanner.secondaryCtaLink} className="hero-btn hero-btn-secondary">{homeContent.heroBanner.secondaryCtaLabel}</Link>
         </div>
       </div>
 

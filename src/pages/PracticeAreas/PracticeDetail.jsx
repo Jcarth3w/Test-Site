@@ -7,12 +7,19 @@ const PracticeDetail = () => {
   const { slug } = useParams();
   const [practice, setPractice] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const loadPractice = async () => {
-      const data = await fetchPracticeBySlug(slug);
-      setPractice(data);
-      setLoading(false);
+      try {
+        const data = await fetchPracticeBySlug(slug);
+        setPractice(data);
+      } catch (error) {
+        setPractice(null);
+        setErrorMessage('Unable to load this practice area right now.');
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadPractice();
@@ -33,7 +40,7 @@ const PracticeDetail = () => {
       <div className="practice-detail-page">
         <div className="container">
           <h1>Practice Area Not Found</h1>
-          <p>The requested practice area could not be found.</p>
+          <p>{errorMessage || 'The requested practice area could not be found.'}</p>
           <Link to="/practice" className="btn btn-primary">View All Practice Areas</Link>
         </div>
       </div>
