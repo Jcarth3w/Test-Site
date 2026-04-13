@@ -17,7 +17,7 @@ services:
       - key: ADMIN_PASSWORD
         sync: false
       - key: ALLOWED_ORIGINS
-        value: https://test-site-vftd.onrender.com
+        value: https://test-site-vtfd.onrender.com,https://mll-backend.onrender.com
       - key: SQLITE_PATH
         value: /var/data/attorneys.db
       - key: UPLOAD_DIR
