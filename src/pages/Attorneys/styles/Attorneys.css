@@ -341,7 +341,7 @@
   display: grid;
   grid-template-columns: minmax(280px, 426px) minmax(0, 1fr);
   gap: 2rem;
-  align-items: start;
+  align-items: center;
   background: #ffffff;
   border: 1px solid #d7e1ec;
   border-radius: 14px;

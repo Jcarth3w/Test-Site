@@ -75,7 +75,7 @@ const AttorneyDetail = () => {
       <section className="attorney-detail">
         <div className="container">
           <Link className="attorney-back" to="/attorneys" aria-label="Back to Attorneys">
-            <span className="attorney-back-icon" aria-hidden="true">\u2190</span>
+            <span className="attorney-back-icon" aria-hidden="true"></span>
             <span>Back to Attorneys</span>
           </Link>
 

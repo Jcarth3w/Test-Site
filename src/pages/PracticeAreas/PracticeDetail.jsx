@@ -52,7 +52,6 @@ const PracticeDetail = () => {
       <section className="practice-hero">
         <div className="container">
           <Link to="/practice" className="practice-back-btn" aria-label="Back to practice areas">
-            <span aria-hidden="true">\u2190</span>
             <span>Back to Practice Areas</span>
           </Link>
           <div className="hero-content">
