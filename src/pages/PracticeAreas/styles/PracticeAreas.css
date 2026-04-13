@@ -42,20 +42,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.practice-card-media {
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 1rem;
-  background: #eef3f9;
-  border: 1px solid #d9e5f1;
-}
 
-.practice-card-image {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  display: block;
-}
 
 .practice-card:hover {
   transform: translateY(-5px);

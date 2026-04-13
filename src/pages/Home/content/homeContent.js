@@ -10,15 +10,15 @@ export const homeContent = {
 
   heroImageSlides: [
     {
-      image: 'https://images.unsplash.com/photo-1582128124301-85b4a9f4f9db?auto=format&fit=crop&w=1800&q=80',
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
       caption: 'Rapid Response in Catastrophic Fire Scenes'
     },
     {
-      image: 'https://images.unsplash.com/photo-1477511801984-4ad318ed9846?auto=format&fit=crop&w=1800&q=80',
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
       caption: 'Forensic and Trial Strategy Under One Roof'
     },
     {
-      image: 'https://images.unsplash.com/photo-1516264663587-5fbf92a6bf4f?auto=format&fit=crop&w=1800&q=80',
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
       caption: 'Courtroom-Ready Representation Nationwide'
     }
   ],
@@ -39,7 +39,7 @@ export const homeContent = {
         'We are known for handling high-stakes fire and explosion matters that demand immediate response, coordinated experts, and disciplined courtroom strategy.',
       ctaLabel: 'Learn About Our Fire and Explosion Work',
       ctaLink: '/practice',
-      image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1400&q=80'
+      image: 'https://images.unsplash.com/photo-1576091160550-112173f7f869?auto=format&fit=crop&w=1400&q=80'
     },
     {
       id: 'unmatched-experience',
@@ -59,13 +59,13 @@ export const homeContent = {
         'While catastrophic fire and explosion litigation is our hallmark, we also bring the same discipline to product liability, personal injury, premises, trucking, professional liability, construction defect, and insurance bad-faith matters.',
       ctaLabel: 'Explore Full Practice Areas',
       ctaLink: '/practice',
-      image: 'https://images.unsplash.com/photo-1453945619913-79ec89a82c51?auto=format&fit=crop&w=1400&q=80'
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=80'
     }
   ],
 
   images: {
-    processSide: 'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?auto=format&fit=crop&w=900&q=80',
-    testimonials: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1100&q=80'
+    processSide: 'https://images.unsplash.com/photo-1531697897236-e289f0ae4d14?auto=format&fit=crop&w=900&q=80',
+    testimonials: 'https://images.unsplash.com/photo-1576091160550-112173f7f869?auto=format&fit=crop&w=1100&q=80'
   },
 
   resultsSection: {

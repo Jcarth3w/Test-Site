@@ -52,14 +52,18 @@ const PracticeDetail = () => {
       <section className="practice-hero">
         <div className="container">
           <Link to="/practice" className="practice-back-btn" aria-label="Back to practice areas">
-            <span>Back to Practice Areas</span>
+            Back to Practice Areas
           </Link>
-          <div className="hero-content">
-            <h1>{practice.title}</h1>
-            <p>{practice.description}</p>
-          </div>
-          <div className="hero-image">
-            <img src={practice.image} alt={practice.title} />
+          <div className="hero-grid">
+            <div className="hero-content">
+              <h1>{practice.title}</h1>
+              <p>{practice.description}</p>
+            </div>
+            {practice.image && (
+              <div className="hero-image">
+                <img src={practice.image} alt={practice.title} />
+              </div>
+            )}
           </div>
         </div>
       </section>
