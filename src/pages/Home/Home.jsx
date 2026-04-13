@@ -21,8 +21,7 @@ const Home = () => {
 
       <footer className="footer">
         <div className="container">
-          <p>&copy; 2024 MLL Law. All rights reserved.</p>
-          <p>Contact us for free case evaluation.</p>
+          <p>© 2012 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
         </div>
       </footer>
     </div>
