@@ -1,4 +1,4 @@
-import { createPractice, getPracticeById, updatePractice } from '../../core/api.js';
+import { createPractice, getPracticeById, updatePractice, uploadPracticeImage } from '../../core/api.js';
 import { bindLogout, getIdFromQuery, requireAuth, toSlug } from '../../core/admin-helpers.js';
 
 if (!requireAuth()) {
@@ -17,6 +17,9 @@ const titleEl = document.getElementById('practice-title');
 const descEl = document.getElementById('practice-description');
 const contentEl = document.getElementById('practice-content');
 const imageUrlEl = document.getElementById('practice-image-url');
+const imageFileEl = document.getElementById('practice-image-file');
+const uploadImageBtn = document.getElementById('upload-practice-image-btn');
+const uploadStatusEl = document.getElementById('upload-practice-image-status');
 const buttonTextEl = document.getElementById('practice-button-text');
 const activeEl = document.getElementById('practice-active');
 
@@ -24,6 +27,12 @@ function showMessage(text, type = 'error') {
   messageEl.textContent = text;
   messageEl.classList.remove('hidden', 'error', 'success');
   messageEl.classList.add(type);
+}
+
+function setUploadStatus(text, type = 'muted') {
+  uploadStatusEl.textContent = text;
+  uploadStatusEl.classList.remove('status-error', 'status-success', 'muted');
+  uploadStatusEl.classList.add(type);
 }
 
 function getPayload() {
@@ -67,6 +76,27 @@ form.addEventListener('submit', async (event) => {
     window.location.href = '/admin/practices';
   } catch (error) {
     showMessage(error.message || 'Save failed');
+  }
+});
+
+uploadImageBtn?.addEventListener('click', async () => {
+  const file = imageFileEl?.files?.[0];
+  if (!file) {
+    setUploadStatus('Please choose an image file first.', 'status-error');
+    return;
+  }
+
+  uploadImageBtn.disabled = true;
+  setUploadStatus('Uploading image...', 'muted');
+
+  try {
+    const uploaded = await uploadPracticeImage(file);
+    imageUrlEl.value = uploaded.photo_url || '';
+    setUploadStatus('Image uploaded successfully. Image URL was filled in.', 'status-success');
+  } catch (error) {
+    setUploadStatus(error.message || 'Image upload failed.', 'status-error');
+  } finally {
+    uploadImageBtn.disabled = false;
   }
 });
 

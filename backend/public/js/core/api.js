@@ -137,3 +137,7 @@ export function uploadPhoto(file) {
     body: formData
   });
 }
+
+export function uploadPracticeImage(file) {
+  return uploadPhoto(file);
+}

@@ -93,6 +93,14 @@ body {
   color: var(--muted);
 }
 
+.status-error {
+  color: var(--danger);
+}
+
+.status-success {
+  color: var(--success);
+}
+
 .stack {
   margin-top: 1rem;
   display: grid;

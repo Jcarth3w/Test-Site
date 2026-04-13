@@ -305,15 +305,36 @@
 }
 
 .attorney-back {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   margin-bottom: 1.5rem;
+  padding: 0.58rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid #bfd0e1;
+  background: #f8fbff;
   color: #2a5f90;
   text-decoration: none;
   font-weight: 700;
+  font-size: 0.9rem;
 }
 
 .attorney-back:hover {
+  background: #edf4fb;
+  border-color: #a8bfd7;
   color: #173e63;
+}
+
+.attorney-back-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #2a5f90;
+  color: #ffffff;
+  font-size: 0.76rem;
 }
 
 .attorney-detail-grid {

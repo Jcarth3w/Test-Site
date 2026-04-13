@@ -74,7 +74,10 @@ const AttorneyDetail = () => {
     <div className="attorneys-page">
       <section className="attorney-detail">
         <div className="container">
-          <Link className="attorney-back" to="/attorneys">\u2190 Back to Attorneys</Link>
+          <Link className="attorney-back" to="/attorneys" aria-label="Back to Attorneys">
+            <span className="attorney-back-icon" aria-hidden="true">\u2190</span>
+            <span>Back to Attorneys</span>
+          </Link>
 
           <div className="attorney-detail-grid">
             {attorney.photo_url && (

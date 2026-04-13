@@ -40,6 +40,9 @@ const PracticeAreas = () => {
           <div className="grid">
             {practices.map((practice) => (
               <div key={practice.slug} className="practice-card">
+                <div className="practice-card-media">
+                  <img src={practice.image} alt={practice.title} className="practice-card-image" loading="lazy" />
+                </div>
                 <h3>{practice.title}</h3>
                 <p>{practice.description}</p>
                 <Link to={`/practice/${practice.slug}`} className="btn btn-primary">
