@@ -70,7 +70,7 @@ Backend (Web Service):
    - `JWT_SECRET=<strong random value>`
    - `ADMIN_USERNAME=<your admin email>`
    - `ADMIN_PASSWORD=<strong password>`
-   - `ALLOWED_ORIGINS=https://<your-frontend>.onrender.com`
+   - `ALLOWED_ORIGINS=https://test-site-vtfd.onrender.com,https://mll-backend.onrender.com`
    - `SQLITE_PATH=/var/data/attorneys.db`
    - `UPLOAD_DIR=/var/data/uploads`
 

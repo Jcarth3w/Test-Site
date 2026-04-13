@@ -36,20 +36,26 @@ function parseCsvEnv(value = '') {
 }
 
 const ALLOWED_ORIGINS = parseCsvEnv(process.env.ALLOWED_ORIGINS);
+const SERVICE_ORIGINS = parseCsvEnv(
+  [process.env.PUBLIC_BASE_URL, process.env.RENDER_EXTERNAL_URL].filter(Boolean).join(',')
+);
+const EFFECTIVE_ALLOWED_ORIGINS = [...new Set([...ALLOWED_ORIGINS, ...SERVICE_ORIGINS])];
 
 function corsOriginHandler(origin, callback) {
   // Allow non-browser requests (curl, health checks, same-origin server calls).
   if (!origin) return callback(null, true);
 
-  if (ALLOWED_ORIGINS.length === 0) {
+  if (EFFECTIVE_ALLOWED_ORIGINS.length === 0) {
     // Keep local setup simple if no explicit allowlist is provided.
     if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) {
       return callback(null, true);
     }
+    logOperation('CORS_ORIGIN_DENIED', { origin, reason: 'no_allowlist_match_local_only' });
     return callback(new Error('CORS origin denied'));
   }
 
-  if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+  if (EFFECTIVE_ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+  logOperation('CORS_ORIGIN_DENIED', { origin, allowed: EFFECTIVE_ALLOWED_ORIGINS });
   return callback(new Error('CORS origin denied'));
 }
 

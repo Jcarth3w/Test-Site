@@ -27,7 +27,10 @@ export async function fetchPracticeAreas() {
     const items = await safeFetch('/api/public/practices');
     return items.map(normalizePractice);
   } catch (error) {
-    return fallbackPractices.map(normalizePractice);
+    if (import.meta.env.DEV) {
+      return fallbackPractices.map(normalizePractice);
+    }
+    throw error;
   }
 }
 
@@ -36,6 +39,9 @@ export async function fetchPracticeBySlug(slug) {
     const item = await safeFetch(`/api/public/practices/${slug}`);
     return normalizePractice(item);
   } catch (error) {
-    return fallbackPractices.map(normalizePractice).find((p) => p.slug === slug) || null;
+    if (import.meta.env.DEV) {
+      return fallbackPractices.map(normalizePractice).find((p) => p.slug === slug) || null;
+    }
+    throw error;
   }
 }

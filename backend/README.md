@@ -69,7 +69,7 @@ Required env vars:
 - `JWT_SECRET=<strong random value>`
 - `ADMIN_USERNAME=<admin email>`
 - `ADMIN_PASSWORD=<strong password>`
-- `ALLOWED_ORIGINS=https://<your-frontend>.onrender.com`
+- `ALLOWED_ORIGINS=https://<your-frontend>.onrender.com,https://<your-backend>.onrender.com`
 - `SQLITE_PATH=/var/data/attorneys.db`
 - `UPLOAD_DIR=/var/data/uploads`
 
