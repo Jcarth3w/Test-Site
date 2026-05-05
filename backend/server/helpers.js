@@ -1,0 +1,87 @@
+const { CANONICAL_OFFICE_BY_KEY } = require('./config');
+
+function normalizeBoolean(value, defaultValue = 1) {
+  if (value === undefined || value === null || value === '') return defaultValue;
+  if (value === true || value === 'true' || value === 1 || value === '1') return 1;
+  return 0;
+}
+
+function normalizeOfficeLocation(value) {
+  const location = (value || '').trim();
+  if (!location) return '';
+  const normalizedKey = location
+    .toLowerCase()
+    .replace(/[.,]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return CANONICAL_OFFICE_BY_KEY.get(normalizedKey) || null;
+}
+
+function normalizeDisplayOrder(value, fallback = 100) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) return fallback;
+  return Math.max(0, parsed);
+}
+
+function normalizePracticeAreas(value) {
+  let list = [];
+
+  if (Array.isArray(value)) {
+    list = value;
+  } else if (typeof value === 'string') {
+    const raw = value.trim();
+    if (!raw) {
+      list = [];
+    } else {
+      try {
+        const parsed = JSON.parse(raw);
+        list = Array.isArray(parsed) ? parsed : raw.split(',');
+      } catch {
+        list = raw.split(',');
+      }
+    }
+  }
+
+  const deduped = [];
+  const seen = new Set();
+
+  list.forEach((item) => {
+    const text = String(item || '').trim();
+    if (!text) return;
+
+    const key = text.toLowerCase();
+    if (seen.has(key)) return;
+
+    seen.add(key);
+    deduped.push(text);
+  });
+
+  return deduped;
+}
+
+function parseStoredPracticeAreas(value) {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function mapAttorneyRow(row) {
+  return {
+    ...row,
+    display_order: normalizeDisplayOrder(row.display_order, 100),
+    practice_areas: parseStoredPracticeAreas(row.practice_areas)
+  };
+}
+
+module.exports = {
+  normalizeBoolean,
+  normalizeOfficeLocation,
+  normalizeDisplayOrder,
+  normalizePracticeAreas,
+  parseStoredPracticeAreas,
+  mapAttorneyRow,
+};

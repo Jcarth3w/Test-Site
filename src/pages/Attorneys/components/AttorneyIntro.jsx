@@ -5,7 +5,7 @@ const AttorneyIntro = () => {
         <p className="attorney-kicker">Our Team</p>
         <h1>Meet Our Attorneys</h1>
         <p>
-          Experienced advocates with focused practice insight and a client-first approach.
+          Experienced defense counsel with focused practice expertise and a strategy-first approach.
         </p>
       </div>
     </section>

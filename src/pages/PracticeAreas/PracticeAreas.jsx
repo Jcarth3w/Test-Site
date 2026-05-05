@@ -29,7 +29,7 @@ const PracticeAreas = () => {
       <section className="page-hero">
         <div className="container">
           <h1>Practice Areas</h1>
-          <p>Our attorneys specialize in catastrophic injury litigation across multiple practice areas.</p>
+          <p>Our attorneys provide experienced defense counsel across multiple practice areas.</p>
         </div>
       </section>
       <section className="practices-grid">

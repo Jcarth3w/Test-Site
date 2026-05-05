@@ -3,8 +3,8 @@ const Results = () => {
     <main className="results-page">
       <section className="page-hero">
         <div className="container">
-          <h1>Recent Verdicts & Settlements</h1>
-          <p>See the outcomes we’ve achieved for clients in complex catastrophic injury and fire-explosion litigation.</p>
+          <h1>Representative Defense Outcomes</h1>
+          <p>See the results we've achieved for our clients through favorable settlements, successful trials, and effective claim management.</p>
         </div>
       </section>
     </main>

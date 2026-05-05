@@ -4,7 +4,7 @@ const Articles = () => {
       <section className="page-hero">
         <div className="container">
           <h1>Insights & News</h1>
-          <p>Explore our latest articles on catastrophic injury litigation, fire and explosion claims, and trial strategy.</p>
+          <p>Explore our latest articles on defense strategy, fire and explosion claims, and litigation insights.</p>
         </div>
       </section>
     </main>

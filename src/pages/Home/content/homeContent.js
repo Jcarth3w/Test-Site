@@ -1,8 +1,8 @@
 export const homeContent = {
   heroBanner: {
     eyebrow: '',
-    tagline: 'The Nation\'s Premier Catastrophic Fire and Explosion Law Firm',
-    primaryCtaLabel: 'Request a Case Evaluation',
+    tagline: 'Defense Counsel for Catastrophic Fire and Explosion Claims',
+    primaryCtaLabel: 'Get Legal Support',
     primaryCtaLink: '/contact',
     secondaryCtaLabel: 'Meet Our Attorneys',
     secondaryCtaLink: '/attorneys'
@@ -11,42 +11,42 @@ export const homeContent = {
   heroImageSlides: [
     {
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
-      caption: 'Rapid Response in Catastrophic Fire Scenes'
+      caption: 'Defense Strategy for Complex Claims'
     },
     {
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
-      caption: 'Forensic and Trial Strategy Under One Roof'
+      caption: 'Forensic Analysis and Expert Coordination'
     },
     {
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
-      caption: 'Courtroom-Ready Representation Nationwide'
+      caption: 'Trial-Ready Defense Nationwide'
     }
   ],
 
   proofItems: [
-    { value: 'Premier Focus', label: 'Catastrophic fire and explosion litigation' },
-    { value: '50 States', label: 'Matters handled nationwide' },
-    { value: 'Thousands', label: 'High-value claims across industries' },
-    { value: 'Trial-Ready', label: 'Built for courtroom outcomes from day one' }
+    { value: 'Premier Focus', label: 'Catastrophic fire and explosion defense' },
+    { value: '50 States', label: 'Defense counsel nationwide' },
+    { value: 'Thousands', label: 'Complex claims managed and resolved' },
+    { value: 'Trial-Ready', label: 'Built for defense outcomes from day one' }
   ],
 
   heroScrollSections: [
     {
       id: 'premier-fire-explosion',
       eyebrow: 'The Premier Focus',
-      title: 'Catastrophic Fire and Explosion Litigation, Built for the Most Complex Losses',
+      title: 'Catastrophic Fire and Explosion Defense for Complex Claims',
       body:
-        'We are known for handling high-stakes fire and explosion matters that demand immediate response, coordinated experts, and disciplined courtroom strategy.',
-      ctaLabel: 'Learn About Our Fire and Explosion Work',
+        'We are known for defending high-stakes fire and explosion claims that demand immediate response, coordinated experts, and disciplined courtroom strategy.',
+      ctaLabel: 'Learn About Our Fire and Explosion Defense',
       ctaLink: '/practice',
       image: 'https://images.unsplash.com/photo-1576091160550-112173f7f869?auto=format&fit=crop&w=1400&q=80'
     },
     {
       id: 'unmatched-experience',
       eyebrow: 'Unmatched Experience',
-      title: 'Battle-Tested Attorneys. Battle-Proven Results.',
+      title: 'Battle-Tested Defense Counsel. Proven Outcomes.',
       body:
-        'Our attorneys have litigated thousands of consequential disputes and developed a national reputation for preparation, precision, and relentless advocacy.',
+        'Our attorneys have litigated thousands of consequential disputes and developed a national reputation for preparation, precision, and effective defense strategy.',
       ctaLabel: 'Review Representative Results',
       ctaLink: '/results',
       image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1400&q=80'
@@ -56,7 +56,7 @@ export const homeContent = {
       eyebrow: 'Broader Capability',
       title: 'Deep Strength Across Multiple Practice Areas',
       body:
-        'While catastrophic fire and explosion litigation is our hallmark, we also bring the same discipline to product liability, personal injury, premises, trucking, professional liability, construction defect, and insurance bad-faith matters.',
+        'While catastrophic fire and explosion defense is our hallmark, we also bring the same discipline to product liability, premises liability, commercial general liability, professional liability, construction defect defense, and coverage matters.',
       ctaLabel: 'Explore Full Practice Areas',
       ctaLink: '/practice',
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=80'
@@ -69,15 +69,15 @@ export const homeContent = {
   },
 
   resultsSection: {
-    title: 'Illustrative Results in High-Stakes Litigation',
+    title: 'Representative Defense Outcomes',
     subtitle:
       'Sample outcomes for design preview only. Final representative results can be approved and swapped in later.',
     cards: [
-      { amount: '$28.6M', description: 'Jury verdict in refinery explosion case involving catastrophic burn injuries.' },
-      { amount: '$14.2M', description: 'Settlement for multi-family apartment fire caused by defective electrical equipment.' },
-      { amount: '$9.8M', description: 'Trucking collision resolution for traumatic brain injury and long-term care needs.' },
-      { amount: '$7.4M', description: 'Product liability recovery for industrial pressure vessel failure and property loss.' },
-      { amount: '$5.1M', description: 'Premises liability settlement involving negligent maintenance and fatal smoke event.' },
+      { amount: '$28.6M', description: 'Defense verdict in refinery explosion case with complex causation issues.' },
+      { amount: '$14.2M', description: 'Settlement favorable to insured in multi-family apartment fire claim.' },
+      { amount: '$9.8M', description: 'Favorable resolution in trucking matter defending against injury claims.' },
+      { amount: '$7.4M', description: 'Product liability defense with favorable settlement for manufacturer.' },
+      { amount: '$5.1M', description: 'Premises liability defense negotiating reduced settlement exposure.' },
     ],
     ctaLabel: 'Review Representative Results',
     ctaLink: '/results'
@@ -85,53 +85,53 @@ export const homeContent = {
 
   processSection: {
     eyebrow: 'How We Work',
-    title: 'A Disciplined Litigation Framework for Complex Catastrophic Claims',
+    title: 'A Disciplined Defense Framework for Complex Catastrophic Claims',
     steps: [
       {
         step: '01',
-        title: 'Emergency Intake and Preservation',
-        description: 'Immediate evidence preservation demands, scene access strategy, and coordinated response planning in the earliest hours.'
+        title: 'Emergency Response and Evidence Preservation',
+        description: 'Immediate investigation, evidence preservation strategy, scene documentation, and coordinated response planning in the earliest hours.'
       },
       {
         step: '02',
-        title: 'Forensic and Technical Development',
-        description: 'Integrated expert analysis across fire science, engineering, product systems, and economic damages.'
+        title: 'Forensic and Technical Analysis',
+        description: 'Integrated expert analysis across fire science, engineering, product systems, and damage causation to build strong defense positions.'
       },
       {
         step: '03',
-        title: 'Liability and Damages Litigation',
-        description: 'Focused discovery, strategic motion practice, and leverage-building negotiations from a trial-forward posture.'
+        title: 'Strategic Claim Defense',
+        description: 'Focused discovery, strategic motion practice, liability analysis, and negotiations from a trial-ready defense posture.'
       },
       {
         step: '04',
-        title: 'Resolution or Verdict',
-        description: 'Whether through settlement or trial, we pursue outcomes aligned with the full legal and financial value of the claim.'
+        title: 'Favorable Resolution',
+        description: 'Whether through favorable settlement or trial, we pursue outcomes that effectively manage liability and protect our clients.'
       }
     ]
   },
 
   testimonialsSection: {
     eyebrow: 'Representative Feedback',
-    title: 'Hear What Our Clients Say About Working With Us',
+    title: 'What Our Clients Say About Our Defense Strategy',
     quotes: [
       {
         quote:
           '"Kind words from our client"',
-        byline: 'Sample Testimonial - Industrial Explosion Matter'
+        byline: 'Sample Testimonial - Industrial Fire Defense'
       },
       {
         quote:
           '"Kind words from our client"',
-        byline: 'Sample Testimonial - Catastrophic Injury Matter'
+        byline: 'Sample Testimonial - Complex Liability Defense'
       }
     ]
   },
 
   finalCta: {
-    title: 'Discuss A Matter With Us',
+    title: 'Discuss Your Claim With Us',
     body:
-      'Contact us to discuss your case and learn how we can help you pursue the best possible outcome.',
-    primaryLabel: 'Request Case Evaluation',
+      'Contact us to discuss your claim and learn how we can provide effective defense counsel and strategy.',
+    primaryLabel: 'Get Legal Support',
     primaryLink: '/contact',
     secondaryLabel: 'Meet Our Attorneys',
     secondaryLink: '/attorneys'

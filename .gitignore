@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Database and uploads
+backend/attorneys.db
+backend/uploads/
+
+# Setup files
+.github/copilot-instructions.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

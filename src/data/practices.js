@@ -2,42 +2,42 @@ const practices = [
   {
     slug: 'fire-explosion',
     title: 'Fire & Explosion Litigation',
-    description: 'Specialized representation for victims of catastrophic fires, chemical explosions, and industrial disasters.',
+    description: 'Specialized defense counsel for catastrophic fires, chemical explosions, and industrial incidents.',
     image: 'https://via.placeholder.com/600x400/ffcccc/000000?text=Fire+Investigation',
-    content: 'Our team has decades of experience handling complex fire and explosion cases across the United States. We investigate the root causes, identify responsible parties, and pursue maximum compensation for our clients.',
-    buttonText: 'Free Case Review'
+    content: 'Our team has decades of experience defending complex fire and explosion claims across the United States. We conduct thorough investigations, analyze causation, and develop strong defense strategies to protect our clients.',
+    buttonText: 'Get Legal Support'
   },
   {
     slug: 'product-liability',
-    title: 'Product Liability',
-    description: 'Defective equipment, chemical exposure, and manufacturing defects.',
+    title: 'Product Liability Defense',
+    description: 'Defense of product liability claims and manufacturing-related disputes.',
     image: 'https://via.placeholder.com/600x400/ccccff/000000?text=Product+Liability',
-    content: 'We represent clients injured by defective products, from faulty machinery to dangerous chemicals. Our attorneys work with experts to prove liability and secure fair compensation.',
-    buttonText: 'Free Case Review'
+    content: 'We defend manufacturers and companies against product liability claims. Our attorneys work with technical experts to challenge allegations, analyze causation, and develop effective defense strategies.',
+    buttonText: 'Get Legal Support'
   },
   {
     slug: 'construction-accidents',
-    title: 'Construction Accidents',
-    description: 'Scaffolding fires, demolition explosions, trench collapses.',
+    title: 'Construction Accident Defense',
+    description: 'Defense of construction site incidents and workplace injury claims.',
     image: 'https://via.placeholder.com/600x400/ffccff/000000?text=Construction+Accidents',
-    content: 'Construction sites present unique hazards. We handle cases involving workplace accidents, equipment failures, and negligent safety practices.',
-    buttonText: 'Free Case Review'
+    content: 'Construction sites present complex liability issues. We defend contractors and developers in workplace accident claims, equipment failures, and safety disputes with expert investigation and strong legal strategies.',
+    buttonText: 'Get Legal Support'
   },
   {
     slug: 'insurance-bad-faith',
-    title: 'Insurance Bad Faith',
-    description: 'Denied claims after catastrophic loss from fire/explosion.',
+    title: 'Coverage & Insurance Defense',
+    description: 'Coverage defense and insurance-related disputes.',
     image: 'https://via.placeholder.com/600x400/ccffcc/000000?text=Insurance+Bad+Faith',
-    content: 'When insurance companies wrongfully deny or underpay claims, we fight for our clients\' rights. Our bad faith litigation recovers what you deserve.',
-    buttonText: 'Free Case Review'
+    content: 'We defend insurance companies and policyholders in complex coverage disputes, claim denials, and insurance-related litigation. Our team provides strategic analysis and effective counsel for intricate policy interpretation issues.',
+    buttonText: 'Get Legal Support'
   },
   {
     slug: 'toxic-exposure',
-    title: 'Toxic Exposure',
-    description: 'Chemical and smoke inhalation injuries after industrial incidents.',
+    title: 'Toxic Exposure Defense',
+    description: 'Defense of claims arising from chemical and occupational exposure.',
     image: 'https://via.placeholder.com/600x400/ffffcc/000000?text=Toxic+Exposure',
-    content: 'Exposure to toxic substances can cause long-term health issues. We pursue compensation for medical expenses, lost wages, and pain and suffering.',
-    buttonText: 'Free Case Review'
+    content: 'We defend companies and insurers in toxic exposure claims involving chemical and occupational incidents. Our attorneys work with industrial hygiene and medical experts to challenge causation and develop strong defense positions.',
+    buttonText: 'Get Legal Support'
   }
 ];
 
