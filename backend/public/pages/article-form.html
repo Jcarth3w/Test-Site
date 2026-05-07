@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLL CMS | Article Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <div>
+          <h1>MLL CMS</h1>
+          <p>Article Editor</p>
+        </div>
+      </div>
+      <button id="logout-btn" class="btn btn-ghost" type="button">Log out</button>
+    </header>
+
+    <main class="content">
+      <section class="panel">
+        <a class="back-link" href="/admin/articles" aria-label="Back to articles">&#8592;</a>
+        <h2 id="form-title">Add Article</h2>
+        <div id="page-message" class="message hidden" role="alert"></div>
+
+        <form id="article-form" class="grid-form">
+          <input type="hidden" id="article-id">
+          <input type="hidden" id="image-url">
+
+          <label class="field field-half">
+            <span>Title</span>
+            <input type="text" id="title" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Slug (URL-friendly)</span>
+            <input type="text" id="slug" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Author (Attorney)</span>
+            <select id="author-id">
+              <option value="">No author</option>
+            </select>
+          </label>
+
+          <label class="field field-half">
+            <span>Publication Date</span>
+            <input type="datetime-local" id="publication-date">
+          </label>
+
+          <label class="field field-full">
+            <span>Source URL (link to original article)</span>
+            <input type="url" id="source-url" placeholder="https://example.com/article">
+          </label>
+
+          <label class="field field-half inline-field">
+            <span>Status</span>
+            <label class="toggle-row">
+              <input type="checkbox" id="article-published">
+              <span>Published (visible on site)</span>
+            </label>
+          </label>
+
+          <label class="field field-full">
+            <span>Summary</span>
+            <textarea id="summary" rows="3" placeholder="Brief description for article listings"></textarea>
+          </label>
+
+          <label class="field field-full">
+            <span>Content</span>
+            <textarea id="content" rows="10" required placeholder="Full article content (supports HTML)"></textarea>
+          </label>
+
+          <div class="form-actions field-full">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-ghost" href="/admin/articles">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/js/pages/articles/form.js"></script>
+</body>
+</html>

@@ -1,9 +1,5 @@
 import { createAttorney, getAttorneyById, updateAttorney, uploadPhoto } from '../../core/api.js';
-import { bindLogout, getIdFromQuery, requireAuth } from '../../core/admin-helpers.js';
-
-if (!requireAuth()) {
-  throw new Error('Not authenticated');
-}
+import { bindLogout, getIdFromQuery } from '../../core/admin-helpers.js';
 
 bindLogout('logout-btn');
 
@@ -14,10 +10,16 @@ const messageEl = document.getElementById('page-message');
 const idEl = document.getElementById('attorney-id');
 const photoUrlEl = document.getElementById('photo-url');
 const practiceAreasJsonEl = document.getElementById('practice-areas-json');
+const educationJsonEl = document.getElementById('education-json');
+const barAdmissionsJsonEl = document.getElementById('bar-admissions-json');
+const awardsJsonEl = document.getElementById('awards-json');
+const affiliationsJsonEl = document.getElementById('affiliations-json');
 const nameEl = document.getElementById('name');
 const titleEl = document.getElementById('title');
 const displayOrderEl = document.getElementById('display-order');
 const specialtyEl = document.getElementById('specialty');
+const emailEl = document.getElementById('email');
+const phoneEl = document.getElementById('phone');
 const locationEl = document.getElementById('location');
 const bioEl = document.getElementById('bio');
 const photoEl = document.getElementById('photo');
@@ -28,8 +30,35 @@ const practiceAreasListEl = document.getElementById('practice-areas-list');
 const photoPreviewEl = document.getElementById('photo-preview');
 const photoPreviewEmptyEl = document.getElementById('photo-preview-empty');
 
+// Education elements
+const educationSchoolEl = document.getElementById('education-school');
+const educationDegreeEl = document.getElementById('education-degree');
+const educationYearEl = document.getElementById('education-year');
+const addEducationBtnEl = document.getElementById('add-education');
+const educationListEl = document.getElementById('education-list');
+
+// Bar Admissions elements
+const barStateEl = document.getElementById('bar-state');
+const barYearEl = document.getElementById('bar-year');
+const addBarAdmissionBtnEl = document.getElementById('add-bar-admission');
+const barAdmissionsListEl = document.getElementById('bar-admissions-list');
+
+// Awards & affiliations (title + optional description, same shape as legacy highlights)
+const awardTitleEl = document.getElementById('award-title');
+const awardDescriptionEl = document.getElementById('award-description');
+const addAwardBtnEl = document.getElementById('add-award');
+const awardsListEl = document.getElementById('awards-list');
+const affiliationTitleEl = document.getElementById('affiliation-title');
+const affiliationDescriptionEl = document.getElementById('affiliation-description');
+const addAffiliationBtnEl = document.getElementById('add-affiliation');
+const affiliationsListEl = document.getElementById('affiliations-list');
+
 let previewObjectUrl = '';
 let practiceAreas = [];
+let education = [];
+let barAdmissions = [];
+let awards = [];
+let affiliations = [];
 
 function normalizePracticeAreaText(value = '') {
   return value.trim().replace(/\s+/g, ' ');
@@ -105,6 +134,235 @@ function addPracticeArea() {
   }
 }
 
+function parseEducation(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string') {
+    const raw = value.trim();
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+function setEducation(nextValues = []) {
+  education = nextValues.filter((item) => item && (item.school || item.degree));
+
+  if (educationJsonEl) {
+    educationJsonEl.value = JSON.stringify(education);
+  }
+
+  if (!educationListEl) return;
+  educationListEl.innerHTML = '';
+
+  if (!education.length) {
+    const empty = document.createElement('p');
+    empty.className = 'muted';
+    empty.textContent = 'No education entries added yet.';
+    educationListEl.appendChild(empty);
+    return;
+  }
+
+  education.forEach((entry, index) => {
+    const item = document.createElement('div');
+    item.className = 'education-item-display';
+    const yearText = entry.year ? ` (${entry.year})` : '';
+    const labelText = [entry.degree, entry.school].filter(Boolean).join(' - ');
+    item.innerHTML = `
+      <div>
+        <strong>${labelText || 'Education entry'}</strong>${yearText}
+        <button type="button" data-index="${index}" aria-label="Remove" class="remove-btn">x</button>
+      </div>
+    `;
+    item.querySelector('.remove-btn').addEventListener('click', () => {
+      setEducation(education.filter((_, i) => i !== index));
+    });
+    educationListEl.appendChild(item);
+  });
+}
+
+function addEducation() {
+  const school = (educationSchoolEl?.value || '').trim();
+  const degree = (educationDegreeEl?.value || '').trim();
+  const year = (educationYearEl?.value || '').trim();
+
+  if (!school && !degree) return;
+
+  setEducation([
+    ...education,
+    { school, degree, year: year ? parseInt(year, 10) : null }
+  ]);
+
+  if (educationSchoolEl) educationSchoolEl.value = '';
+  if (educationDegreeEl) educationDegreeEl.value = '';
+  if (educationYearEl) educationYearEl.value = '';
+  if (educationSchoolEl) educationSchoolEl.focus();
+}
+
+function parseBarAdmissions(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string') {
+    const raw = value.trim();
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+function setBarAdmissions(nextValues = []) {
+  barAdmissions = nextValues.filter((item) => item && item.state);
+
+  if (barAdmissionsJsonEl) {
+    barAdmissionsJsonEl.value = JSON.stringify(barAdmissions);
+  }
+
+  if (!barAdmissionsListEl) return;
+  barAdmissionsListEl.innerHTML = '';
+
+  if (!barAdmissions.length) {
+    const empty = document.createElement('p');
+    empty.className = 'muted';
+    empty.textContent = 'No bar admissions added yet.';
+    barAdmissionsListEl.appendChild(empty);
+    return;
+  }
+
+  barAdmissions.forEach((entry, index) => {
+    const item = document.createElement('div');
+    item.className = 'bar-admission-item-display';
+    const yearText = entry.year ? ` (${entry.year})` : '';
+    item.innerHTML = `
+      <div>
+        <strong>${entry.state}</strong>${yearText}
+        <button type="button" data-index="${index}" aria-label="Remove" class="remove-btn">x</button>
+      </div>
+    `;
+    item.querySelector('.remove-btn').addEventListener('click', () => {
+      setBarAdmissions(barAdmissions.filter((_, i) => i !== index));
+    });
+    barAdmissionsListEl.appendChild(item);
+  });
+}
+
+function addBarAdmission() {
+  const state = (barStateEl?.value || '').trim();
+  const year = (barYearEl?.value || '').trim();
+
+  if (!state) return;
+
+  setBarAdmissions([
+    ...barAdmissions,
+    { state, year: year ? parseInt(year, 10) : null }
+  ]);
+
+  if (barStateEl) barStateEl.value = '';
+  if (barYearEl) barYearEl.value = '';
+  if (barStateEl) barStateEl.focus();
+}
+
+function parseTitleDescriptionItems(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string') {
+    const raw = value.trim();
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+function renderTitleDescriptionList(containerEl, entries, itemClass, onRemove) {
+  if (!containerEl) return;
+  containerEl.innerHTML = '';
+
+  if (!entries.length) {
+    const empty = document.createElement('p');
+    empty.className = 'muted';
+    empty.textContent = 'No entries added yet.';
+    containerEl.appendChild(empty);
+    return;
+  }
+
+  entries.forEach((entry, index) => {
+    const item = document.createElement('div');
+    item.className = itemClass;
+    const descText = entry.description ? `<p>${entry.description}</p>` : '';
+    item.innerHTML = `
+      <div>
+        <strong>${entry.title}</strong>${descText}
+        <button type="button" data-index="${index}" aria-label="Remove" class="remove-btn">x</button>
+      </div>
+    `;
+    item.querySelector('.remove-btn').addEventListener('click', () => {
+      onRemove(index);
+    });
+    containerEl.appendChild(item);
+  });
+}
+
+function setAwards(nextValues = []) {
+  awards = nextValues.filter((item) => item && item.title);
+
+  if (awardsJsonEl) {
+    awardsJsonEl.value = JSON.stringify(awards);
+  }
+
+  renderTitleDescriptionList(awardsListEl, awards, 'award-item-display', (index) => {
+    setAwards(awards.filter((_, i) => i !== index));
+  });
+}
+
+function addAward() {
+  const title = (awardTitleEl?.value || '').trim();
+  const description = (awardDescriptionEl?.value || '').trim();
+
+  if (!title) return;
+
+  setAwards([...awards, { title, description: description || null }]);
+
+  if (awardTitleEl) awardTitleEl.value = '';
+  if (awardDescriptionEl) awardDescriptionEl.value = '';
+  if (awardTitleEl) awardTitleEl.focus();
+}
+
+function setAffiliations(nextValues = []) {
+  affiliations = nextValues.filter((item) => item && item.title);
+
+  if (affiliationsJsonEl) {
+    affiliationsJsonEl.value = JSON.stringify(affiliations);
+  }
+
+  renderTitleDescriptionList(affiliationsListEl, affiliations, 'affiliation-item-display', (index) => {
+    setAffiliations(affiliations.filter((_, i) => i !== index));
+  });
+}
+
+function addAffiliation() {
+  const title = (affiliationTitleEl?.value || '').trim();
+  const description = (affiliationDescriptionEl?.value || '').trim();
+
+  if (!title) return;
+
+  setAffiliations([...affiliations, { title, description: description || null }]);
+
+  if (affiliationTitleEl) affiliationTitleEl.value = '';
+  if (affiliationDescriptionEl) affiliationDescriptionEl.value = '';
+  if (affiliationTitleEl) affiliationTitleEl.focus();
+}
+
 function resolvePhotoUrl(photoUrl = '') {
   if (!photoUrl) return '';
   if (/^https?:\/\//i.test(photoUrl)) return photoUrl;
@@ -168,7 +426,13 @@ function getPayload() {
     title: titleEl.value.trim(),
     display_order: Number.isNaN(parsedOrder) ? 100 : parsedOrder,
     specialty: specialtyEl.value.trim(),
+    email: emailEl.value.trim(),
+    phone: phoneEl.value.trim(),
     practice_areas: [...practiceAreas],
+    education: [...education],
+    bar_admissions: [...barAdmissions],
+    awards: [...awards],
+    affiliations: [...affiliations],
     location: locationEl.value,
     bio: bioEl.value.trim(),
     photo_url: photoUrlEl.value || '',
@@ -184,7 +448,13 @@ async function loadAttorney(id) {
   titleEl.value = attorney.title || '';
   displayOrderEl.value = Number.isFinite(Number(attorney.display_order)) ? Number(attorney.display_order) : 100;
   specialtyEl.value = attorney.specialty || '';
+  emailEl.value = attorney.email || '';
+  phoneEl.value = attorney.phone || '';
   setPracticeAreas(parsePracticeAreas(attorney.practice_areas));
+  setEducation(parseEducation(attorney.education));
+  setBarAdmissions(parseBarAdmissions(attorney.bar_admissions));
+  setAwards(parseTitleDescriptionItems(attorney.awards));
+  setAffiliations(parseTitleDescriptionItems(attorney.affiliations));
   setOfficeSelection(attorney.location || '');
   bioEl.value = attorney.bio || '';
   activeEl.checked = Boolean(attorney.is_active);
@@ -211,6 +481,38 @@ practiceAreaInputEl?.addEventListener('keydown', (event) => {
   if (event.key !== 'Enter') return;
   event.preventDefault();
   addPracticeArea();
+});
+
+addEducationBtnEl?.addEventListener('click', addEducation);
+
+educationYearEl?.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter') return;
+  event.preventDefault();
+  addEducation();
+});
+
+addBarAdmissionBtnEl?.addEventListener('click', addBarAdmission);
+
+barYearEl?.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter') return;
+  event.preventDefault();
+  addBarAdmission();
+});
+
+addAwardBtnEl?.addEventListener('click', addAward);
+
+awardDescriptionEl?.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter') return;
+  event.preventDefault();
+  addAward();
+});
+
+addAffiliationBtnEl?.addEventListener('click', addAffiliation);
+
+affiliationDescriptionEl?.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter') return;
+  event.preventDefault();
+  addAffiliation();
 });
 
 form.addEventListener('submit', async (event) => {
@@ -247,6 +549,10 @@ form.addEventListener('submit', async (event) => {
 (async () => {
   setPhotoPreview('');
   setPracticeAreas([]);
+  setEducation([]);
+  setBarAdmissions([]);
+  setAwards([]);
+  setAffiliations([]);
 
   const id = getIdFromQuery();
   if (!id) return;

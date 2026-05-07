@@ -70,12 +70,35 @@ router.get('/attorneys/:id', authenticateToken, (req, res) => {
 
 // CMS: create attorney
 router.post('/attorneys', authenticateToken, (req, res) => {
-  const { name, title, bio, specialty, location, display_order, practice_areas, photo_url, is_active } = req.body;
+  const {
+    name,
+    title,
+    email,
+    phone,
+    bio,
+    specialty,
+    location,
+    display_order,
+    practice_areas,
+    education,
+    bar_admissions,
+    awards,
+    affiliations,
+    photo_url,
+    is_active
+  } = req.body;
+
   const activeValue = normalizeBoolean(is_active, 1);
   const officeLocation = normalizeOfficeLocation(location);
   const displayOrder = normalizeDisplayOrder(display_order, 100);
+  const normalizedEmail = (email || '').trim();
+  const normalizedPhone = (phone || '').trim();
   const practiceAreas = normalizePracticeAreas(practice_areas);
   const practiceAreasJson = JSON.stringify(practiceAreas);
+  const educationJson = JSON.stringify(Array.isArray(education) ? education : []);
+  const barAdmissionsJson = JSON.stringify(Array.isArray(bar_admissions) ? bar_admissions : []);
+  const awardsJson = JSON.stringify(Array.isArray(awards) ? awards : []);
+  const affiliationsJson = JSON.stringify(Array.isArray(affiliations) ? affiliations : []);
   const normalizedPhotoUrl = (photo_url || '').trim();
 
   if (officeLocation === null) {
@@ -86,18 +109,43 @@ router.post('/attorneys', authenticateToken, (req, res) => {
   }
 
   db.run(
-    `INSERT INTO attorneys (name, title, bio, specialty, location, display_order, practice_areas, photo_url, is_active)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [name, title, bio, specialty, officeLocation, displayOrder, practiceAreasJson, normalizedPhotoUrl, activeValue],
+    `INSERT INTO attorneys (name, title, email, phone, bio, specialty, location, display_order, practice_areas, education, bar_admissions, awards, affiliations, highlights, photo_url, is_active)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      name,
+      title,
+      normalizedEmail,
+      normalizedPhone,
+      bio,
+      specialty,
+      officeLocation,
+      displayOrder,
+      practiceAreasJson,
+      educationJson,
+      barAdmissionsJson,
+      awardsJson,
+      affiliationsJson,
+      '[]',
+      normalizedPhotoUrl,
+      activeValue
+    ],
     function (err) {
       if (err) {
         logOperation('ATTORNEY_CREATE_ERROR', { error: err.message, by: req.user?.username });
         return res.status(500).json({ error: 'Database error' });
       }
       logOperation('ATTORNEY_CREATED', {
-        id: this.lastID, name, location: officeLocation,
-        display_order: displayOrder, practice_areas_count: practiceAreas.length,
-        is_active: activeValue, by: req.user?.username
+        id: this.lastID,
+        name,
+        location: officeLocation,
+        display_order: displayOrder,
+        practice_areas_count: practiceAreas.length,
+        education_count: Array.isArray(education) ? education.length : 0,
+        bar_admissions_count: Array.isArray(bar_admissions) ? bar_admissions.length : 0,
+        awards_count: Array.isArray(awards) ? awards.length : 0,
+        affiliations_count: Array.isArray(affiliations) ? affiliations.length : 0,
+        is_active: activeValue,
+        by: req.user?.username
       });
       res.json({ id: this.lastID, message: 'Attorney created successfully' });
     }
@@ -106,12 +154,35 @@ router.post('/attorneys', authenticateToken, (req, res) => {
 
 // CMS: update attorney
 router.put('/attorneys/:id', authenticateToken, (req, res) => {
-  const { name, title, bio, specialty, location, display_order, practice_areas, photo_url, is_active } = req.body;
+  const {
+    name,
+    title,
+    email,
+    phone,
+    bio,
+    specialty,
+    location,
+    display_order,
+    practice_areas,
+    education,
+    bar_admissions,
+    awards,
+    affiliations,
+    photo_url,
+    is_active
+  } = req.body;
+
   const activeValue = normalizeBoolean(is_active, 1);
   const officeLocation = normalizeOfficeLocation(location);
   const displayOrder = normalizeDisplayOrder(display_order, 100);
+  const normalizedEmail = (email || '').trim();
+  const normalizedPhone = (phone || '').trim();
   const practiceAreas = normalizePracticeAreas(practice_areas);
   const practiceAreasJson = JSON.stringify(practiceAreas);
+  const educationJson = JSON.stringify(Array.isArray(education) ? education : []);
+  const barAdmissionsJson = JSON.stringify(Array.isArray(bar_admissions) ? bar_admissions : []);
+  const awardsJson = JSON.stringify(Array.isArray(awards) ? awards : []);
+  const affiliationsJson = JSON.stringify(Array.isArray(affiliations) ? affiliations : []);
 
   if (officeLocation === null) {
     return res.status(400).json({ error: 'Invalid office location' });
@@ -119,10 +190,27 @@ router.put('/attorneys/:id', authenticateToken, (req, res) => {
 
   db.run(
     `UPDATE attorneys
-     SET name = ?, title = ?, bio = ?, specialty = ?, location = ?, display_order = ?,
-         practice_areas = ?, photo_url = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
+     SET name = ?, title = ?, email = ?, phone = ?, bio = ?, specialty = ?, location = ?, display_order = ?,
+         practice_areas = ?, education = ?, bar_admissions = ?, awards = ?, affiliations = ?, highlights = '[]', photo_url = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
      WHERE id = ?`,
-    [name, title, bio, specialty, officeLocation, displayOrder, practiceAreasJson, photo_url, activeValue, req.params.id],
+    [
+      name,
+      title,
+      normalizedEmail,
+      normalizedPhone,
+      bio,
+      specialty,
+      officeLocation,
+      displayOrder,
+      practiceAreasJson,
+      educationJson,
+      barAdmissionsJson,
+      awardsJson,
+      affiliationsJson,
+      photo_url,
+      activeValue,
+      req.params.id
+    ],
     function (err) {
       if (err) {
         logOperation('ATTORNEY_UPDATE_ERROR', { id: req.params.id, error: err.message, by: req.user?.username });
@@ -130,8 +218,16 @@ router.put('/attorneys/:id', authenticateToken, (req, res) => {
       }
       if (this.changes === 0) return res.status(404).json({ error: 'Attorney not found' });
       logOperation('ATTORNEY_UPDATED', {
-        id: req.params.id, location: officeLocation, display_order: displayOrder,
-        practice_areas_count: practiceAreas.length, is_active: activeValue, by: req.user?.username
+        id: req.params.id,
+        location: officeLocation,
+        display_order: displayOrder,
+        practice_areas_count: practiceAreas.length,
+        education_count: Array.isArray(education) ? education.length : 0,
+        bar_admissions_count: Array.isArray(bar_admissions) ? bar_admissions.length : 0,
+        awards_count: Array.isArray(awards) ? awards.length : 0,
+        affiliations_count: Array.isArray(affiliations) ? affiliations.length : 0,
+        is_active: activeValue,
+        by: req.user?.username
       });
       res.json({ message: 'Attorney updated successfully' });
     }

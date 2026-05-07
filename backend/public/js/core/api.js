@@ -141,3 +141,109 @@ export function uploadPhoto(file) {
 export function uploadPracticeImage(file) {
   return uploadPhoto(file);
 }
+
+// Offices API
+export function getOffices() {
+  return request('/api/offices', {
+    headers: { ...getAuthHeader() }
+  });
+}
+
+export function getOfficeById(id) {
+  return request(`/api/offices/${id}`, {
+    headers: { ...getAuthHeader() }
+  });
+}
+
+export function createOffice(payload) {
+  return request('/api/offices', {
+    method: 'POST',
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+}
+
+export function updateOffice(id, payload) {
+  return request(`/api/offices/${id}`, {
+    method: 'PUT',
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+}
+
+export function setOfficeStatus(id, isActive) {
+  return request(`/api/offices/${id}/status`, {
+    method: 'PATCH',
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ is_active: isActive })
+  });
+}
+
+export function removeOffice(id) {
+  return request(`/api/offices/${id}`, {
+    method: 'DELETE',
+    headers: { ...getAuthHeader() }
+  });
+}
+
+// Articles API
+export function getArticles() {
+  return request('/api/articles', {
+    headers: { ...getAuthHeader() }
+  });
+}
+
+export function getArticleById(id) {
+  return request(`/api/articles/${id}`, {
+    headers: { ...getAuthHeader() }
+  });
+}
+
+export function createArticle(payload) {
+  return request('/api/articles', {
+    method: 'POST',
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+}
+
+export function updateArticle(id, payload) {
+  return request(`/api/articles/${id}`, {
+    method: 'PUT',
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+}
+
+export function setArticleStatus(id, isPublished) {
+  return request(`/api/articles/${id}/status`, {
+    method: 'PATCH',
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ is_published: isPublished })
+  });
+}
+
+export function removeArticle(id) {
+  return request(`/api/articles/${id}`, {
+    method: 'DELETE',
+    headers: { ...getAuthHeader() }
+  });
+}

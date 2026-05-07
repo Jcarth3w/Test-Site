@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLL CMS | Office Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <div>
+          <h1>MLL CMS</h1>
+          <p>Office Editor</p>
+        </div>
+      </div>
+      <button id="logout-btn" class="btn btn-ghost" type="button">Log out</button>
+    </header>
+
+    <main class="content">
+      <section class="panel">
+        <a class="back-link" href="/admin/offices" aria-label="Back to offices">&#8592;</a>
+        <h2 id="form-title">Add Office</h2>
+        <div id="page-message" class="message hidden" role="alert"></div>
+
+        <form id="office-form" class="grid-form">
+          <input type="hidden" id="office-id">
+          <input type="hidden" id="image-url">
+
+          <label class="field field-half">
+            <span>Office Name / City</span>
+            <input type="text" id="name" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Display Order</span>
+            <input type="number" id="display-order" min="0" step="1" value="100" required>
+          </label>
+
+          <label class="field field-full">
+            <span>Address</span>
+            <input type="text" id="address" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Phone</span>
+            <input type="tel" id="phone" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Image</span>
+            <input type="file" id="image" accept="image/*">
+          </label>
+
+          <div class="field field-half photo-preview-field">
+            <span>Current / Selected Image</span>
+            <div class="photo-preview-wrap">
+              <img id="image-preview" class="photo-preview hidden" alt="Office preview">
+              <p id="image-preview-empty" class="muted">No image selected yet.</p>
+            </div>
+          </div>
+
+          <label class="field field-half inline-field">
+            <span>Status</span>
+            <label class="toggle-row">
+              <input type="checkbox" id="office-active" checked>
+              <span>Active (visible on site)</span>
+            </label>
+          </label>
+
+          <label class="field field-full">
+            <span>Description</span>
+            <textarea id="description" rows="6" required></textarea>
+          </label>
+
+          <div class="form-actions field-full">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-ghost" href="/admin/offices">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/js/pages/offices/form.js"></script>
+</body>
+</html>

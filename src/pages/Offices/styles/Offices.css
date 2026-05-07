@@ -1,0 +1,275 @@
+.offices-page {
+  background: #f5f7fb;
+}
+
+.office-intro {
+  padding: 1.35rem 2rem 1.7rem;
+  text-align: center;
+  background: linear-gradient(135deg, #ffffff 0%, #e6eef8 100%);
+}
+
+.office-kicker {
+  margin: 0 0 0.35rem;
+  color: #3e668e;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.office-intro h1 {
+  color: #203f5f;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.35rem);
+  line-height: 1.08;
+}
+
+.office-intro p {
+  color: #54687d;
+  max-width: 640px;
+  margin: 0.5rem auto 0;
+  font-size: 0.98rem;
+}
+
+.office-list-section {
+  padding: 3rem 2rem 4rem;
+}
+
+.office-list-section .container {
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.office-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.office-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #d6e2ef;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+
+.office-card:hover {
+  box-shadow: 0 12px 28px rgba(16, 40, 66, 0.12);
+  border-color: #3e668e;
+  transform: translateY(-2px);
+}
+
+.office-card-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #f0f5fa;
+}
+
+.office-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.office-card-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.office-card-content h2 {
+  margin: 0 0 0.75rem;
+  color: #203f5f;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.office-address {
+  margin: 0 0 0.5rem;
+  color: #5f6f83;
+  font-size: 0.95rem;
+}
+
+.office-phone {
+  margin: 0 0 0.75rem;
+  color: #5f6f83;
+  font-size: 0.95rem;
+}
+
+.office-link-arrow {
+  display: inline-block;
+  margin-top: auto;
+  color: #3e668e;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 200ms ease;
+}
+
+.office-card:hover .office-link-arrow {
+  color: #2f5f8b;
+}
+
+/* Office Detail Page */
+.office-detail {
+  padding: 2rem;
+  background: #ffffff;
+}
+
+.office-detail .container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.office-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  color: #3e668e;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 200ms ease;
+}
+
+.office-back:hover {
+  color: #2f5f8b;
+}
+
+.office-back-icon::before {
+  content: '←';
+  display: inline-block;
+}
+
+.office-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  align-items: start;
+}
+
+.office-detail-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(16, 40, 66, 0.12);
+}
+
+.office-detail-content h1 {
+  color: #203f5f;
+  margin: 0 0 1rem;
+  font-size: 2.2rem;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.office-detail-address {
+  margin: 0 0 1rem;
+  color: #5f6f83;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.office-detail-phone,
+.office-detail-email {
+  margin: 0 0 0.75rem;
+  color: #334a62;
+  font-size: 0.95rem;
+}
+
+.office-detail-phone a,
+.office-detail-email a {
+  color: #3e668e;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 200ms ease;
+}
+
+.office-detail-phone a:hover,
+.office-detail-email a:hover {
+  color: #2f5f8b;
+  text-decoration: underline;
+}
+
+.office-detail-description {
+  margin-top: 1.5rem;
+  color: #334a62;
+  font-size: 0.98rem;
+  line-height: 1.72;
+}
+
+/* Other Offices Section */
+.other-offices-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #d6e2ef;
+}
+
+.other-offices-section h2 {
+  color: #203f5f;
+  margin: 0 0 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.office-links-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.office-links-item {
+  padding: 1rem;
+  background: #f0f5fa;
+  border: 1px solid #d6e2ef;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #203f5f;
+  font-weight: 600;
+  text-align: center;
+  transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.office-links-item:hover {
+  background: #e6eef8;
+  border-color: #3e668e;
+  color: #3e668e;
+}
+
+.footer {
+  padding: 2rem 0;
+  background: #172d4b;
+  color: white;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0.3rem 0;
+}
+
+@media (max-width: 768px) {
+  .office-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .office-detail-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .office-list {
+    grid-template-columns: 1fr;
+  }
+
+  .office-links-list {
+    grid-template-columns: 1fr;
+  }
+}

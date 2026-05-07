@@ -21,6 +21,54 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
   }
 });
 
+function ensureAttorneyAwardsAffiliationsColumns() {
+  db.all('PRAGMA table_info(attorneys)', [], (err, rows) => {
+    if (err) {
+      console.error('Error reading attorneys schema:', err.message);
+      logOperation('DB_SCHEMA_READ_ERROR', { table: 'attorneys', error: err.message });
+      return;
+    }
+
+    const names = new Set(rows.map((r) => r.name));
+
+    const addColumn = (column, definition, onAdded) => {
+      if (names.has(column)) {
+        onAdded();
+        return;
+      }
+      db.run(`ALTER TABLE attorneys ADD COLUMN ${column} ${definition}`, (alterErr) => {
+        if (alterErr) {
+          console.error(`Error adding ${column} to attorneys:`, alterErr.message);
+          logOperation('DB_MIGRATION_ERROR', { table: 'attorneys', column, error: alterErr.message });
+        } else {
+          console.log(`Added ${column} column to attorneys.`);
+          logOperation('DB_MIGRATION_COLUMN_ADDED', { table: 'attorneys', column });
+          names.add(column);
+        }
+        onAdded();
+      });
+    };
+
+    addColumn('awards', "TEXT DEFAULT '[]'", () => {
+      addColumn('affiliations', "TEXT DEFAULT '[]'", () => {
+        db.run(
+          `UPDATE attorneys
+           SET awards = highlights, highlights = '[]'
+           WHERE highlights IS NOT NULL
+             AND TRIM(highlights) NOT IN ('', '[]')
+             AND (awards IS NULL OR TRIM(awards) IN ('', '[]'))`,
+          (migrateErr) => {
+            if (migrateErr) {
+              console.error('Error migrating highlights to awards:', migrateErr.message);
+              logOperation('DB_MIGRATE_HIGHLIGHTS_ERROR', { error: migrateErr.message });
+            }
+          }
+        );
+      });
+    });
+  });
+}
+
 function ensureColumn(table, column, definition) {
   db.all(`PRAGMA table_info(${table})`, [], (err, rows) => {
     if (err) {
@@ -60,6 +108,8 @@ function initDatabase() {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         title TEXT,
+        email TEXT,
+        phone TEXT,
         bio TEXT,
         specialty TEXT,
         location TEXT,
@@ -85,6 +135,40 @@ function initDatabase() {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
+    `);
+
+    db.run(`
+      CREATE TABLE IF NOT EXISTS offices (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        slug TEXT UNIQUE,
+        name TEXT,
+        address TEXT,
+        phone TEXT,
+        email TEXT,
+        description TEXT,
+        image_url TEXT,
+        is_active INTEGER DEFAULT 1,
+        display_order INTEGER DEFAULT 100,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    db.run(`
+      CREATE TABLE IF NOT EXISTS articles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        slug TEXT UNIQUE,
+        title TEXT,
+        summary TEXT,
+        content TEXT,
+        author_id INTEGER,
+        publication_date DATETIME,
+        image_url TEXT,
+        is_published INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (author_id) REFERENCES attorneys(id)
+      )
     `, (err) => {
       if (err) {
         console.error('Error creating database tables:', err.message);
@@ -94,7 +178,15 @@ function initDatabase() {
         ensureColumn('attorneys', 'location', "TEXT DEFAULT ''");
         ensureColumn('attorneys', 'display_order', 'INTEGER DEFAULT 100');
         ensureColumn('attorneys', 'practice_areas', "TEXT DEFAULT '[]'");
+        ensureColumn('attorneys', 'email', "TEXT DEFAULT ''");
+        ensureColumn('attorneys', 'phone', "TEXT DEFAULT ''");
+        ensureColumn('attorneys', 'education', "TEXT DEFAULT '[]'");
+        ensureColumn('attorneys', 'bar_admissions', "TEXT DEFAULT '[]'");
+        ensureColumn('attorneys', 'highlights', "TEXT DEFAULT '[]'");
+        ensureAttorneyAwardsAffiliationsColumns();
+        ensureColumn('attorneys', 'publications', "TEXT DEFAULT '[]'");
         ensureColumn('practices', 'is_active', 'INTEGER DEFAULT 1');
+        ensureColumn('articles', 'source_url', "TEXT DEFAULT ''");
 
         const hashedPassword = bcrypt.hashSync(ADMIN_PASSWORD, 10);
         db.run(

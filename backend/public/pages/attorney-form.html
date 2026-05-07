@@ -32,6 +32,10 @@
           <input type="hidden" id="attorney-id">
           <input type="hidden" id="photo-url">
           <input type="hidden" id="practice-areas-json">
+          <input type="hidden" id="education-json">
+          <input type="hidden" id="bar-admissions-json">
+          <input type="hidden" id="awards-json">
+          <input type="hidden" id="affiliations-json">
 
           <label class="field field-half">
             <span>Name</span>
@@ -51,6 +55,16 @@
           <label class="field field-half">
             <span>Specialty</span>
             <input type="text" id="specialty" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Email</span>
+            <input type="email" id="email" placeholder="name@example.com">
+          </label>
+
+          <label class="field field-half">
+            <span>Phone</span>
+            <input type="tel" id="phone" placeholder="(555) 123-4567">
           </label>
 
           <label class="field field-half">
@@ -98,6 +112,55 @@
                 <button id="add-practice-area" type="button" class="btn btn-ghost">Add</button>
               </div>
               <div id="practice-areas-list" class="practice-areas-list"></div>
+            </div>
+          </label>
+
+          <label class="field field-full">
+            <span>Education</span>
+            <div class="education-editor">
+              <div class="education-input-row">
+                <input type="text" id="education-school" placeholder="School/University">
+                <input type="text" id="education-degree" placeholder="Degree (e.g., J.D.)">
+                <input type="number" id="education-year" placeholder="Year" min="1900" max="2100">
+                <button id="add-education" type="button" class="btn btn-ghost">Add</button>
+              </div>
+              <div id="education-list" class="education-list"></div>
+            </div>
+          </label>
+
+          <label class="field field-full">
+            <span>Bar Admissions</span>
+            <div class="bar-editor">
+              <div class="bar-input-row">
+                <input type="text" id="bar-state" placeholder="State (e.g., Wisconsin)">
+                <input type="number" id="bar-year" placeholder="Year" min="1900" max="2100">
+                <button id="add-bar-admission" type="button" class="btn btn-ghost">Add</button>
+              </div>
+              <div id="bar-admissions-list" class="bar-admissions-list"></div>
+            </div>
+          </label>
+
+          <label class="field field-full">
+            <span>Awards</span>
+            <div class="awards-editor">
+              <div class="awards-input-row">
+                <input type="text" id="award-title" placeholder="Title (e.g., Best Lawyer 2024)">
+                <input type="text" id="award-description" placeholder="Description (optional)">
+                <button id="add-award" type="button" class="btn btn-ghost">Add</button>
+              </div>
+              <div id="awards-list" class="awards-list"></div>
+            </div>
+          </label>
+
+          <label class="field field-full">
+            <span>Affiliations</span>
+            <div class="affiliations-editor">
+              <div class="affiliations-input-row">
+                <input type="text" id="affiliation-title" placeholder="Organization or role">
+                <input type="text" id="affiliation-description" placeholder="Description (optional)">
+                <button id="add-affiliation" type="button" class="btn btn-ghost">Add</button>
+              </div>
+              <div id="affiliations-list" class="affiliations-list"></div>
             </div>
           </label>
 

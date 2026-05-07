@@ -397,9 +397,89 @@ a.btn {
 }
 
 .meta {
-  margin: 0.3rem 0;
+  font-size: 0.85rem;
   color: var(--muted);
-  font-size: 0.92rem;
+}
+
+/* Education, Bar Admissions, and Highlights Styles */
+.education-editor,
+.bar-editor,
+.highlights-editor,
+.awards-editor,
+.affiliations-editor {
+  padding: 0.6rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.education-input-row,
+.bar-input-row,
+.highlights-input-row,
+.awards-input-row,
+.affiliations-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 0.5rem;
+}
+
+.education-list,
+.bar-admissions-list,
+.highlights-list,
+.awards-list,
+.affiliations-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.education-item-display,
+.bar-admission-item-display,
+.highlight-item-display,
+.award-item-display,
+.affiliation-item-display {
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #2a3f5e;
+  background: #1a2d45;
+  color: #8ec4f0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.education-item-display div,
+.bar-admission-item-display div,
+.highlight-item-display div,
+.award-item-display div,
+.affiliation-item-display div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.highlight-item-display div p,
+.award-item-display div p,
+.affiliation-item-display div p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #7aafde;
+}
+
+.education-item-display .remove-btn,
+.bar-admission-item-display .remove-btn,
+.highlight-item-display .remove-btn,
+.award-item-display .remove-btn,
+.affiliation-item-display .remove-btn {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.95rem;
+  line-height: 1;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
 }
 
 .card-actions {
@@ -452,7 +532,134 @@ a.btn {
   display: none !important;
 }
 
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.9rem 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-table thead {
+  background: #0a131f;
+}
+
+.admin-table th {
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+
+.admin-table tbody tr:hover {
+  background: #1a2d45;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.action-group {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.action-group .btn {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center;
+  color: var(--muted);
+  padding: 1.5rem 0.75rem !important;
+}
+
+/* Medium screens: 1024px and below */
+@media (max-width: 1024px) {
+  .app-shell {
+    padding: 0 0.9rem;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+
+  .panel-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .grid-form {
+    grid-template-columns: 1fr;
+  }
+
+  .field-half {
+    grid-column: 1 / -1;
+  }
+
+  .practice-input-row,
+  .education-input-row,
+  .bar-input-row,
+  .highlights-input-row,
+  .awards-input-row,
+  .affiliations-input-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .practice-input-row input,
+  .practice-input-row button,
+  .education-input-row input,
+  .education-input-row button,
+  .bar-input-row input,
+  .bar-input-row button,
+  .highlights-input-row input,
+  .highlights-input-row button,
+  .awards-input-row input,
+  .awards-input-row button,
+  .affiliations-input-row input,
+  .affiliations-input-row button {
+    min-width: 0;
+  }
+
+  .form-actions {
+    gap: 0.75rem;
+  }
+}
+
+/* Small screens: 760px and below */
 @media (max-width: 760px) {
+  .admin-table {
+    font-size: 0.85rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.5rem;
+  }
+
+  .action-group {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .admin-table .btn-sm {
+    width: 100%;
+  }
+
   .panel-head {
     flex-direction: column;
     align-items: stretch;
@@ -468,5 +675,42 @@ a.btn {
 
   .form-actions {
     flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  .practice-input-row,
+  .education-input-row,
+  .bar-input-row,
+  .highlights-input-row,
+  .awards-input-row,
+  .affiliations-input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .practice-input-row input,
+  .practice-input-row button,
+  .education-input-row input,
+  .education-input-row button,
+  .bar-input-row input,
+  .bar-input-row button,
+  .highlights-input-row input,
+  .highlights-input-row button,
+  .awards-input-row input,
+  .awards-input-row button,
+  .affiliations-input-row input,
+  .affiliations-input-row button {
+    width: 100%;
+  }
+
+  .photo-preview-wrap {
+    min-height: auto;
+  }
+
+  .photo-preview {
+    max-width: 100%;
+  }
+
+  .btn {
+    width: 100%;
   }
 }

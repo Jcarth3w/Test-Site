@@ -20,9 +20,9 @@ const Navbar = () => {
           <li><Link to="/about">Who We Are</Link></li>
           <li><Link to="/attorneys">Attorneys</Link></li>
           <li><Link to="/practice">Practice Areas</Link></li>
+          <li><Link to="/offices">Offices</Link></li>
           <li><Link to="/articles">Articles</Link></li>
-          <li><Link to="/results">Results</Link></li>
-          <li><Link to="/contact" className="cta">Get Legal Support</Link></li>
+          <li><Link to="/contact" className="cta">Contact Us</Link></li>
         </ul>
       </div>
     </nav>

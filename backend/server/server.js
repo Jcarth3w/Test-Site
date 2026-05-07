@@ -7,6 +7,8 @@ const { PORT, UPLOAD_DIR } = require('./config');
 const { corsOriginHandler, requestLogger } = require('./middleware');
 const attorneyRoutes = require('./routes/attorneys');
 const practiceRoutes = require('./routes/practices');
+const officeRoutes = require('./routes/offices');
+const articleRoutes = require('./routes/articles');
 const uploadRoutes = require('./routes/upload');
 
 // Ensure upload directory exists
@@ -25,6 +27,8 @@ app.use(requestLogger);
 // API routes
 app.use('/api', attorneyRoutes);
 app.use('/api', practiceRoutes);
+app.use('/api', officeRoutes);
+app.use('/api', articleRoutes);
 app.use('/api', uploadRoutes);
 
 // Serve uploaded files
@@ -45,6 +49,22 @@ app.get('/admin/practices', (req, res) => {
 });
 app.get('/admin/practices/form', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'practice-form.html'));
+});
+
+app.get('/admin/offices', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'offices.html'));
+});
+
+app.get('/admin/offices/form', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'office-form.html'));
+});
+
+app.get('/admin/articles', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'articles.html'));
+});
+
+app.get('/admin/articles/form', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'article-form.html'));
 });
 
 app.listen(PORT, () => {

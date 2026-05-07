@@ -69,11 +69,32 @@ function parseStoredPracticeAreas(value) {
   }
 }
 
+function parseStoredJsonArray(value) {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 function mapAttorneyRow(row) {
+  const awards = parseStoredJsonArray(row.awards);
+  const affiliations = parseStoredJsonArray(row.affiliations);
+  const legacyHighlights = parseStoredJsonArray(row.highlights);
+  const mergedAwards =
+    awards.length || affiliations.length ? awards : legacyHighlights;
+
   return {
     ...row,
     display_order: normalizeDisplayOrder(row.display_order, 100),
-    practice_areas: parseStoredPracticeAreas(row.practice_areas)
+    practice_areas: parseStoredPracticeAreas(row.practice_areas),
+    education: parseStoredJsonArray(row.education),
+    bar_admissions: parseStoredJsonArray(row.bar_admissions),
+    awards: mergedAwards,
+    affiliations,
+    highlights: []
   };
 }
 
