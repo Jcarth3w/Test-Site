@@ -4,10 +4,60 @@ import { fetchPracticeAreas } from '../../services/practicesApi';
 import { practiceCategorySections } from '../../data/practices';
 import './styles/PracticeAreas.css';
 
+const FIRE_EXPLOSION_KEYWORDS = [
+  'fire',
+  'explosion',
+  'wildfire',
+  'subrogation',
+  'carbon monoxide',
+  'electrical',
+  'chemical',
+  'natural gas',
+  'propane'
+];
+
+const PRACTICE_CATEGORIES = [
+  {
+    id: 'fire-explosion',
+    title: 'Fire & Explosion',
+    description:
+      'Focused defense for catastrophic fire, explosion, and related subrogation claims involving complex causation and technical investigation.'
+  },
+  {
+    id: 'other',
+    title: 'Other',
+    description:
+      'Experienced defense counsel for additional liability, coverage, construction, trucking, premises, product, and professional matters.'
+  }
+];
+
+function isFireExplosionPractice(practice) {
+  const searchableText = `${practice.title || ''} ${practice.description || ''} ${practice.slug || ''}`.toLowerCase();
+  return FIRE_EXPLOSION_KEYWORDS.some((keyword) => searchableText.includes(keyword));
+}
+
+function groupPracticesByCategory(practices) {
+  const grouped = {
+    'fire-explosion': [],
+    other: []
+  };
+
+  practices.forEach((practice) => {
+    const categoryId = isFireExplosionPractice(practice) ? 'fire-explosion' : 'other';
+    grouped[categoryId].push(practice);
+  });
+
+  return PRACTICE_CATEGORIES.map((category) => ({
+    ...category,
+    practiceAreas: grouped[category.id] || []
+  })).filter((category) => category.practiceAreas.length > 0);
+}
+
 const PracticeAreas = () => {
   const [practices, setPractices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [expandedCategories, setExpandedCategories] = useState([]);
 
   const practicesByCategory = useMemo(() => {
     const grouped = {};
@@ -27,7 +77,7 @@ const PracticeAreas = () => {
       try {
         const data = await fetchPracticeAreas();
         setPractices(data);
-      } catch (error) {
+      } catch {
         setErrorMessage('Unable to load practice areas right now. Please try again shortly.');
         setPractices([]);
       } finally {
@@ -37,6 +87,16 @@ const PracticeAreas = () => {
 
     loadData();
   }, []);
+
+  const practiceCategories = groupPracticesByCategory(practices);
+
+  const toggleCategory = (categoryId) => {
+    setExpandedCategories((current) =>
+      current.includes(categoryId)
+        ? current.filter((id) => id !== categoryId)
+        : [...current, categoryId]
+    );
+  };
 
   return (
     <div className="practice-areas-page">
