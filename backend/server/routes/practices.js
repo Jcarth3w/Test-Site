@@ -4,6 +4,21 @@ const { db } = require('../db');
 const { authenticateToken } = require('../middleware');
 const { logOperation } = require('../logger');
 const { normalizeBoolean } = require('../helpers');
+const {
+  PRACTICE_CATEGORIES,
+  isValidPracticeCategory,
+  normalizePracticeCategory
+} = require('../practiceCategories');
+
+// Public: list of selectable practice categories (fixed enum)
+router.get('/public/practice-categories', (req, res) => {
+  res.json(PRACTICE_CATEGORIES);
+});
+
+// CMS: same list, surfaced for the form dropdown
+router.get('/practice-categories', authenticateToken, (req, res) => {
+  res.json(PRACTICE_CATEGORIES);
+});
 
 // Public: active practice areas
 router.get('/public/practices', (req, res) => {
@@ -41,13 +56,18 @@ router.get('/practices/:id', authenticateToken, (req, res) => {
 
 // CMS: create practice area
 router.post('/practices', authenticateToken, (req, res) => {
-  const { slug, title, description, content, image_url, button_text, is_active } = req.body;
+  const { slug, title, description, content, image_url, button_text, category, is_active } = req.body;
   const activeValue = normalizeBoolean(is_active, 1);
 
+  if (!isValidPracticeCategory(category)) {
+    return res.status(400).json({ error: 'Invalid category' });
+  }
+  const categoryValue = normalizePracticeCategory(category);
+
   db.run(
-    `INSERT INTO practices (slug, title, description, content, image_url, button_text, is_active)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [slug, title, description, content, image_url, button_text || 'Free Case Review', activeValue],
+    `INSERT INTO practices (slug, title, description, content, image_url, button_text, category, is_active)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [slug, title, description, content, image_url, button_text || 'Free Case Review', categoryValue, activeValue],
     function (err) {
       if (err) {
         logOperation('PRACTICE_CREATE_ERROR', { slug, error: err.message, by: req.user?.username });
@@ -56,7 +76,13 @@ router.post('/practices', authenticateToken, (req, res) => {
         }
         return res.status(500).json({ error: 'Database error' });
       }
-      logOperation('PRACTICE_CREATED', { id: this.lastID, slug, is_active: activeValue, by: req.user?.username });
+      logOperation('PRACTICE_CREATED', {
+        id: this.lastID,
+        slug,
+        category: categoryValue,
+        is_active: activeValue,
+        by: req.user?.username
+      });
       res.json({ id: this.lastID, message: 'Practice area created successfully' });
     }
   );
@@ -64,15 +90,20 @@ router.post('/practices', authenticateToken, (req, res) => {
 
 // CMS: update practice area
 router.put('/practices/:id', authenticateToken, (req, res) => {
-  const { slug, title, description, content, image_url, button_text, is_active } = req.body;
+  const { slug, title, description, content, image_url, button_text, category, is_active } = req.body;
   const activeValue = normalizeBoolean(is_active, 1);
+
+  if (!isValidPracticeCategory(category)) {
+    return res.status(400).json({ error: 'Invalid category' });
+  }
+  const categoryValue = normalizePracticeCategory(category);
 
   db.run(
     `UPDATE practices
      SET slug = ?, title = ?, description = ?, content = ?, image_url = ?,
-         button_text = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
+         button_text = ?, category = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
      WHERE id = ?`,
-    [slug, title, description, content, image_url, button_text || 'Free Case Review', activeValue, req.params.id],
+    [slug, title, description, content, image_url, button_text || 'Free Case Review', categoryValue, activeValue, req.params.id],
     function (err) {
       if (err) {
         logOperation('PRACTICE_UPDATE_ERROR', { id: req.params.id, slug, error: err.message, by: req.user?.username });
@@ -82,7 +113,13 @@ router.put('/practices/:id', authenticateToken, (req, res) => {
         return res.status(500).json({ error: 'Database error' });
       }
       if (this.changes === 0) return res.status(404).json({ error: 'Practice area not found' });
-      logOperation('PRACTICE_UPDATED', { id: req.params.id, slug, is_active: activeValue, by: req.user?.username });
+      logOperation('PRACTICE_UPDATED', {
+        id: req.params.id,
+        slug,
+        category: categoryValue,
+        is_active: activeValue,
+        by: req.user?.username
+      });
       res.json({ message: 'Practice area updated successfully' });
     }
   );

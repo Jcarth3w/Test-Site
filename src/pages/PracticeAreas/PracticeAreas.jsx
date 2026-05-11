@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPracticeAreas } from '../../services/practicesApi';
+import { practiceCategorySections } from '../../data/practices';
 import './styles/PracticeAreas.css';
 
 const FIRE_EXPLOSION_KEYWORDS = [
@@ -58,6 +59,19 @@ const PracticeAreas = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [expandedCategories, setExpandedCategories] = useState([]);
 
+  const practicesByCategory = useMemo(() => {
+    const grouped = {};
+    practices.forEach((practice) => {
+      const categorySlug = practice.category || '';
+      if (!grouped[categorySlug]) grouped[categorySlug] = [];
+      grouped[categorySlug].push(practice);
+    });
+    Object.values(grouped).forEach((list) => {
+      list.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    });
+    return grouped;
+  }, [practices]);
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -89,60 +103,44 @@ const PracticeAreas = () => {
       <section className="page-hero">
         <div className="container">
           <h1>Practice Areas</h1>
-          <p>Our attorneys provide experienced defense counsel across multiple practice areas.</p>
+          <p>Coverage, defense, subrogation, and appellate matters.</p>
         </div>
       </section>
-      <section className="practices-grid">
+      <section className="practice-categories">
         <div className="container">
-          {loading && <p>Loading practice areas...</p>}
-          {!loading && errorMessage && <p>{errorMessage}</p>}
-          {!loading && !errorMessage && practices.length === 0 && <p>No practice areas are currently published.</p>}
-          <div className="practice-category-grid">
-            {!loading && !errorMessage && practiceCategories.map((category) => {
-              const isExpanded = expandedCategories.includes(category.id);
-              const contentId = `practice-category-${category.id}`;
-
-              return (
-                <article key={category.id} className={`practice-category-card${isExpanded ? ' expanded' : ''}`}>
-                  <button
-                    type="button"
-                    className="practice-category-toggle"
-                    onClick={() => toggleCategory(category.id)}
-                    aria-expanded={isExpanded}
-                    aria-controls={contentId}
-                  >
-                    <span className="practice-category-copy">
-                      <span className="practice-category-title">{category.title}</span>
-                      <span className="practice-category-description">{category.description}</span>
-                    </span>
-                    <span className="practice-category-icon" aria-hidden="true">
-                      {isExpanded ? '-' : '+'}
-                    </span>
-                  </button>
-
-                  {isExpanded && (
-                    <div id={contentId} className="practice-category-content">
-                      <ul className="practice-area-list">
-                        {category.practiceAreas.map((practice) => (
-                          <li key={practice.slug}>
-                            <Link to={`/practice/${practice.slug}`} className="practice-area-link">
-                              <span>{practice.title}</span>
-                              {practice.description && <small>{practice.description}</small>}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </article>
-              );
-            })}
-          </div>
+          {loading && <p className="status-text">Loading practice areas...</p>}
+          {!loading && errorMessage && <p className="status-text">{errorMessage}</p>}
+          {!loading && !errorMessage && practices.length === 0 && (
+            <p className="status-text">No practice areas are currently published.</p>
+          )}
+          {!loading && !errorMessage && practices.length > 0 && (
+            <div className="practice-tabs">
+              {practiceCategorySections.map((section) => {
+                const sectionPractices = practicesByCategory[section.slug] || [];
+                if (sectionPractices.length === 0) return null;
+                return (
+                  <article key={section.slug} className="category-tab">
+                    <header className="category-tab-header">
+                      <h2>{section.title}</h2>
+                      <p className="category-subtitle">{section.subtitle}</p>
+                    </header>
+                    <ul className="category-practices">
+                      {sectionPractices.map((practice) => (
+                        <li key={`${section.slug}-${practice.slug}`}>
+                          <Link to={`/practice/${practice.slug}`}>{practice.title}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
       <footer className="footer">
         <div className="container">
-          <p>© 2012 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
+          <p>© 2013 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
         </div>
       </footer>
     </div>

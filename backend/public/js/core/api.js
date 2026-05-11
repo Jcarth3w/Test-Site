@@ -81,6 +81,12 @@ export function getPractices() {
   });
 }
 
+export function getPracticeCategories() {
+  return request('/api/practice-categories', {
+    headers: { ...getAuthHeader() }
+  });
+}
+
 export function getPracticeById(id) {
   return request(`/api/practices/${id}`, {
     headers: { ...getAuthHeader() }

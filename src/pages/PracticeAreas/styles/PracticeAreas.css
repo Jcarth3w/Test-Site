@@ -1,144 +1,143 @@
 .practice-areas-page {
   background: #f7f8fb;
+  min-height: calc(100dvh - 6.5rem);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 .page-hero {
-  padding: 4rem 2rem;
+  padding: 0.85rem 1.5rem 0.75rem;
   text-align: center;
   background: linear-gradient(135deg, #ffffff 0%, #e8eef6 100%);
+  border-bottom: 1px solid #e1e7ef;
 }
 
 .page-hero h1 {
   color: #203f5f;
-  margin-bottom: 1rem;
-  font-size: 2.8rem;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
 }
 
 .page-hero p {
   color: #54687d;
   max-width: 720px;
+  margin: 0.15rem auto 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.practice-categories {
+  padding: 1.75rem 1.5rem 2.25rem;
+  flex: 1;
+}
+
+.practice-categories .container {
+  max-width: 1280px;
   margin: 0 auto;
-  font-size: 1.05rem;
 }
 
-.practices-grid {
-  padding: 3rem 2rem 4rem;
+.status-text {
+  text-align: center;
+  color: #54687d;
 }
 
-.practice-category-grid {
+.practice-tabs {
   display: grid;
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
 }
 
-.practice-category-card {
-  background: white;
+.category-tab {
+  background: #ffffff;
+  border: 1px solid #cfd9e6;
   border-radius: 12px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  text-align: left;
-  transition: box-shadow 0.3s ease;
-}
-
-.practice-category-card:hover,
-.practice-category-card.expanded {
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
-}
-
-.practice-category-toggle {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
   display: flex;
-  gap: 1.5rem;
-  justify-content: space-between;
-  padding: 1.4rem 1.5rem;
-  text-align: left;
-  width: 100%;
+  flex-direction: column;
+  box-shadow: 0 6px 18px rgba(32, 63, 95, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.practice-category-toggle:focus-visible {
-  outline: 3px solid rgba(47, 83, 117, 0.35);
-  outline-offset: -3px;
+.category-tab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(32, 63, 95, 0.12);
 }
 
-.practice-category-copy {
-  display: block;
-}
-
-.practice-category-title {
-  color: #203f5f;
-  display: block;
-  font-weight: 700;
-  margin: 0.25rem 0 0.85rem;
-  font-size: 1.55rem;
-}
-
-.practice-category-description {
-  color: #5f6f83;
-  display: block;
-  margin: 0;
-  line-height: 1.6;
-}
-
-.practice-category-icon {
-  align-items: center;
+.category-tab-header {
   background: #2f5375;
-  border-radius: 50%;
-  color: white;
-  display: inline-flex;
-  flex: 0 0 auto;
+  color: #ffffff;
+  padding: 1rem 1.1rem 0.9rem;
+}
+
+.category-tab-header h2 {
+  margin: 0 0 0.25rem;
+  color: #ffffff;
   font-size: 1.4rem;
-  font-weight: 600;
-  height: 2.4rem;
-  justify-content: center;
-  line-height: 1;
-  width: 2.4rem;
-}
-
-.practice-category-content {
-  border-top: 1px solid #e4eaf1;
-  padding: 0 1.5rem 1.5rem;
-}
-
-.practice-area-list {
-  display: grid;
-  gap: 0.85rem;
-  list-style: none;
-  margin: 1.25rem 0 0;
-  padding: 0;
-}
-
-.practice-area-link {
-  background: #f7f8fb;
-  border: 1px solid #e4eaf1;
-  border-radius: 8px;
-  color: #203f5f;
-  display: block;
-  padding: 1rem;
-  text-decoration: none;
-  transition: border-color 0.25s ease, transform 0.25s ease;
-}
-
-.practice-area-link:hover,
-.practice-area-link:focus {
-  border-color: #2f5375;
-  transform: translateX(4px);
-}
-
-.practice-area-link span {
-  display: block;
   font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
-.practice-area-link small {
-  color: #5f6f83;
+.category-subtitle {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.category-practices {
+  list-style: none;
+  margin: 0;
+  padding: 0.65rem 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+}
+
+.category-practices li {
+  margin: 0;
+}
+
+.category-practices a {
   display: block;
+  color: #1f3a5a;
+  text-decoration: none;
+  font-weight: 600;
   font-size: 0.95rem;
-  line-height: 1.5;
-  margin-top: 0.35rem;
+  line-height: 1.35;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.category-practices a:hover {
+  background: #eef3f9;
+  border-left-color: #efbe45;
+  color: #2f5375;
+}
+
+@media (max-width: 1100px) {
+  .practice-tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .practice-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .category-tab-header h2 {
+    font-size: 1.25rem;
+  }
 }
 
 .footer {
@@ -150,20 +149,4 @@
 
 .footer p {
   margin: 0.3rem 0;
-}
-
-@media (max-width: 640px) {
-  .practice-category-toggle {
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1.2rem;
-  }
-
-  .practice-category-title {
-    font-size: 1.35rem;
-  }
-
-  .practice-category-content {
-    padding: 0 1.2rem 1.2rem;
-  }
 }

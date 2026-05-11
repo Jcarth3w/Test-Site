@@ -18,11 +18,10 @@ const Navbar = () => {
         <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
           <li><Link to="/">Home</Link></li>
           <li><Link to="/about">Who We Are</Link></li>
-          <li><Link to="/attorneys">Attorneys</Link></li>
           <li><Link to="/practice">Practice Areas</Link></li>
-          <li><Link to="/offices">Offices</Link></li>
-          <li><Link to="/articles">Articles</Link></li>
-          <li><Link to="/contact" className="cta">Contact Us</Link></li>
+          <li><Link to="/offices">Locations</Link></li>
+          <li><Link to="/articles">Insights</Link></li>
+          <li><Link to="/attorneys" className="cta">Find an attorney</Link></li>
         </ul>
       </div>
     </nav>
