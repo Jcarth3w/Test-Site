@@ -12,7 +12,6 @@ import OfficeDetail from './pages/Offices/OfficeDetail';
 import Articles from './pages/Articles/Articles';
 import ArticleDetail from './pages/Articles/ArticleDetail';
 import Results from './pages/Results/Results';
-import Contact from './pages/Contact/Contact';
 
 function App() {
   return (
@@ -30,7 +29,7 @@ function App() {
         <Route path="/articles" element={<Articles />} />
         <Route path="/articles/:slug" element={<ArticleDetail />} />
         <Route path="/results" element={<Results />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact" element={<Navigate to="/attorneys" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

@@ -1,4 +1,10 @@
-import { createPractice, getPracticeById, updatePractice, uploadPracticeImage } from '../../core/api.js';
+import {
+  createPractice,
+  getPracticeById,
+  getPracticeCategories,
+  updatePractice,
+  uploadPracticeImage
+} from '../../core/api.js';
 import { bindLogout, getIdFromQuery, requireAuth, toSlug } from '../../core/admin-helpers.js';
 
 if (!requireAuth()) {
@@ -14,6 +20,7 @@ const messageEl = document.getElementById('page-message');
 const idEl = document.getElementById('practice-id');
 const slugEl = document.getElementById('practice-slug');
 const titleEl = document.getElementById('practice-title');
+const categoryEl = document.getElementById('practice-category');
 const descEl = document.getElementById('practice-description');
 const contentEl = document.getElementById('practice-content');
 const imageUrlEl = document.getElementById('practice-image-url');
@@ -22,6 +29,8 @@ const uploadImageBtn = document.getElementById('upload-practice-image-btn');
 const uploadStatusEl = document.getElementById('upload-practice-image-status');
 const buttonTextEl = document.getElementById('practice-button-text');
 const activeEl = document.getElementById('practice-active');
+
+let availableCategorySlugs = new Set();
 
 function showMessage(text, type = 'error') {
   messageEl.textContent = text;
@@ -35,10 +44,41 @@ function setUploadStatus(text, type = 'muted') {
   uploadStatusEl.classList.add(type);
 }
 
+function populateCategoryOptions(categories, selectedSlug = '') {
+  availableCategorySlugs = new Set(categories.map((c) => c.slug));
+  categoryEl.innerHTML = '';
+
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = 'Select a category';
+  placeholder.disabled = true;
+  if (!selectedSlug) placeholder.selected = true;
+  categoryEl.appendChild(placeholder);
+
+  categories.forEach((category) => {
+    const option = document.createElement('option');
+    option.value = category.slug;
+    option.textContent = category.title;
+    if (category.slug === selectedSlug) option.selected = true;
+    categoryEl.appendChild(option);
+  });
+}
+
+async function loadCategories(selectedSlug = '') {
+  try {
+    const categories = await getPracticeCategories();
+    populateCategoryOptions(categories, selectedSlug);
+  } catch (error) {
+    categoryEl.innerHTML = '<option value="" disabled selected>Could not load categories</option>';
+    showMessage(error.message || 'Could not load practice categories');
+  }
+}
+
 function getPayload() {
   return {
     slug: toSlug(slugEl.value),
     title: titleEl.value.trim(),
+    category: categoryEl.value,
     description: descEl.value.trim(),
     content: contentEl.value.trim(),
     image_url: imageUrlEl.value.trim(),
@@ -58,6 +98,10 @@ async function loadPractice(id) {
   buttonTextEl.value = practice.button_text || 'Free Case Review';
   activeEl.checked = Boolean(practice.is_active);
   formTitle.textContent = 'Edit Practice Area';
+
+  if (practice.category && availableCategorySlugs.has(practice.category)) {
+    categoryEl.value = practice.category;
+  }
 }
 
 form.addEventListener('submit', async (event) => {
@@ -65,6 +109,11 @@ form.addEventListener('submit', async (event) => {
 
   try {
     const payload = getPayload();
+
+    if (!payload.category || !availableCategorySlugs.has(payload.category)) {
+      showMessage('Please select a category from the list.');
+      return;
+    }
 
     if (idEl.value) {
       await updatePractice(idEl.value, payload);
@@ -101,6 +150,8 @@ uploadImageBtn?.addEventListener('click', async () => {
 });
 
 (async () => {
+  await loadCategories();
+
   const id = getIdFromQuery();
   if (!id) return;
 

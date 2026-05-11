@@ -2,8 +2,8 @@ export const homeContent = {
   heroBanner: {
     eyebrow: '',
     tagline: 'Defense Counsel for Catastrophic Fire and Explosion Claims',
-    primaryCtaLabel: 'Get Legal Support',
-    primaryCtaLink: '/contact',
+    primaryCtaLabel: 'Find an attorney',
+    primaryCtaLink: '/attorneys',
     secondaryCtaLabel: 'Meet Our Attorneys',
     secondaryCtaLink: '/attorneys'
   },
@@ -130,9 +130,9 @@ export const homeContent = {
   finalCta: {
     title: 'Discuss Your Claim With Us',
     body:
-      'Contact us to discuss your claim and learn how we can provide effective defense counsel and strategy.',
-    primaryLabel: 'Get Legal Support',
-    primaryLink: '/contact',
+      'Find an attorney to discuss your claim and learn how we can provide effective defense counsel and strategy.',
+    primaryLabel: 'Find an attorney',
+    primaryLink: '/attorneys',
     secondaryLabel: 'Meet Our Attorneys',
     secondaryLink: '/attorneys'
   }

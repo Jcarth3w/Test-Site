@@ -1,12 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPracticeAreas } from '../../services/practicesApi';
+import { practiceCategorySections } from '../../data/practices';
 import './styles/PracticeAreas.css';
 
 const PracticeAreas = () => {
   const [practices, setPractices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const practicesByCategory = useMemo(() => {
+    const grouped = {};
+    practices.forEach((practice) => {
+      const categorySlug = practice.category || '';
+      if (!grouped[categorySlug]) grouped[categorySlug] = [];
+      grouped[categorySlug].push(practice);
+    });
+    Object.values(grouped).forEach((list) => {
+      list.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    });
+    return grouped;
+  }, [practices]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -29,30 +43,44 @@ const PracticeAreas = () => {
       <section className="page-hero">
         <div className="container">
           <h1>Practice Areas</h1>
-          <p>Our attorneys provide experienced defense counsel across multiple practice areas.</p>
+          <p>Coverage, defense, subrogation, and appellate matters.</p>
         </div>
       </section>
-      <section className="practices-grid">
+      <section className="practice-categories">
         <div className="container">
-          {loading && <p>Loading practice areas...</p>}
-          {!loading && errorMessage && <p>{errorMessage}</p>}
-          {!loading && !errorMessage && practices.length === 0 && <p>No practice areas are currently published.</p>}
-          <div className="grid">
-            {practices.map((practice) => (
-              <div key={practice.slug} className="practice-card">
-                <h3>{practice.title}</h3>
-                <p>{practice.description}</p>
-                <Link to={`/practice/${practice.slug}`} className="btn btn-primary">
-                  Learn More
-                </Link>
-              </div>
-            ))}
-          </div>
+          {loading && <p className="status-text">Loading practice areas...</p>}
+          {!loading && errorMessage && <p className="status-text">{errorMessage}</p>}
+          {!loading && !errorMessage && practices.length === 0 && (
+            <p className="status-text">No practice areas are currently published.</p>
+          )}
+          {!loading && !errorMessage && practices.length > 0 && (
+            <div className="practice-tabs">
+              {practiceCategorySections.map((section) => {
+                const sectionPractices = practicesByCategory[section.slug] || [];
+                if (sectionPractices.length === 0) return null;
+                return (
+                  <article key={section.slug} className="category-tab">
+                    <header className="category-tab-header">
+                      <h2>{section.title}</h2>
+                      <p className="category-subtitle">{section.subtitle}</p>
+                    </header>
+                    <ul className="category-practices">
+                      {sectionPractices.map((practice) => (
+                        <li key={`${section.slug}-${practice.slug}`}>
+                          <Link to={`/practice/${practice.slug}`}>{practice.title}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
       <footer className="footer">
         <div className="container">
-          <p>© 2012 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
+          <p>© 2013 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
         </div>
       </footer>
     </div>

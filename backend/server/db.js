@@ -131,6 +131,7 @@ function initDatabase() {
         content TEXT,
         image_url TEXT,
         button_text TEXT DEFAULT 'Free Case Review',
+        category TEXT DEFAULT '',
         is_active INTEGER DEFAULT 1,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -186,6 +187,7 @@ function initDatabase() {
         ensureAttorneyAwardsAffiliationsColumns();
         ensureColumn('attorneys', 'publications', "TEXT DEFAULT '[]'");
         ensureColumn('practices', 'is_active', 'INTEGER DEFAULT 1');
+        ensureColumn('practices', 'category', "TEXT DEFAULT ''");
         ensureColumn('articles', 'source_url', "TEXT DEFAULT ''");
 
         const hashedPassword = bcrypt.hashSync(ADMIN_PASSWORD, 10);

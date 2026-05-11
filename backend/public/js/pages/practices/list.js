@@ -1,4 +1,4 @@
-import { getPractices, removePractice, setPracticeStatus } from '../../core/api.js';
+import { getPractices, getPracticeCategories, removePractice, setPracticeStatus } from '../../core/api.js';
 import { bindLogout, requireAuth } from '../../core/admin-helpers.js';
 
 if (!requireAuth()) {
@@ -10,10 +10,17 @@ bindLogout('logout-btn');
 const practiceList = document.getElementById('practice-list');
 const pageMessage = document.getElementById('page-message');
 
+let categoryTitleBySlug = new Map();
+
 function showMessage(text, type = 'error') {
   pageMessage.textContent = text;
   pageMessage.classList.remove('hidden', 'error', 'success');
   pageMessage.classList.add(type);
+}
+
+function categoryLabel(slug) {
+  if (!slug) return 'Uncategorized';
+  return categoryTitleBySlug.get(slug) || slug;
 }
 
 function renderList(practices) {
@@ -32,6 +39,7 @@ function renderList(practices) {
       <span class="status-chip ${isActive ? 'active' : 'inactive'}">${isActive ? 'ACTIVE' : 'INACTIVE'}</span>
       <h3>${practice.title || 'Untitled Practice'}</h3>
       <p class="meta"><strong>Slug:</strong> ${practice.slug || '-'}</p>
+      <p class="meta"><strong>Category:</strong> ${categoryLabel(practice.category)}</p>
       <p class="meta">${practice.description || ''}</p>
       <div class="card-actions">
         <a class="btn btn-ghost" href="/admin/practices/form?id=${practice.id}">Edit</a>
@@ -64,6 +72,15 @@ function renderList(practices) {
   });
 }
 
+async function loadCategoryLabels() {
+  try {
+    const categories = await getPracticeCategories();
+    categoryTitleBySlug = new Map(categories.map((c) => [c.slug, c.title]));
+  } catch {
+    categoryTitleBySlug = new Map();
+  }
+}
+
 async function loadPractices() {
   try {
     const practices = await getPractices();
@@ -73,4 +90,7 @@ async function loadPractices() {
   }
 }
 
-loadPractices();
+(async () => {
+  await loadCategoryLabels();
+  await loadPractices();
+})();

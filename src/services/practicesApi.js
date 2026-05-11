@@ -24,6 +24,7 @@ function normalizePractice(item) {
     description: item.description,
     image: resolvePracticeImageUrl(item.image_url || item.image),
     content: item.content,
+    category: item.category || '',
     buttonText: item.button_text || item.buttonText || 'Free Case Review',
     isActive: item.is_active ?? 1
   };

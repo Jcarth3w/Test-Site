@@ -21,7 +21,7 @@ const Home = () => {
 
       <footer className="footer">
         <div className="container">
-          <p>© 2012 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
+          <p>© 2013 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
         </div>
       </footer>
     </div>

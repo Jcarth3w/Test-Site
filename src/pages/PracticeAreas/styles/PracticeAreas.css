@@ -1,79 +1,143 @@
 .practice-areas-page {
   background: #f7f8fb;
+  min-height: calc(100dvh - 6.5rem);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 .page-hero {
-  padding: 4rem 2rem;
+  padding: 0.85rem 1.5rem 0.75rem;
   text-align: center;
   background: linear-gradient(135deg, #ffffff 0%, #e8eef6 100%);
+  border-bottom: 1px solid #e1e7ef;
 }
 
 .page-hero h1 {
   color: #203f5f;
-  margin-bottom: 1rem;
-  font-size: 2.8rem;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
 }
 
 .page-hero p {
   color: #54687d;
   max-width: 720px;
+  margin: 0.15rem auto 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.practice-categories {
+  padding: 1.75rem 1.5rem 2.25rem;
+  flex: 1;
+}
+
+.practice-categories .container {
+  max-width: 1280px;
   margin: 0 auto;
-  font-size: 1.05rem;
 }
 
-.practices-grid {
-  padding: 3rem 2rem 4rem;
+.status-text {
+  text-align: center;
+  color: #54687d;
 }
 
-.grid {
+.practice-tabs {
   display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
 }
 
-.practice-card {
-  background: white;
+.category-tab {
+  background: #ffffff;
+  border: 1px solid #cfd9e6;
   border-radius: 12px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.05);
-  padding: 1.2rem 1.2rem 1.6rem;
-  text-align: left;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 18px rgba(32, 63, 95, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-
-
-.practice-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+.category-tab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(32, 63, 95, 0.12);
 }
 
-.practice-card h3 {
-  color: #203f5f;
-  margin: 0.25rem 0 0.85rem;
-  font-size: 1.4rem;
-}
-
-.practice-card p {
-  color: #5f6f83;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-}
-
-.btn-primary {
-  display: inline-block;
+.category-tab-header {
   background: #2f5375;
-  color: white;
-  padding: 0.8rem 1.4rem;
-  border-radius: 5px;
+  color: #ffffff;
+  padding: 1rem 1.1rem 0.9rem;
+}
+
+.category-tab-header h2 {
+  margin: 0 0 0.25rem;
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.category-subtitle {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.category-practices {
+  list-style: none;
+  margin: 0;
+  padding: 0.65rem 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+}
+
+.category-practices li {
+  margin: 0;
+}
+
+.category-practices a {
+  display: block;
+  color: #1f3a5a;
   text-decoration: none;
   font-weight: 600;
-  transition: background 0.25s ease;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-.btn-primary:hover {
-  background: #1f3a5a;
+.category-practices a:hover {
+  background: #eef3f9;
+  border-left-color: #efbe45;
+  color: #2f5375;
+}
+
+@media (max-width: 1100px) {
+  .practice-tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .practice-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .category-tab-header h2 {
+    font-size: 1.25rem;
+  }
 }
 
 .footer {

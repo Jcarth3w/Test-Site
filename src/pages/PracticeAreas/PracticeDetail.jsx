@@ -76,8 +76,8 @@ const PracticeDetail = () => {
             <div className="content-cta">
               <h3>Ready to Discuss Your Case?</h3>
               <p>Get a free, confidential case review with our experienced attorneys.</p>
-              <Link to="/contact" className="btn btn-primary">
-                {practice.buttonText}
+              <Link to="/attorneys" className="btn btn-primary">
+                Find an attorney
               </Link>
             </div>
           </div>
@@ -85,7 +85,7 @@ const PracticeDetail = () => {
       </section>
       <footer className="footer">
         <div className="container">
-          <p>© 2012 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
+          <p>© 2013 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
         </div>
       </footer>
     </div>

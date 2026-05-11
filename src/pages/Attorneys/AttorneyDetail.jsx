@@ -332,7 +332,7 @@ const AttorneyDetail = () => {
 
       <footer className="footer">
         <div className="container">
-          <p>&copy; 2024 MLL Law. All rights reserved.</p>
+          <p>&copy; 2013 - 2026 MLL Law. All rights reserved.</p>
           <p>Contact us to schedule an attorney consultation.</p>
         </div>
       </footer>
