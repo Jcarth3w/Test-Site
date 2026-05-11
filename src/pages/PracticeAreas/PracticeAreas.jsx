@@ -63,7 +63,7 @@ const PracticeAreas = () => {
       try {
         const data = await fetchPracticeAreas();
         setPractices(data);
-      } catch (error) {
+      } catch {
         setErrorMessage('Unable to load practice areas right now. Please try again shortly.');
         setPractices([]);
       } finally {
@@ -136,7 +136,7 @@ const PracticeAreas = () => {
                   )}
                 </article>
               );
-            ))}
+            })}
           </div>
         </div>
       </section>
