@@ -4,7 +4,7 @@ const AboutBanner = () => {
   return (
     <section className="about-banner">
       <div className="container">
-        <h1>Trusted Counsel for Fire, Explosion, and Complex Claims</h1>
+        <h1>Fire & explosion counsel, nationwide</h1>
         <p>
           In 2013, John McCoy, Laurence Leavitt, and Brook Laskey combined their talents and over 30 years of experience
           to form McCoy Leavitt Laskey LLC, focused on serving the insurance industry with high-quality legal work and an
@@ -18,20 +18,17 @@ const AboutBanner = () => {
           <strong>all 50 states</strong>, with offices strategically placed across the country and the resources to
           support matters wherever they arise.
         </p>
-        <p className="about-banner-links">
-          <Link to="/practice" className="about-inline-link">
-            Explore our practice areas
+        <div className="about-banner-actions">
+          <Link to="/practice" className="btn btn-primary">
+            Practice areas
           </Link>
-          <span className="about-banner-links-sep" aria-hidden="true">
-            ·
-          </span>
-          <Link to="/offices" className="about-inline-link">
-            View our locations
+          <Link to="/offices" className="btn btn-primary">
+            Locations
           </Link>
-        </p>
-        <Link to="/attorneys" className="btn btn-primary">
-          Find an attorney
-        </Link>
+          <Link to="/attorneys" className="btn btn-primary">
+            Find an attorney
+          </Link>
+        </div>
       </div>
     </section>
   );
