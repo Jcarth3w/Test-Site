@@ -1,16 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicOffices } from '../../services/officesApi';
-import { getApiBaseUrl } from '../../services/apiBaseUrl';
+import { resolveMediaUrl } from '../../services/apiBaseUrl';
 import './styles/Offices.css';
-
-const API_BASE_URL = getApiBaseUrl();
-
-function resolveImageUrl(imageUrl = '') {
-  if (!imageUrl) return '';
-  if (/^https?:\/\//i.test(imageUrl)) return imageUrl;
-  return `${API_BASE_URL}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
-}
 
 const OfficeIntro = () => {
   return (
@@ -76,7 +68,7 @@ const OfficeList = () => {
               {office.image_url && (
                 <div className="office-card-image">
                   <img
-                    src={resolveImageUrl(office.image_url)}
+                    src={resolveMediaUrl(office.image_url)}
                     alt={office.name}
                   />
                 </div>

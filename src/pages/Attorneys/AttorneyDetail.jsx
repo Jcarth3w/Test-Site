@@ -2,10 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
 import { fetchPublicArticlesByAuthor } from '../../services/articlesApi';
-import { getApiBaseUrl } from '../../services/apiBaseUrl';
+import { resolveMediaUrl } from '../../services/apiBaseUrl';
 import './styles/Attorneys.css';
-
-const API_BASE_URL = getApiBaseUrl();
 
 function slugifyName(name = '') {
   return name
@@ -13,12 +11,6 @@ function slugifyName(name = '') {
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-');
-}
-
-function resolvePhotoUrl(photoUrl = '') {
-  if (!photoUrl) return '';
-  if (/^https?:\/\//i.test(photoUrl)) return photoUrl;
-  return `${API_BASE_URL}${photoUrl.startsWith('/') ? '' : '/'}${photoUrl}`;
 }
 
 function escapeVCardValue(value = '') {
@@ -172,7 +164,7 @@ const AttorneyDetail = () => {
               {attorney.photo_url && (
                 <img
                   className="attorney-detail-photo"
-                  src={resolvePhotoUrl(attorney.photo_url)}
+                  src={resolveMediaUrl(attorney.photo_url)}
                   alt={`${attorney.name || 'Attorney'} portrait`}
                 />
               )}

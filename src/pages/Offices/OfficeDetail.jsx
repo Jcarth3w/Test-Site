@@ -1,16 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchPublicOffices, fetchPublicOfficeBySlug } from '../../services/officesApi';
-import { getApiBaseUrl } from '../../services/apiBaseUrl';
+import { resolveMediaUrl } from '../../services/apiBaseUrl';
 import './styles/Offices.css';
-
-const API_BASE_URL = getApiBaseUrl();
-
-function resolveImageUrl(imageUrl = '') {
-  if (!imageUrl) return '';
-  if (/^https?:\/\//i.test(imageUrl)) return imageUrl;
-  return `${API_BASE_URL}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
-}
 
 const OfficeDetail = () => {
   const { slug } = useParams();
@@ -77,7 +69,7 @@ const OfficeDetail = () => {
             {office.image_url && (
               <img
                 className="office-detail-image"
-                src={resolveImageUrl(office.image_url)}
+                src={resolveMediaUrl(office.image_url)}
                 alt={office.name}
               />
             )}

@@ -24,6 +24,11 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(requestLogger);
 
+// Render (and similar) default service URLs hit `/`; the CMS lives under `/admin`.
+app.get('/', (req, res) => {
+  res.redirect(302, '/admin');
+});
+
 // API routes
 app.use('/api', attorneyRoutes);
 app.use('/api', practiceRoutes);

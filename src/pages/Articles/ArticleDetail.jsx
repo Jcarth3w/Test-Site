@@ -2,22 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchPublicArticleBySlug } from '../../services/articlesApi';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
-import { getApiBaseUrl } from '../../services/apiBaseUrl';
+import { resolveMediaUrl } from '../../services/apiBaseUrl';
 import './styles/Articles.css';
-
-const API_BASE_URL = getApiBaseUrl();
-
-function resolveImageUrl(imageUrl = '') {
-  if (!imageUrl) return '';
-  if (/^https?:\/\//i.test(imageUrl)) return imageUrl;
-  return `${API_BASE_URL}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
-}
-
-function resolvePhotoUrl(photoUrl = '') {
-  if (!photoUrl) return '';
-  if (/^https?:\/\//i.test(photoUrl)) return photoUrl;
-  return `${API_BASE_URL}${photoUrl.startsWith('/') ? '' : '/'}${photoUrl}`;
-}
 
 function slugifyName(name = '') {
   return name
@@ -113,7 +99,7 @@ const ArticleDetail = () => {
           {article.image_url && (
             <img
               className="article-detail-hero"
-              src={resolveImageUrl(article.image_url)}
+              src={resolveMediaUrl(article.image_url)}
               alt={article.title}
             />
           )}
@@ -153,7 +139,7 @@ const ArticleDetail = () => {
                 {author.photo_url ? (
                   <img
                     className="article-author-photo"
-                    src={resolvePhotoUrl(author.photo_url)}
+                    src={resolveMediaUrl(author.photo_url)}
                     alt=""
                   />
                 ) : (

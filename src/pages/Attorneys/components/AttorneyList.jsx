@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicAttorneys } from '../../../services/attorneysApi';
-import { getApiBaseUrl } from '../../../services/apiBaseUrl';
-
-const API_BASE_URL = getApiBaseUrl();
+import { resolveMediaUrl } from '../../../services/apiBaseUrl';
 
 function getLastName(name = '') {
   const parts = name.trim().split(/\s+/);
   return parts.length ? parts[parts.length - 1] : '';
-}
-
-function resolvePhotoUrl(photoUrl = '') {
-  if (!photoUrl) return '';
-  if (/^https?:\/\//i.test(photoUrl)) return photoUrl;
-  return `${API_BASE_URL}${photoUrl.startsWith('/') ? '' : '/'}${photoUrl}`;
 }
 
 function slugifyName(name = '') {
@@ -209,7 +201,7 @@ const AttorneyList = () => {
                       {attorney.photo_url ? (
                         <img
                           className="attorney-photo"
-                          src={resolvePhotoUrl(attorney.photo_url)}
+                          src={resolveMediaUrl(attorney.photo_url)}
                           alt={`${attorney.name || 'Attorney'} portrait`}
                           loading="lazy"
                         />

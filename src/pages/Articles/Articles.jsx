@@ -2,16 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicArticles } from '../../services/articlesApi';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
-import { getApiBaseUrl } from '../../services/apiBaseUrl';
+import { resolveMediaUrl } from '../../services/apiBaseUrl';
 import './styles/Articles.css';
-
-const API_BASE_URL = getApiBaseUrl();
-
-function resolveImageUrl(imageUrl = '') {
-  if (!imageUrl) return '';
-  if (/^https?:\/\//i.test(imageUrl)) return imageUrl;
-  return `${API_BASE_URL}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
-}
 
 function slugifyName(name = '') {
   return name
@@ -81,7 +73,7 @@ const Articles = () => {
                       className="article-image-link"
                     >
                       <img
-                        src={resolveImageUrl(article.image_url)}
+                        src={resolveMediaUrl(article.image_url)}
                         alt={article.title}
                         className="article-image"
                       />
