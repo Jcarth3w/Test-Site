@@ -1,4 +1,4 @@
-import { createAttorney, getAttorneyById, updateAttorney, uploadPhoto } from '../../core/api.js';
+import { createAttorney, getAttorneyById, getPractices, updateAttorney, uploadPhoto } from '../../core/api.js';
 import { bindLogout, getIdFromQuery } from '../../core/admin-helpers.js';
 
 bindLogout('logout-btn');
@@ -25,6 +25,7 @@ const bioEl = document.getElementById('bio');
 const photoEl = document.getElementById('photo');
 const activeEl = document.getElementById('attorney-active');
 const practiceAreaInputEl = document.getElementById('practice-area-input');
+const practiceFromCatalogEl = document.getElementById('practice-area-from-catalog');
 const addPracticeAreaBtnEl = document.getElementById('add-practice-area');
 const practiceAreasListEl = document.getElementById('practice-areas-list');
 const photoPreviewEl = document.getElementById('photo-preview');
@@ -66,7 +67,14 @@ function normalizePracticeAreaText(value = '') {
 
 function parsePracticeAreas(value) {
   if (Array.isArray(value)) {
-    return value.map(normalizePracticeAreaText).filter(Boolean);
+    return value
+      .map((item) => {
+        if (item == null) return '';
+        if (typeof item === 'string') return normalizePracticeAreaText(item);
+        if (typeof item === 'object' && item.title) return normalizePracticeAreaText(item.title);
+        return '';
+      })
+      .filter(Boolean);
   }
 
   if (typeof value === 'string') {
@@ -75,7 +83,7 @@ function parsePracticeAreas(value) {
     try {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed)) {
-        return parsed.map(normalizePracticeAreaText).filter(Boolean);
+        return parsePracticeAreas(parsed);
       }
     } catch {
       return raw.split(',').map(normalizePracticeAreaText).filter(Boolean);
@@ -114,13 +122,52 @@ function setPracticeAreas(nextValues = []) {
   practiceAreas.forEach((area, index) => {
     const pill = document.createElement('span');
     pill.className = 'practice-pill';
-    pill.innerHTML = `<span>${area}</span><button type="button" data-index="${index}" aria-label="Remove ${area}">x</button>`;
-    pill.querySelector('button').addEventListener('click', () => {
+    const label = document.createElement('span');
+    label.textContent = area;
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.setAttribute('aria-label', `Remove ${area}`);
+    removeBtn.textContent = 'x';
+    removeBtn.addEventListener('click', () => {
       const next = practiceAreas.filter((_, i) => i !== index);
       setPracticeAreas(next);
     });
+    pill.appendChild(label);
+    pill.appendChild(removeBtn);
     practiceAreasListEl.appendChild(pill);
   });
+}
+
+async function loadPracticeCatalog() {
+  if (!practiceFromCatalogEl) return;
+
+  const placeholder = '<option value="">Add from practice directory…</option>';
+
+  try {
+    const rows = await getPractices();
+    const titles = rows
+      .map((row) => normalizePracticeAreaText(row?.title || ''))
+      .filter(Boolean);
+
+    const uniqueByKey = new Map();
+    titles.forEach((title) => {
+      const key = title.toLowerCase();
+      if (!uniqueByKey.has(key)) uniqueByKey.set(key, title);
+    });
+
+    const sorted = Array.from(uniqueByKey.values()).sort((a, b) => a.localeCompare(b));
+
+    practiceFromCatalogEl.innerHTML = placeholder;
+    sorted.forEach((title) => {
+      const opt = document.createElement('option');
+      opt.value = title;
+      opt.textContent = title;
+      practiceFromCatalogEl.appendChild(opt);
+    });
+  } catch {
+    practiceFromCatalogEl.innerHTML =
+      '<option value="">Could not load practice directory (try refreshing)</option>';
+  }
 }
 
 function addPracticeArea() {
@@ -477,6 +524,13 @@ photoEl.addEventListener('change', () => {
 
 addPracticeAreaBtnEl?.addEventListener('click', addPracticeArea);
 
+practiceFromCatalogEl?.addEventListener('change', () => {
+  const value = normalizePracticeAreaText(practiceFromCatalogEl.value || '');
+  if (!value) return;
+  setPracticeAreas([...practiceAreas, value]);
+  practiceFromCatalogEl.value = '';
+});
+
 practiceAreaInputEl?.addEventListener('keydown', (event) => {
   if (event.key !== 'Enter') return;
   event.preventDefault();
@@ -553,6 +607,8 @@ form.addEventListener('submit', async (event) => {
   setBarAdmissions([]);
   setAwards([]);
   setAffiliations([]);
+
+  await loadPracticeCatalog();
 
   const id = getIdFromQuery();
   if (!id) return;

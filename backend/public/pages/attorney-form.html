@@ -107,8 +107,13 @@
           <label class="field field-full">
             <span>Areas of Practice</span>
             <div class="practice-editor">
+              <div class="practice-catalog-row">
+                <select id="practice-area-from-catalog" aria-label="Add an existing practice area from the directory">
+                  <option value="">Add from practice directory…</option>
+                </select>
+              </div>
               <div class="practice-input-row">
-                <input type="text" id="practice-area-input" placeholder="Add area (e.g., Personal Injury)">
+                <input type="text" id="practice-area-input" placeholder="Or type a custom area (e.g., Personal Injury)">
                 <button id="add-practice-area" type="button" class="btn btn-ghost">Add</button>
               </div>
               <div id="practice-areas-list" class="practice-areas-list"></div>

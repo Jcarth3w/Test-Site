@@ -83,6 +83,13 @@ function parseJsonArray(data) {
   return [];
 }
 
+function practiceAreaLabel(area) {
+  if (area == null) return '';
+  if (typeof area === 'string') return area.trim();
+  if (typeof area === 'object' && typeof area.title === 'string') return area.title.trim();
+  return String(area).trim();
+}
+
 const AttorneyDetail = () => {
   const { slug } = useParams();
   const [attorneys, setAttorneys] = useState([]);
@@ -149,7 +156,8 @@ const AttorneyDetail = () => {
     );
   }
 
-  const practiceAreas = parseJsonArray(attorney.practice_areas);
+  const practiceAreasRaw = parseJsonArray(attorney.practice_areas);
+  const practiceAreas = practiceAreasRaw.map(practiceAreaLabel).filter(Boolean);
   const education = parseJsonArray(attorney.education);
   const barAdmissions = parseJsonArray(attorney.bar_admissions);
   const awards = parseJsonArray(attorney.awards);
