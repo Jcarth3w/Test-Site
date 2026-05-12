@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicAttorneys } from '../../../services/attorneysApi';
+import { fetchPracticeAreas } from '../../../services/practicesApi';
 import { resolveMediaUrl } from '../../../services/apiBaseUrl';
 
 function getLastName(name = '') {
@@ -16,19 +17,43 @@ function slugifyName(name = '') {
     .replace(/\s+/g, '-');
 }
 
+function normalizePracticeLabel(value = '') {
+  return String(value).trim().replace(/\s+/g, ' ');
+}
+
 const AttorneyList = () => {
   const [attorneys, setAttorneys] = useState([]);
   const [query, setQuery] = useState('');
   const [selectedOffice, setSelectedOffice] = useState('all');
-  const [selectedPosition, setSelectedPosition] = useState('all');
   const [selectedPracticeArea, setSelectedPracticeArea] = useState('all');
+  const [catalogPracticeTitles, setCatalogPracticeTitles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
-      try {
-        const items = await fetchPublicAttorneys();
+      const [attorneysOutcome, practicesOutcome] = await Promise.allSettled([
+        fetchPublicAttorneys(),
+        fetchPracticeAreas()
+      ]);
+
+      if (practicesOutcome.status === 'fulfilled') {
+        const uniqueByKey = new Map();
+        practicesOutcome.value.forEach((practice) => {
+          const title = normalizePracticeLabel(practice.title || '');
+          if (!title) return;
+          const key = title.toLowerCase();
+          if (!uniqueByKey.has(key)) uniqueByKey.set(key, title);
+        });
+        setCatalogPracticeTitles(
+          Array.from(uniqueByKey.values()).sort((a, b) => a.localeCompare(b))
+        );
+      } else {
+        setCatalogPracticeTitles([]);
+      }
+
+      if (attorneysOutcome.status === 'fulfilled') {
+        const items = attorneysOutcome.value;
         const sorted = [...items].sort((a, b) => {
           const displayA = Number.isFinite(Number(a.display_order)) ? Number(a.display_order) : 100;
           const displayB = Number.isFinite(Number(b.display_order)) ? Number(b.display_order) : 100;
@@ -44,12 +69,13 @@ const AttorneyList = () => {
           return (a.name || '').localeCompare(b.name || '');
         });
         setAttorneys(sorted);
-      } catch (error) {
+        setErrorMessage('');
+      } else {
         setErrorMessage('Unable to load attorneys right now. Please try again shortly.');
         setAttorneys([]);
-      } finally {
-        setLoading(false);
       }
+
+      setLoading(false);
     };
 
     loadData();
@@ -59,35 +85,19 @@ const AttorneyList = () => {
     new Set(attorneys.map((attorney) => (attorney.location || '').trim()).filter(Boolean))
   ).sort((a, b) => a.localeCompare(b));
 
-  const positionOptions = Array.from(
-    new Set(attorneys.map((attorney) => (attorney.title || '').trim()).filter(Boolean))
-  ).sort((a, b) => a.localeCompare(b));
-
-  const practiceAreaOptions = Array.from(
-    new Set(
-      attorneys
-        .flatMap((attorney) => (Array.isArray(attorney.practice_areas) ? attorney.practice_areas : []))
-        .map((area) => String(area || '').trim())
-        .filter(Boolean)
-    )
-  ).sort((a, b) => a.localeCompare(b));
-
   const filteredAttorneys = attorneys.filter((attorney) => {
     const normalizedQuery = query.trim().toLowerCase();
     const practiceAreas = Array.isArray(attorney.practice_areas)
-      ? attorney.practice_areas.map((area) => String(area || '').trim()).filter(Boolean)
+      ? attorney.practice_areas.map((area) => normalizePracticeLabel(area)).filter(Boolean)
       : [];
 
     if (selectedOffice !== 'all' && (attorney.location || '') !== selectedOffice) {
       return false;
     }
 
-    if (selectedPosition !== 'all' && (attorney.title || '') !== selectedPosition) {
-      return false;
-    }
-
     if (selectedPracticeArea !== 'all') {
-      const hasPractice = practiceAreas.some((area) => area.toLowerCase() === selectedPracticeArea.toLowerCase());
+      const selectedKey = normalizePracticeLabel(selectedPracticeArea).toLowerCase();
+      const hasPractice = practiceAreas.some((area) => area.toLowerCase() === selectedKey);
       if (!hasPractice) return false;
     }
 
@@ -110,13 +120,11 @@ const AttorneyList = () => {
   const hasActiveFilters =
     query.trim().length > 0 ||
     selectedOffice !== 'all' ||
-    selectedPosition !== 'all' ||
     selectedPracticeArea !== 'all';
 
   const clearFilters = () => {
     setQuery('');
     setSelectedOffice('all');
-    setSelectedPosition('all');
     setSelectedPracticeArea('all');
   };
 
@@ -135,7 +143,7 @@ const AttorneyList = () => {
                 <input
                   type="search"
                   className="attorney-search-input"
-                  placeholder="Search by name, area, office, or position"
+                  placeholder="Search by name, area, or office"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   aria-label="Search attorneys"
@@ -155,19 +163,6 @@ const AttorneyList = () => {
                 ))}
               </select>
 
-              <label className="filter-label" htmlFor="position-filter">Position</label>
-              <select
-                id="position-filter"
-                className="attorney-filter-select"
-                value={selectedPosition}
-                onChange={(event) => setSelectedPosition(event.target.value)}
-              >
-                <option value="all">All positions</option>
-                {positionOptions.map((position) => (
-                  <option key={position} value={position}>{position}</option>
-                ))}
-              </select>
-
               <label className="filter-label" htmlFor="practice-filter">Area of Practice</label>
               <select
                 id="practice-filter"
@@ -176,7 +171,7 @@ const AttorneyList = () => {
                 onChange={(event) => setSelectedPracticeArea(event.target.value)}
               >
                 <option value="all">All practice areas</option>
-                {practiceAreaOptions.map((area) => (
+                {catalogPracticeTitles.map((area) => (
                   <option key={area} value={area}>{area}</option>
                 ))}
               </select>
