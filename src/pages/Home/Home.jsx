@@ -13,8 +13,6 @@ const Home = () => {
       <HeroSlider />
       <ProofStrip items={homeContent.proofItems} />
       <ScrollStorySections sections={homeContent.heroScrollSections} />
-
-      <CaseResults />
       <ProcessSection section={homeContent.processSection} sideImage={homeContent.images.processSide} />
       <TestimonialsSection section={homeContent.testimonialsSection} image={homeContent.images.testimonials} />
       <FinalCtaSection cta={homeContent.finalCta} />
