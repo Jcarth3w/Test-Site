@@ -10,10 +10,24 @@ const practiceRoutes = require('./routes/practices');
 const officeRoutes = require('./routes/offices');
 const articleRoutes = require('./routes/articles');
 const uploadRoutes = require('./routes/upload');
+const { serveUploads } = require('./serveUploads');
 
 // Ensure upload directory exists
 if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
+try {
+  const files = fs.readdirSync(UPLOAD_DIR);
+  const fileCount = files.filter((f) => {
+    try {
+      return fs.statSync(path.join(UPLOAD_DIR, f)).isFile();
+    } catch {
+      return false;
+    }
+  }).length;
+  console.log(`Uploads: ${path.resolve(UPLOAD_DIR)} (${fileCount} files on disk)`);
+} catch (e) {
+  console.warn('Could not read UPLOAD_DIR:', e.message);
 }
 
 const app = express();
@@ -21,6 +35,7 @@ const app = express();
 app.set('trust proxy', 1);
 app.use(cors({ origin: corsOriginHandler, credentials: true }));
 app.use(express.json());
+app.use('/uploads', serveUploads(UPLOAD_DIR));
 app.use(express.static('public'));
 app.use(requestLogger);
 
@@ -35,9 +50,6 @@ app.use('/api', practiceRoutes);
 app.use('/api', officeRoutes);
 app.use('/api', articleRoutes);
 app.use('/api', uploadRoutes);
-
-// Serve uploaded files
-app.use('/uploads', express.static(UPLOAD_DIR));
 
 // Admin pages
 app.get('/admin', (req, res) => {
