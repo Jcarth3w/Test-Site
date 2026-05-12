@@ -2,7 +2,7 @@ const FirmValues = () => {
   return (
     <section className="firm-values">
       <div className="container">
-        <h2>Why Insurers and Defendants Choose Us</h2>
+        <h2>Why Choose Us?</h2>
         <div className="value-grid">
           <div className="value-card">
             <h3>Experienced Trial Team</h3>
