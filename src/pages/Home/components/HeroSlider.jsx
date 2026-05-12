@@ -36,7 +36,6 @@ const HeroSlider = () => {
         <h1>{homeContent.heroBanner.tagline}</h1>
         <div className="hero-actions">
           <Link to={homeContent.heroBanner.primaryCtaLink} className="hero-btn hero-btn-primary">{homeContent.heroBanner.primaryCtaLabel}</Link>
-          <Link to={homeContent.heroBanner.secondaryCtaLink} className="hero-btn hero-btn-secondary">{homeContent.heroBanner.secondaryCtaLabel}</Link>
         </div>
       </div>
 

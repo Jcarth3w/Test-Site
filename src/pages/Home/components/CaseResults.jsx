@@ -18,9 +18,13 @@ const CaseResults = () => {
             </div>
           ))}
         </div>
-        <div className="results-cta">
-          <Link to={results.ctaLink} className="btn btn-outline">{results.ctaLabel}</Link>
-        </div>
+        {results.ctaLink && results.ctaLabel ? (
+          <div className="results-cta">
+            <Link to={results.ctaLink} className="btn btn-outline">
+              {results.ctaLabel}
+            </Link>
+          </div>
+        ) : null}
       </div>
     </section>
   );

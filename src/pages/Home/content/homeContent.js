@@ -47,8 +47,8 @@ export const homeContent = {
       title: 'Battle-Tested Defense Counsel. Proven Outcomes.',
       body:
         'Our attorneys have litigated thousands of consequential disputes and developed a national reputation for preparation, precision, and effective defense strategy.',
-      ctaLabel: 'Review Representative Results',
-      ctaLink: '/results',
+      ctaLabel: 'Explore Full Practice Areas',
+      ctaLink: '/practice',
       image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1400&q=80'
     },
     {
@@ -69,18 +69,16 @@ export const homeContent = {
   },
 
   resultsSection: {
-    title: 'Representative Defense Outcomes',
+    title: 'Defense Outcomes',
     subtitle:
-      'Sample outcomes for design preview only. Final representative results can be approved and swapped in later.',
+      'Sample outcomes for design preview only. Final case summaries can be approved and swapped in later.',
     cards: [
       { amount: '$28.6M', description: 'Defense verdict in refinery explosion case with complex causation issues.' },
       { amount: '$14.2M', description: 'Settlement favorable to insured in multi-family apartment fire claim.' },
       { amount: '$9.8M', description: 'Favorable resolution in trucking matter defending against injury claims.' },
       { amount: '$7.4M', description: 'Product liability defense with favorable settlement for manufacturer.' },
       { amount: '$5.1M', description: 'Premises liability defense negotiating reduced settlement exposure.' },
-    ],
-    ctaLabel: 'Review Representative Results',
-    ctaLink: '/results'
+    ]
   },
 
   processSection: {
@@ -111,7 +109,7 @@ export const homeContent = {
   },
 
   testimonialsSection: {
-    eyebrow: 'Representative Feedback',
+    eyebrow: 'Client Feedback',
     title: 'What Our Clients Say About Our Defense Strategy',
     quotes: [
       {
