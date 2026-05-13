@@ -11,23 +11,22 @@ export const homeContent = {
   heroImageSlides: [
     {
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
-      caption: 'Defense Strategy for Complex Claims'
+      caption: 'Battle-Tested Attorneys. Battle-Proven Results.'
     },
     {
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
-      caption: 'Forensic Analysis and Expert Coordination'
+      caption: 'Unmatched Experience'
     },
     {
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
-      caption: 'Trial-Ready Defense Nationwide'
+      caption: 'Real-Time Analysis and Solutions'
     }
   ],
 
   proofItems: [
-    { value: 'Premier Focus', label: 'Catastrophic fire and explosion defense' },
-    { value: '50 States', label: 'Defense counsel nationwide' },
-    { value: 'Thousands', label: 'Complex claims managed and resolved' },
-    { value: 'Trial-Ready', label: 'Built for defense outcomes from day one' }
+    { value: 'Battle-Tested Attorneys', label: 'Battle-proven results' },
+    { value: 'Unmatched Experience', label: 'Focused counsel for complex claims' },
+    { value: 'Real-Time Analysis', label: 'Practical solutions when timing matters' }
   ],
 
   heroScrollSections: [
