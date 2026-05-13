@@ -1,7 +1,7 @@
 export const homeContent = {
   heroBanner: {
     eyebrow: '',
-    tagline: 'Defense Counsel for Catastrophic Fire and Explosion Claims',
+    tagline: 'Trial-Ready Fire and Explosion Defense Nationwide',
     primaryCtaLabel: 'Find an attorney',
     primaryCtaLink: '/attorneys',
     secondaryCtaLabel: 'Meet Our Attorneys',
@@ -38,7 +38,7 @@ export const homeContent = {
       body:
         'We are known for defending high-stakes fire and explosion claims that demand immediate response, coordinated experts, and disciplined courtroom strategy.',
       ctaLabel: 'Learn About Our Fire and Explosion Defense',
-      ctaLink: '/practice',
+      ctaLink: '/practice/fire-explosion',
       image: 'https://images.unsplash.com/photo-1576091160550-112173f7f869?auto=format&fit=crop&w=1400&q=80'
     },
     {
@@ -53,12 +53,12 @@ export const homeContent = {
     },
     {
       id: 'broader-litigation-strength',
-      eyebrow: 'Broader Capability',
-      title: 'Deep Strength Across Multiple Practice Areas',
+      eyebrow: 'National Reach',
+      title: 'Where You Need Us, When It Matters Most',
       body:
-        'While catastrophic fire and explosion defense is our hallmark, we also bring the same discipline to product liability, premises liability, commercial general liability, professional liability, construction defect defense, and coverage matters.',
-      ctaLabel: 'Explore Full Practice Areas',
-      ctaLink: '/practice',
+        'Our locations support clients across jurisdictions with responsive defense counsel, coordinated local insight, and the depth to handle complex matters wherever they arise.',
+      ctaLabel: 'View Our Locations',
+      ctaLink: '/offices',
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=80'
     }
   ],
