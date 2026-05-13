@@ -10,15 +10,15 @@ export const homeContent = {
 
   heroImageSlides: [
     {
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
+      image: '/images/home/catastrophic-fire-and-explosion-law-firm.jpg',
       caption: 'Battle-Tested Attorneys. Battle-Proven Results.'
     },
     {
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
+      image: '/images/home/catastrophic-fire-and-explosion-law-firm-2.jpg',
       caption: 'Unmatched Experience'
     },
     {
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80',
+      image: '/images/home/catastrophic-fire-and-explosion-law-firm-3.jpg',
       caption: 'Real-Time Analysis and Solutions'
     }
   ],
