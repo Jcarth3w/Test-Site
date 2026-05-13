@@ -32,23 +32,24 @@ export const homeContent = {
   heroScrollSections: [
     {
       id: 'premier-fire-explosion',
-      eyebrow: 'The Premier Focus',
+      eyebrow: 'Our Premier Focus',
       title: 'Catastrophic Fire and Explosion Defense for Complex Claims',
       body:
         'We are known for defending high-stakes fire and explosion claims that demand immediate response, coordinated experts, and disciplined courtroom strategy.',
       ctaLabel: 'Learn About Our Fire and Explosion Defense',
       ctaLink: '/practice/fire-explosion',
-      image: 'https://images.unsplash.com/photo-1576091160550-112173f7f869?auto=format&fit=crop&w=1400&q=80'
+      image: '/images/home/catastrophic-fire-and-explosion-law-firm-4.jpg'
     },
     {
       id: 'unmatched-experience',
-      eyebrow: 'Unmatched Experience',
-      title: 'Battle-Tested Defense Counsel. Proven Outcomes.',
-      body:
-        'Our attorneys have litigated thousands of consequential disputes and developed a national reputation for preparation, precision, and effective defense strategy.',
+      eyebrow: 'Broad practice coverage',
+      title: 'Comprehensive Legal Support for Any of Your Needs',
+      body: 
+        'Our attorneys have litigated thousands of consequential disputes across a wide range of practices and developed a national reputation for preparation, precision, and effective defense strategy.',
       ctaLabel: 'Explore Full Practice Areas',
       ctaLink: '/practice',
-      image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1400&q=80'
+      image: '/images/home/laurence-h-leavitt-on-scene.jpg',
+      imageFit: 'contain'
     },
     {
       id: 'broader-litigation-strength',

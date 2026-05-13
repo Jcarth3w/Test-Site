@@ -21,8 +21,13 @@ const ScrollStorySections = ({ sections }) => {
             <div
               className="scroll-story-image"
               aria-hidden="true"
-              style={{ '--scroll-story-image': `url("${item.image}")` }}
-            />
+            >
+              <img
+                src={item.image}
+                alt=""
+                style={{ objectFit: item.imageFit || 'cover' }}
+              />
+            </div>
           </article>
         ))}
       </div>
