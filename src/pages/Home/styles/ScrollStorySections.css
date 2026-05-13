@@ -55,7 +55,6 @@
 }
 
 .scroll-story-image {
-  min-height: 290px;
   overflow: hidden;
   border-radius: 16px;
   border: 1px solid #d2e1ef;
@@ -68,8 +67,7 @@
 .scroll-story-image img {
   display: block;
   width: 100%;
-  height: 290px;
-  object-position: center;
+  height: auto;
 }
 
 @media (max-width: 1024px) {

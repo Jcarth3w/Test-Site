@@ -25,7 +25,6 @@ const ScrollStorySections = ({ sections }) => {
               <img
                 src={item.image}
                 alt=""
-                style={{ objectFit: item.imageFit || 'cover' }}
               />
             </div>
           </article>

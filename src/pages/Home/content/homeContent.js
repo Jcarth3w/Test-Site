@@ -44,12 +44,11 @@ export const homeContent = {
       id: 'unmatched-experience',
       eyebrow: 'Broad practice coverage',
       title: 'Comprehensive Legal Support for Any of Your Needs',
-      body: 
+      body:
         'Our attorneys have litigated thousands of consequential disputes across a wide range of practices and developed a national reputation for preparation, precision, and effective defense strategy.',
       ctaLabel: 'Explore Full Practice Areas',
       ctaLink: '/practice',
-      image: '/images/home/laurence-h-leavitt-on-scene.jpg',
-      imageFit: 'contain'
+      image: '/images/home/laurence-h-leavitt-on-scene.jpg'
     },
     {
       id: 'broader-litigation-strength',
@@ -59,13 +58,13 @@ export const homeContent = {
         'Our locations support clients across jurisdictions with responsive defense counsel, coordinated local insight, and the depth to handle complex matters wherever they arise.',
       ctaLabel: 'View Our Locations',
       ctaLink: '/offices',
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=80'
+      image: '/images/home/mccoy-leavitt-laskey-office-map.png'
     }
   ],
 
   images: {
-    processSide: 'https://images.unsplash.com/photo-1531697897236-e289f0ae4d14?auto=format&fit=crop&w=900&q=80',
-    testimonials: 'https://images.unsplash.com/photo-1576091160550-112173f7f869?auto=format&fit=crop&w=1100&q=80'
+    processSide: '/images/home/mll-catastrophic-explosion-site-inspection.jpg',
+    testimonials: '/images/home/client-testimonials.jpeg'
   },
 
   resultsSection: {
@@ -114,13 +113,28 @@ export const homeContent = {
     quotes: [
       {
         quote:
-          '"Kind words from our client"',
-        byline: 'Sample Testimonial - Industrial Fire Defense'
+          '"Responsive from day one. The team coordinated experts and kept our exposure focused while we stayed operational."',
+        byline: 'Risk Director — Manufacturing'
       },
       {
         quote:
-          '"Kind words from our client"',
-        byline: 'Sample Testimonial - Complex Liability Defense'
+          '"Clear strategy, disciplined discovery, and trial-ready posture. We always knew where the case stood and why."',
+        byline: 'General Counsel — Energy'
+      },
+      {
+        quote:
+          '"They understood the technical issues as well as the legal ones and translated both for our board with confidence."',
+        byline: 'Claims Lead — Transportation'
+      },
+      {
+        quote:
+          '"National reach without losing the local nuance. Counsel felt aligned from coast to coast on a complex multi-site claim."',
+        byline: 'VP Insurance — National Program'
+      },
+      {
+        quote:
+          '"Practical recommendations under pressure. We valued the balance of aggressive defense and commercial judgment."',
+        byline: 'Outside Counsel Liaison — Retail'
       }
     ]
   },

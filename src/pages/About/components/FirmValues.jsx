@@ -1,3 +1,5 @@
+import { useId, useState } from 'react';
+
 const IconTrial = () => (
   <svg className="value-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
     <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
@@ -19,7 +21,46 @@ const IconCommunication = () => (
   </svg>
 );
 
+const Chevron = () => (
+  <svg className="value-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const VALUE_ITEMS = [
+  {
+    id: 'trial',
+    title: 'Experienced Trial Team',
+    body: 'Our attorneys have successfully litigated complex defense matters nationwide.',
+    Icon: IconTrial,
+  },
+  {
+    id: 'strategy',
+    title: 'Strategic Defense',
+    body: 'We prioritize managing liability and develop effective strategies to protect our clients.',
+    Icon: IconStrategy,
+  },
+  {
+    id: 'communication',
+    title: 'Transparent Communication',
+    body: 'Clients receive clear updates, strategic guidance, and dedicated support at every step.',
+    Icon: IconCommunication,
+  },
+];
+
 const FirmValues = () => {
+  const baseId = useId();
+  const [open, setOpen] = useState(() => new Set());
+
+  const toggle = (key) => {
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
   return (
     <section className="firm-values" aria-labelledby="firm-values-heading">
       <div className="firm-values-inner">
@@ -30,27 +71,48 @@ const FirmValues = () => {
           </p>
         </header>
         <div className="value-grid">
-          <article className="value-card">
-            <div className="value-card-icon-wrap" aria-hidden="true">
-              <IconTrial />
-            </div>
-            <h3>Experienced Trial Team</h3>
-            <p>Our attorneys have successfully litigated complex defense matters nationwide.</p>
-          </article>
-          <article className="value-card">
-            <div className="value-card-icon-wrap" aria-hidden="true">
-              <IconStrategy />
-            </div>
-            <h3>Strategic Defense</h3>
-            <p>We prioritize managing liability and develop effective strategies to protect our clients.</p>
-          </article>
-          <article className="value-card">
-            <div className="value-card-icon-wrap" aria-hidden="true">
-              <IconCommunication />
-            </div>
-            <h3>Transparent Communication</h3>
-            <p>Clients receive clear updates, strategic guidance, and dedicated support at every step.</p>
-          </article>
+          {VALUE_ITEMS.map(({ id, title, body, Icon }) => {
+            const panelId = `${baseId}-${id}-panel`;
+            const isExpanded = open.has(id);
+
+            return (
+              <article key={id} className="value-card value-card--collapsible">
+                <h3 className="value-card-heading">
+                  <button
+                    type="button"
+                    className="value-card-trigger"
+                    id={`${baseId}-${id}-trigger`}
+                    aria-expanded={isExpanded}
+                    aria-controls={panelId}
+                    onClick={() => toggle(id)}
+                  >
+                    <span className="value-card-trigger-main">
+                      <span className="value-card-icon-wrap" aria-hidden="true">
+                        <Icon />
+                      </span>
+                      <span className="value-card-title-text">{title}</span>
+                    </span>
+                    <span className={`value-card-chevron-wrap${isExpanded ? ' is-open' : ''}`}>
+                      <Chevron />
+                    </span>
+                  </button>
+                </h3>
+                <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={`${baseId}-${id}-trigger`}
+                  aria-hidden={!isExpanded}
+                  className={`value-card-panel${isExpanded ? ' value-card-panel--open' : ''}`}
+                >
+                  <div className="value-card-panel-sizer">
+                    <div className="value-card-panel-inner">
+                      <p className="value-card-body">{body}</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -9,7 +9,6 @@ const FinalCtaSection = ({ cta }) => {
         <p>{cta.body}</p>
         <div className="final-cta-actions">
           <Link to={cta.primaryLink} className="home-btn-primary">{cta.primaryLabel}</Link>
-          <Link to={cta.secondaryLink} className="home-btn-secondary">{cta.secondaryLabel}</Link>
         </div>
       </div>
     </section>

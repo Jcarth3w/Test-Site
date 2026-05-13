@@ -23,7 +23,8 @@ const ProcessSection = ({ section, sideImage }) => {
             className="process-side-photo"
             aria-hidden="true"
             style={{ '--process-side-image': `url("${sideImage}")` }}
-          />
+          >
+          </div>
         </div>
       </div>
     </section>

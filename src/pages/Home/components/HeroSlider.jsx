@@ -25,9 +25,7 @@ const HeroSlider = () => {
             key={index}
             className={`slide hero-image-slide ${index === current ? 'active' : ''}`}
             style={{ '--hero-slide-image': `url("${slide.image}")` }}
-          >
-            <p className="hero-image-caption">{slide.caption}</p>
-          </div>
+          />
         ))}
       </div>
 
