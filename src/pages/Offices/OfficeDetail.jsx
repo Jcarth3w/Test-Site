@@ -63,77 +63,94 @@ const OfficeDetail = () => {
 
   const otherOffices = offices.filter((o) => o.id !== office.id);
   const officeAttorneys = attorneysForOffice(attorneys, office);
+  const hasMediaColumn = Boolean(office.image_url || office.address);
 
   return (
     <div className="offices-page">
       <section className="office-detail">
         <div className="container">
-          <Link className="office-back" to="/offices" aria-label="Back to Offices">
-            <span className="office-back-icon" aria-hidden="true"></span>
-            <span>Back to Offices</span>
-          </Link>
+          <div
+            className={`office-detail-layout${
+              otherOffices.length === 0 ? ' office-detail-layout--no-aside' : ''
+            }`}
+          >
+            <div className="office-detail-main">
+              <Link className="office-back" to="/offices" aria-label="Back to Offices">
+                <span className="office-back-icon" aria-hidden="true"></span>
+                <span>Back to Offices</span>
+              </Link>
 
-          <div className="office-detail-grid">
-            {office.image_url && (
-              <img
-                className="office-detail-image"
-                src={resolveMediaUrl(office.image_url)}
-                alt={office.name}
-              />
-            )}
+              <div
+                className={
+                  hasMediaColumn ? 'office-detail-grid' : 'office-detail-grid office-detail-grid--single'
+                }
+              >
+                {hasMediaColumn && (
+                  <div className="office-detail-media">
+                    {office.image_url && (
+                      <img
+                        className="office-detail-image"
+                        src={resolveMediaUrl(office.image_url)}
+                        alt={office.name}
+                      />
+                    )}
+                    {office.address && (
+                      <OfficeMapEmbed address={office.address} label={office.name} />
+                    )}
+                  </div>
+                )}
 
-            <div className="office-detail-content">
-              <h1>{office.name}</h1>
-              {office.address && (
-                <p className="office-detail-address">{office.address}</p>
-              )}
-              {office.phone && (
-                <p className="office-detail-phone">
-                  <strong>Phone:</strong> <a href={`tel:${office.phone}`}>{office.phone}</a>
-                </p>
-              )}
-              {office.email && (
-                <p className="office-detail-email">
-                  <strong>Email:</strong> <a href={`mailto:${office.email}`}>{office.email}</a>
-                </p>
-              )}
-              {office.address && (
-                <OfficeMapEmbed address={office.address} label={office.name} />
-              )}
-              {officeAttorneys.length > 0 && (
-                <div className="office-detail-attorneys">
-                  <h2 className="office-detail-attorneys-heading">Our attorneys in this office</h2>
-                  <ul className="office-detail-attorney-list">
-                    {officeAttorneys.map((attorney) => (
-                      <li key={attorney.id}>
-                        <Link to={`/attorneys/${slugifyAttorneyName(attorney.name)}`}>
-                          {attorney.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="office-detail-content">
+                  <h1>{office.name}</h1>
+                  {office.address && (
+                    <p className="office-detail-address">{office.address}</p>
+                  )}
+                  {office.phone && (
+                    <p className="office-detail-phone">
+                      <strong>Phone:</strong> <a href={`tel:${office.phone}`}>{office.phone}</a>
+                    </p>
+                  )}
+                  {office.email && (
+                    <p className="office-detail-email">
+                      <strong>Email:</strong> <a href={`mailto:${office.email}`}>{office.email}</a>
+                    </p>
+                  )}
+                  {office.description && (
+                    <div className="office-detail-description">
+                      {office.description}
+                    </div>
+                  )}
+                  {officeAttorneys.length > 0 && (
+                    <div className="office-detail-attorneys">
+                      <h2 className="office-detail-attorneys-heading">Our attorneys in this office</h2>
+                      <ul className="office-detail-attorney-list">
+                        {officeAttorneys.map((attorney) => (
+                          <li key={attorney.id}>
+                            <Link to={`/attorneys/${slugifyAttorneyName(attorney.name)}`}>
+                              {attorney.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              )}
-              {office.description && (
-                <div className="office-detail-description">
-                  {office.description}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {otherOffices.length > 0 && (
-            <div className="other-offices-section">
-              <h2>Our Other Offices</h2>
-              <div className="office-links-list">
-                {otherOffices.map((o) => (
-                  <Link key={o.id} to={`/offices/${o.slug}`} className="office-links-item">
-                    {o.name}
-                  </Link>
-                ))}
               </div>
             </div>
-          )}
+
+            {otherOffices.length > 0 && (
+              <aside className="office-detail-aside" aria-label="Other office locations">
+                <h2 className="office-detail-aside-heading">Other offices</h2>
+                <ul className="office-detail-aside-list">
+                  {otherOffices.map((o) => (
+                    <li key={o.id}>
+                      <Link to={`/offices/${o.slug}`}>{o.name}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            )}
+          </div>
         </div>
       </section>
 

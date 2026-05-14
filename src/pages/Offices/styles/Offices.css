@@ -53,17 +53,9 @@
   border: 1px solid #d6e2ef;
   border-radius: 12px;
   overflow: hidden;
-  color: inherit;
-  transition: box-shadow 200ms ease, border-color 200ms ease, transform 200ms ease;
-}
-
-.office-card-link {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
   text-decoration: none;
   color: inherit;
+  transition: box-shadow 200ms ease, border-color 200ms ease, transform 200ms ease;
 }
 
 .office-card:hover {
@@ -136,10 +128,6 @@
   border: 0;
 }
 
-.office-map-embed--compact iframe {
-  height: 180px;
-}
-
 .office-map-external {
   display: block;
   padding: 0.5rem 1rem 0.75rem;
@@ -158,46 +146,8 @@
   background: #e4ecf6;
 }
 
-.office-card-attorneys {
-  padding: 1rem 1.5rem 1.35rem;
-  border-top: 1px solid #e8eef5;
-  background: #ffffff;
-}
-
-.office-card-attorneys-heading {
-  margin: 0 0 0.65rem;
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #3e668e;
-}
-
-.office-card-attorney-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 0.75rem;
-}
-
-.office-card-attorney-list a {
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: #203f5f;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: color 200ms ease, border-color 200ms ease;
-}
-
-.office-card-attorney-list a:hover {
-  color: #3e668e;
-  border-bottom-color: #3e668e;
-}
-
 .office-detail .office-map-embed {
-  margin: 1.25rem 0 0;
+  margin: 0;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid #d6e2ef;
@@ -209,8 +159,8 @@
 }
 
 .office-detail-attorneys {
-  margin-top: 1.75rem;
-  padding-top: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.75rem;
   border-top: 1px solid #e8eef5;
 }
 
@@ -250,8 +200,62 @@
 }
 
 .office-detail .container {
-  max-width: 1000px;
+  max-width: 1180px;
   margin: 0 auto;
+}
+
+.office-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 220px);
+  gap: 2.5rem 3rem;
+  align-items: start;
+}
+
+.office-detail-layout--no-aside {
+  grid-template-columns: 1fr;
+}
+
+.office-detail-main {
+  min-width: 0;
+}
+
+.office-detail-aside {
+  position: sticky;
+  top: 1.25rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid #e0e9f2;
+}
+
+.office-detail-aside-heading {
+  margin: 0 0 1rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #3e668e;
+}
+
+.office-detail-aside-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.office-detail-aside-list a {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #203f5f;
+  text-decoration: none;
+  line-height: 1.35;
+  transition: color 200ms ease;
+}
+
+.office-detail-aside-list a:hover {
+  color: #3e668e;
+  text-decoration: underline;
 }
 
 .office-back {
@@ -277,10 +281,20 @@
 
 .office-detail-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  margin-bottom: 3rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 2.5rem 3rem;
+  margin-bottom: 0;
   align-items: start;
+}
+
+.office-detail-grid--single {
+  grid-template-columns: 1fr;
+}
+
+.office-detail-media {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .office-detail-image {
@@ -333,44 +347,6 @@
   line-height: 1.72;
 }
 
-/* Other Offices Section */
-.other-offices-section {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid #d6e2ef;
-}
-
-.other-offices-section h2 {
-  color: #203f5f;
-  margin: 0 0 1.5rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.office-links-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-}
-
-.office-links-item {
-  padding: 1rem;
-  background: #f0f5fa;
-  border: 1px solid #d6e2ef;
-  border-radius: 8px;
-  text-decoration: none;
-  color: #203f5f;
-  font-weight: 600;
-  text-align: center;
-  transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
-}
-
-.office-links-item:hover {
-  background: #e6eef8;
-  border-color: #3e668e;
-  color: #3e668e;
-}
-
 .footer {
   padding: 2rem 0;
   background: #172d4b;
@@ -380,6 +356,32 @@
 
 .footer p {
   margin: 0.3rem 0;
+}
+
+@media (max-width: 960px) {
+  .office-detail-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .office-detail-aside {
+    position: static;
+    padding: 1.5rem 0 0;
+    margin-top: 0.5rem;
+    border-left: none;
+    border-top: 1px solid #e0e9f2;
+  }
+
+  .office-detail-aside-heading {
+    margin-bottom: 0.85rem;
+  }
+
+  .office-detail-aside-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 1.25rem;
+    row-gap: 0.5rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -393,10 +395,6 @@
   }
 
   .office-list {
-    grid-template-columns: 1fr;
-  }
-
-  .office-links-list {
     grid-template-columns: 1fr;
   }
 }
