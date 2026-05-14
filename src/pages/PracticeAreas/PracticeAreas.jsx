@@ -4,60 +4,10 @@ import { fetchPracticeAreas } from '../../services/practicesApi';
 import { practiceCategorySections } from '../../data/practices';
 import './styles/PracticeAreas.css';
 
-const FIRE_EXPLOSION_KEYWORDS = [
-  'fire',
-  'explosion',
-  'wildfire',
-  'subrogation',
-  'carbon monoxide',
-  'electrical',
-  'chemical',
-  'natural gas',
-  'propane'
-];
-
-const PRACTICE_CATEGORIES = [
-  {
-    id: 'fire-explosion',
-    title: 'Fire & Explosion',
-    description:
-      'Focused defense for catastrophic fire, explosion, and related subrogation claims involving complex causation and technical investigation.'
-  },
-  {
-    id: 'other',
-    title: 'Other',
-    description:
-      'Experienced defense counsel for additional liability, coverage, construction, trucking, premises, product, and professional matters.'
-  }
-];
-
-function isFireExplosionPractice(practice) {
-  const searchableText = `${practice.title || ''} ${practice.description || ''} ${practice.slug || ''}`.toLowerCase();
-  return FIRE_EXPLOSION_KEYWORDS.some((keyword) => searchableText.includes(keyword));
-}
-
-function groupPracticesByCategory(practices) {
-  const grouped = {
-    'fire-explosion': [],
-    other: []
-  };
-
-  practices.forEach((practice) => {
-    const categoryId = isFireExplosionPractice(practice) ? 'fire-explosion' : 'other';
-    grouped[categoryId].push(practice);
-  });
-
-  return PRACTICE_CATEGORIES.map((category) => ({
-    ...category,
-    practiceAreas: grouped[category.id] || []
-  })).filter((category) => category.practiceAreas.length > 0);
-}
-
 const PracticeAreas = () => {
   const [practices, setPractices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const [expandedCategories, setExpandedCategories] = useState([]);
 
   const practicesByCategory = useMemo(() => {
     const grouped = {};
@@ -88,22 +38,30 @@ const PracticeAreas = () => {
     loadData();
   }, []);
 
-  const practiceCategories = groupPracticesByCategory(practices);
-
-  const toggleCategory = (categoryId) => {
-    setExpandedCategories((current) =>
-      current.includes(categoryId)
-        ? current.filter((id) => id !== categoryId)
-        : [...current, categoryId]
-    );
-  };
-
   return (
     <div className="practice-areas-page">
       <section className="page-hero">
         <div className="container">
           <h1>Practice Areas</h1>
           <p>Coverage, defense, subrogation, and appellate matters.</p>
+        </div>
+      </section>
+      <section className="practice-page-intro" aria-labelledby="practice-intro-heading">
+        <div className="container practice-page-intro-inner">
+          <h2 id="practice-intro-heading" className="visually-hidden">
+            About our practice
+          </h2>
+          <p>
+            At our core, we are counselors to, and representatives of, the insurance industry nationwide. We are skilled
+            litigators, trial attorneys, and strategic thinkers. McCoy Leavitt Laskey attorneys bring a deep understanding
+            of the insurance industry, with particular strength in fire and explosion litigation and a broad portfolio of
+            defense and coverage disputes.
+          </p>
+          <p>
+            We help clients chart paths to efficient, well-reasoned resolution—whether through motion practice, mediation,
+            or trial. Our attorneys concentrate in coverage, defense, subrogation, and appeals, serving carriers and their
+            insureds across the country.
+          </p>
         </div>
       </section>
       <section className="practice-categories">
