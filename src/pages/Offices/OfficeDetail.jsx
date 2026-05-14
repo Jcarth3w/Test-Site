@@ -1,23 +1,30 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { fetchPublicAttorneys } from '../../services/attorneysApi';
 import { fetchPublicOffices, fetchPublicOfficeBySlug } from '../../services/officesApi';
 import { resolveMediaUrl } from '../../services/apiBaseUrl';
+import OfficeMapEmbed from './components/OfficeMapEmbed';
+import { attorneysForOffice, slugifyAttorneyName } from './officeAttorneyMatch';
 import './styles/Offices.css';
 
 const OfficeDetail = () => {
   const { slug } = useParams();
   const [office, setOffice] = useState(null);
   const [offices, setOffices] = useState([]);
+  const [attorneys, setAttorneys] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const officeData = await fetchPublicOfficeBySlug(slug);
+        const [officeData, allOffices, attorneyList] = await Promise.all([
+          fetchPublicOfficeBySlug(slug),
+          fetchPublicOffices(),
+          fetchPublicAttorneys().catch(() => [])
+        ]);
         setOffice(officeData);
-        
-        const allOffices = await fetchPublicOffices();
         setOffices(allOffices);
+        setAttorneys(Array.isArray(attorneyList) ? attorneyList : []);
       } catch {
         setOffice(null);
       } finally {
@@ -55,6 +62,7 @@ const OfficeDetail = () => {
   }
 
   const otherOffices = offices.filter((o) => o.id !== office.id);
+  const officeAttorneys = attorneysForOffice(attorneys, office);
 
   return (
     <div className="offices-page">
@@ -88,6 +96,23 @@ const OfficeDetail = () => {
                 <p className="office-detail-email">
                   <strong>Email:</strong> <a href={`mailto:${office.email}`}>{office.email}</a>
                 </p>
+              )}
+              {office.address && (
+                <OfficeMapEmbed address={office.address} label={office.name} />
+              )}
+              {officeAttorneys.length > 0 && (
+                <div className="office-detail-attorneys">
+                  <h2 className="office-detail-attorneys-heading">Our attorneys in this office</h2>
+                  <ul className="office-detail-attorney-list">
+                    {officeAttorneys.map((attorney) => (
+                      <li key={attorney.id}>
+                        <Link to={`/attorneys/${slugifyAttorneyName(attorney.name)}`}>
+                          {attorney.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
               {office.description && (
                 <div className="office-detail-description">

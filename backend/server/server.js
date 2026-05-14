@@ -11,11 +11,13 @@ const officeRoutes = require('./routes/offices');
 const articleRoutes = require('./routes/articles');
 const uploadRoutes = require('./routes/upload');
 const { serveUploads } = require('./serveUploads');
+const { syncBundledUploadsIfMissing } = require('./syncBundledUploads');
 
 // Ensure upload directory exists
 if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
+syncBundledUploadsIfMissing(UPLOAD_DIR);
 try {
   const files = fs.readdirSync(UPLOAD_DIR);
   const fileCount = files.filter((f) => {
