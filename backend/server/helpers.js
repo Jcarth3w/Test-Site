@@ -6,6 +6,9 @@ function normalizeBoolean(value, defaultValue = 1) {
   return 0;
 }
 
+/** Legacy typo from attorney form / config; normalize to canonical office key. */
+const LEGACY_OFFICE_LOCATION_ALIASES = new Map([['albuqueque nm', 'Albuquerque, NM']]);
+
 function normalizeOfficeLocation(value) {
   const location = (value || '').trim();
   if (!location) return '';
@@ -14,7 +17,11 @@ function normalizeOfficeLocation(value) {
     .replace(/[.,]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
-  return CANONICAL_OFFICE_BY_KEY.get(normalizedKey) || null;
+  return (
+    LEGACY_OFFICE_LOCATION_ALIASES.get(normalizedKey) ||
+    CANONICAL_OFFICE_BY_KEY.get(normalizedKey) ||
+    null
+  );
 }
 
 function normalizeDisplayOrder(value, fallback = 100) {

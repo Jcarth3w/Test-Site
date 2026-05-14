@@ -35,7 +35,7 @@ const EFFECTIVE_ALLOWED_ORIGINS = [...new Set([...ALLOWED_ORIGINS, ...SERVICE_OR
 const ATTORNEY_OFFICES = new Set([
   'Milwaukee, WI',
   'Portland, ME',
-  'Albuqueque, NM',
+  'Albuquerque, NM',
   'Kansas City, KS',
   'San Antonio, TX',
   'Ann Arbor, MI',

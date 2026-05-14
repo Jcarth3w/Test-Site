@@ -69,6 +69,20 @@ function ensureAttorneyAwardsAffiliationsColumns() {
   });
 }
 
+function fixAlbuquerqueLocationTypo() {
+  db.run(
+    `UPDATE attorneys
+     SET location = 'Albuquerque, NM', updated_at = CURRENT_TIMESTAMP
+     WHERE INSTR(LOWER(COALESCE(location, '')), 'albuqueque') > 0`,
+    (err) => {
+      if (err) {
+        console.error('Error correcting Albuquerque office location typo:', err.message);
+        logOperation('DB_FIX_ALBUQUERQUE_TYPO_ERROR', { error: err.message });
+      }
+    }
+  );
+}
+
 function ensureColumn(table, column, definition) {
   db.all(`PRAGMA table_info(${table})`, [], (err, rows) => {
     if (err) {
@@ -189,6 +203,8 @@ function initDatabase() {
         ensureColumn('practices', 'is_active', 'INTEGER DEFAULT 1');
         ensureColumn('practices', 'category', "TEXT DEFAULT ''");
         ensureColumn('articles', 'source_url', "TEXT DEFAULT ''");
+
+        fixAlbuquerqueLocationTypo();
 
         const hashedPassword = bcrypt.hashSync(ADMIN_PASSWORD, 10);
         db.run(

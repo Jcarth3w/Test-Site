@@ -7,12 +7,17 @@ export function normalizeLocationKey(value) {
     .trim();
 }
 
+/** Correct legacy typo from the attorney CMS dropdown so office pages still match. */
+function attorneyLocationForMatch(value) {
+  return String(value || '').replace(/Albuqueque/gi, 'Albuquerque');
+}
+
 /**
  * Whether an attorney's `location` field corresponds to this office's display name.
  * Supports attorney values like "Milwaukee, WI" and office names like "Milwaukee" or "Milwaukee Office".
  */
 export function attorneyMatchesOffice(attorneyLocation, officeName) {
-  const raw = String(attorneyLocation || '').trim();
+  const raw = attorneyLocationForMatch(attorneyLocation).trim();
   const o = normalizeLocationKey(officeName);
   if (!raw || !o) return false;
 
