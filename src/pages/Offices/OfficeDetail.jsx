@@ -75,11 +75,6 @@ const OfficeDetail = () => {
             }`}
           >
             <div className="office-detail-main">
-              <Link className="office-back" to="/offices" aria-label="Back to Offices">
-                <span className="office-back-icon" aria-hidden="true"></span>
-                <span>Back to Offices</span>
-              </Link>
-
               <div
                 className={
                   hasMediaColumn ? 'office-detail-grid' : 'office-detail-grid office-detail-grid--single'

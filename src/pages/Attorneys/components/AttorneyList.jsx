@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { fetchPublicAttorneys } from '../../../services/attorneysApi';
 import { fetchPracticeAreas } from '../../../services/practicesApi';
 import { resolveMediaUrl } from '../../../services/apiBaseUrl';
@@ -22,8 +22,11 @@ function normalizePracticeLabel(value = '') {
 }
 
 const AttorneyList = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const qFromUrl = searchParams.get('q') ?? '';
+
   const [attorneys, setAttorneys] = useState([]);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(qFromUrl);
   const [selectedOffice, setSelectedOffice] = useState('all');
   const [selectedPracticeArea, setSelectedPracticeArea] = useState('all');
   const [catalogPracticeTitles, setCatalogPracticeTitles] = useState([]);
@@ -81,6 +84,10 @@ const AttorneyList = () => {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setQuery(qFromUrl);
+  }, [qFromUrl]);
+
   const officeOptions = Array.from(
     new Set(attorneys.map((attorney) => (attorney.location || '').trim()).filter(Boolean))
   ).sort((a, b) => a.localeCompare(b));
@@ -126,6 +133,11 @@ const AttorneyList = () => {
     setQuery('');
     setSelectedOffice('all');
     setSelectedPracticeArea('all');
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.delete('q');
+      return next;
+    }, { replace: true });
   };
 
   return (

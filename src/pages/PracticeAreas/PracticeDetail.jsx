@@ -76,7 +76,10 @@ const PracticeDetail = () => {
             <div className="content-cta">
               <h3>Ready to Discuss Your Case?</h3>
               <p>Get a free, confidential case review with our experienced attorneys.</p>
-              <Link to="/attorneys" className="btn btn-primary">
+              <Link
+                to={{ pathname: '/attorneys', search: `?q=${encodeURIComponent(practice.title)}` }}
+                className="btn btn-primary"
+              >
                 Find an attorney
               </Link>
             </div>
