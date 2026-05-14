@@ -9,7 +9,7 @@ function getPort() {
 
   if (portArg) return Number(portArg);
   if (process.env.PORT) return Number(process.env.PORT);
-  return 5000;
+  return 5001;
 }
 
 function parseCsvEnv(value = '') {
