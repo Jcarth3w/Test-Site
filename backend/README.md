@@ -19,7 +19,7 @@ This is a simple Node.js/Express backend with SQLite database for managing attor
    npm run dev
    ```
 
-The server will run on http://localhost:5000
+The server will run on http://localhost:5001
 
 ## Default Login
 
@@ -43,7 +43,7 @@ The server will run on http://localhost:5000
 
 ## Admin Interface
 
-Visit http://localhost:5000/admin to access the CMS interface.
+Visit http://localhost:5001/admin to access the CMS interface.
 
 ## Database
 

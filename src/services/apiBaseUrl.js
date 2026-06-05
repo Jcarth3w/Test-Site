@@ -7,7 +7,7 @@ export function getApiBaseUrl() {
   if (configured) return configured;
 
   // Keep local development convenient when env vars are not set.
-  if (import.meta.env.DEV) return 'http://localhost:5000';
+  if (import.meta.env.DEV) return 'http://localhost:5001';
 
   // In production, default to same-origin so reverse proxy setups also work.
   return '';

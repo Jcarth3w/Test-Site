@@ -10,27 +10,33 @@
 .home-pill-link {
   display: inline-block;
   text-decoration: none;
-  border-radius: 999px;
-  border: 1px solid #aec5dd;
-  color: #2f5e89;
-  background: #f8fbff;
+  border-radius: 2px;
+  border: none;
+  border-bottom: 2px solid #1a4a72;
+  color: #1a4a72;
+  background: transparent;
   font-weight: 700;
-  font-size: 0.88rem;
-  padding: 0.58rem 1.1rem;
+  font-size: 0.9rem;
+  padding: 0 0 0.15rem;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .home-pill-link:hover {
-  background: #ecf4fd;
+  color: #0f3558;
+  border-color: #0f3558;
 }
 
 .home-section-head.align-left {
-  margin: 0 0 1.45rem;
+  margin: 0 0 1.75rem;
   text-align: left;
 }
 
 .home-section-head h2 {
   margin: 0.45rem 0 0;
-  font-size: clamp(1.65rem, 3.2vw, 2.45rem);
-  color: #1f476f;
-  line-height: 1.18;
+  font-size: clamp(1.65rem, 3.2vw, 2.35rem);
+  color: #143d63;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }

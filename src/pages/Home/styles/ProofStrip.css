@@ -1,6 +1,7 @@
 .home-proof-strip {
-  padding: 1.1rem 2rem;
-  background: #132944;
+  padding: 1.25rem 2rem;
+  background: #0f2a42;
+  border-bottom: 3px solid #efbe45;
 }
 
 .home-proof-strip .container {
@@ -15,12 +16,13 @@
 }
 
 .proof-item {
-  border: 1px solid rgba(235, 243, 251, 0.18);
-  border-radius: 12px;
-  padding: 0.82rem 0.9rem;
+  border: none;
+  border-left: 2px solid rgba(239, 190, 69, 0.55);
+  border-radius: 0;
+  padding: 0.5rem 0 0.5rem 1rem;
   text-align: left;
   color: #e7f0fa;
-  background: rgba(255, 255, 255, 0.07);
+  background: transparent;
 }
 
 .proof-item strong {

@@ -1,6 +1,8 @@
 .home-process {
   padding: 4.2rem 2rem;
   background: #ffffff;
+  border-top: 1px solid #b8cfe3;
+  border-bottom: 1px solid #e2eaf2;
 }
 
 .home-process .container {
@@ -24,9 +26,8 @@
 .process-side-photo {
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: 16px;
-  border: 1px solid #d6e4f2;
-  box-shadow: 0 18px 34px rgba(18, 48, 79, 0.14);
+  border-radius: 2px;
+  box-shadow: 0 18px 34px rgba(18, 48, 79, 0.12);
   background-color: #edf4fb;
   background-image: var(--process-side-image);
   background-position: center;
@@ -35,11 +36,11 @@
 }
 
 .process-card {
-  border: 1px solid #d9e5f1;
-  border-radius: 14px;
-  padding: 1.05rem;
+  border: 1px solid #e2eaf2;
+  border-radius: 2px;
+  padding: 1.15rem 1.2rem;
   text-align: left;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  background: #fafcfe;
 }
 
 .process-step {

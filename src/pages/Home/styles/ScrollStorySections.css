@@ -1,88 +1,85 @@
 .home-scroll-sections {
-  padding: 3.4rem 2rem 2.2rem;
-  background: #f9fcff;
+  padding: 0;
+  background: #c5d8ea;
 }
 
-.home-scroll-sections .container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.scroll-story {
+.scroll-story--editorial {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.15rem;
-  align-items: center;
-  margin-bottom: 1.4rem;
-}
-
-.scroll-story:last-child {
-  margin-bottom: 0;
-}
-
-.scroll-story.reverse {
-  direction: rtl;
-}
-
-.scroll-story.reverse > * {
-  direction: ltr;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 44%);
+  min-height: min(520px, 72vh);
+  max-width: 100%;
 }
 
 .scroll-story-copy {
-  border: 1px solid #d7e5f2;
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 16px 34px rgba(31, 71, 111, 0.08);
-  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: left;
+  padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 3.5rem);
+  padding-left: max(1.5rem, calc((100vw - 1200px) / 2 + 2rem));
+  background: #e8f1f8;
+}
+
+.scroll-story-copy .home-eyebrow {
+  color: #1a4a72;
 }
 
 .scroll-story-copy h2 {
   margin: 0.45rem 0 0;
-  color: #214e78;
-  font-size: clamp(1.35rem, 2.4vw, 2rem);
-  line-height: 1.2;
+  color: #0f2a42;
+  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+  line-height: 1.18;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .scroll-story-copy p {
-  margin-top: 0.65rem;
-  color: #577089;
-  line-height: 1.62;
+  margin-top: 0.85rem;
+  color: #2d4a63;
+  line-height: 1.68;
+  font-size: 1.02rem;
+  max-width: 52ch;
 }
 
 .scroll-story-copy .home-pill-link {
-  margin-top: 0.9rem;
+  margin-top: 1.15rem;
 }
 
-.scroll-story-image {
+.scroll-story-visual {
+  position: relative;
+  margin: 0;
+  min-height: 280px;
   overflow: hidden;
-  border-radius: 16px;
-  border: 1px solid #d2e1ef;
-  box-shadow: 0 16px 34px rgba(31, 71, 111, 0.13);
-  background:
-    linear-gradient(145deg, rgba(17, 50, 84, 0.08), rgba(17, 50, 84, 0.18)),
-    #edf4fb;
 }
 
-.scroll-story-image img {
-  display: block;
+.scroll-story-visual img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 @media (max-width: 1024px) {
-  .scroll-story {
+  .scroll-story--editorial {
     grid-template-columns: 1fr;
+    min-height: 0;
   }
 
-  .scroll-story.reverse {
-    direction: ltr;
+  .scroll-story-copy {
+    padding: 2.5rem 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .scroll-story-visual {
+    min-height: 320px;
+    order: -1;
   }
 }
 
 @media (max-width: 680px) {
-  .home-scroll-sections {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  .scroll-story-visual {
+    min-height: 260px;
   }
 }

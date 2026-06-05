@@ -1,16 +1,44 @@
 .home-testimonials {
+  position: relative;
   padding: 4rem 2rem;
-  background: linear-gradient(180deg, #f2f7fd 0%, #e8f1fb 100%);
+  background-color: #2a241c;
+  background-image: var(--testimonial-bg-image);
+  background-size: cover;
+  background-position: center;
+  border-top: 1px solid #1a3553;
+  overflow: hidden;
+}
+
+.home-testimonials-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(15, 42, 66, 0.92) 0%,
+    rgba(22, 50, 78, 0.82) 45%,
+    rgba(35, 58, 82, 0.75) 100%
+  );
+  pointer-events: none;
 }
 
 .home-testimonials .container {
+  position: relative;
+  z-index: 1;
   max-width: 1200px;
   margin: 0 auto;
 }
 
+.home-testimonials .home-eyebrow {
+  color: #d4e4f5;
+}
+
+.home-testimonials .home-section-head h2 {
+  color: #ffffff;
+}
+
 .testimonial-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
 }
 
@@ -64,56 +92,29 @@
   }
 }
 
-.testimonial-layout {
-  display: grid;
-  grid-template-columns: 0.88fr 1.12fr;
-  gap: 1rem;
-  align-items: stretch;
-}
-
-.testimonial-photo {
-  overflow: hidden;
-  border-radius: 16px;
-  border: 1px solid #cfdfee;
-  box-shadow: 0 16px 32px rgba(18, 48, 79, 0.14);
-  background: #edf4fb;
-}
-
-.testimonial-photo img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .testimonial-card {
   margin: 0;
-  border: 1px solid #cddded;
-  border-radius: 14px;
-  padding: 1.2rem;
-  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 2px;
+  padding: 1.35rem 1.4rem;
+  background: rgba(255, 255, 255, 0.97);
   text-align: left;
-  box-shadow: 0 12px 28px rgba(31, 71, 111, 0.08);
+  box-shadow: 0 16px 40px rgba(4, 12, 24, 0.2);
 }
 
 .testimonial-card p {
   margin: 0;
-  color: #35577a;
-  line-height: 1.6;
+  color: #2d4a63;
+  line-height: 1.62;
 }
 
 .testimonial-card cite {
   display: block;
   margin-top: 0.8rem;
   font-style: normal;
-  color: #5b7794;
+  color: #4a6278;
   font-weight: 600;
   font-size: 0.88rem;
-}
-
-@media (max-width: 1024px) {
-  .testimonial-layout {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 680px) {

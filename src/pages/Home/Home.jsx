@@ -1,19 +1,38 @@
+import { useState } from 'react';
 import HeroSlider from './components/HeroSlider';
-import CaseResults from './components/CaseResults';
-import ProofStrip from './components/ProofStrip';
+import InsightsSection from './components/InsightsSection';
+import InsightsSectionToggle, {
+  getStoredInsightsEnabled,
+  setStoredInsightsEnabled,
+} from './components/InsightsSectionToggle';
 import ScrollStorySections from './components/ScrollStorySections';
-import ProcessSection from './components/ProcessSection';
+import AboutSection from './components/AboutSection';
+import ExploreLinksSection from './components/ExploreLinksSection';
 import TestimonialsSection from './components/TestimonialsSection';
 import FinalCtaSection from './components/FinalCtaSection';
 import { homeContent } from './content/homeContent';
 
 const Home = () => {
+  const insightsConfig = homeContent.insightsSection;
+  const [insightsEnabled, setInsightsEnabled] = useState(() =>
+    getStoredInsightsEnabled(insightsConfig.enabledByDefault !== false)
+  );
+
+  const handleInsightsToggle = (next) => {
+    setInsightsEnabled(next);
+    setStoredInsightsEnabled(next);
+  };
+
   return (
     <div className="App">
       <HeroSlider />
-      <ProofStrip items={homeContent.proofItems} />
+      {insightsConfig.showDevToggle ? (
+        <InsightsSectionToggle enabled={insightsEnabled} onChange={handleInsightsToggle} />
+      ) : null}
+      {insightsEnabled ? <InsightsSection section={insightsConfig} /> : null}
       <ScrollStorySections sections={homeContent.heroScrollSections} />
-      <ProcessSection section={homeContent.processSection} sideImage={homeContent.images.processSide} />
+      <AboutSection section={homeContent.aboutSection} />
+      <ExploreLinksSection links={homeContent.exploreLinks} />
       <TestimonialsSection section={homeContent.testimonialsSection} image={homeContent.images.testimonials} />
       <FinalCtaSection cta={homeContent.finalCta} />
 

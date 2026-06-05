@@ -1,7 +1,7 @@
 export const homeContent = {
   heroBanner: {
     eyebrow: '',
-    tagline: 'Trial-Ready Fire and Explosion Defense Nationwide',
+    tagline: 'From first notice to resolution Coordinated, Prepared, Direct',
     primaryCtaLabel: 'Find an attorney',
     primaryCtaLink: '/attorneys',
     secondaryCtaLabel: 'Meet Our Attorneys',
@@ -23,11 +23,50 @@ export const homeContent = {
     }
   ],
 
-  proofItems: [
-    { value: 'Battle-Tested Attorneys', label: 'Battle-proven results' },
-    { value: 'Unmatched Experience', label: 'Focused counsel for complex claims' },
-    { value: 'Real-Time Analysis', label: 'Practical solutions when timing matters' }
-  ],
+  insightsSection: {
+    enabledByDefault: true,
+    showDevToggle: true,
+    eyebrow: 'Insights & News',
+    title: 'Perspectives on Defense Strategy and Complex Claims',
+    lead:
+      'Thought leadership on fire and explosion defense, claims response, and the issues that matter to insurers and corporate clients.',
+    viewAllLabel: 'View all insights',
+    viewAllLink: '/articles',
+    emptyNote:
+      'New articles and firm perspectives are in development. Check back soon or contact us to discuss a topic with our team.',
+    showcaseImages: [
+      {
+        src: '/images/home/laurence-h-leavitt-on-scene.jpg',
+        alt: 'Attorney on site at a loss scene',
+        layout: 'primary',
+      },
+      {
+        src: '/images/home/mll-catastrophic-explosion-site-inspection.jpg',
+        alt: 'Site inspection at a catastrophic loss',
+        layout: 'secondary',
+      },
+    ],
+    placeholders: [
+      {
+        topic: 'Fire & Explosion',
+        title: 'Early Response Priorities After a Catastrophic Fire or Explosion',
+        description:
+          'What insurers and risk teams should coordinate in the first hours to preserve evidence and shape the defense.',
+      },
+      {
+        topic: 'Investigation & Evidence',
+        title: 'Building a Trial-Ready Posture in High-Exposure Claims',
+        description:
+          'How disciplined discovery, expert alignment, and motion practice reduce uncertainty before resolution.',
+      },
+      {
+        topic: 'Industry',
+        title: 'Defense Trends Shaping Complex Casualty and Property Programs',
+        description:
+          'Practical takeaways for claims leaders managing multi-jurisdictional and technically intensive matters.',
+      },
+    ],
+  },
 
   heroScrollSections: [
     {
@@ -40,26 +79,36 @@ export const homeContent = {
       ctaLink: '/practice/fire-explosion',
       image: '/images/home/catastrophic-fire-and-explosion-law-firm-4.jpg'
     },
+  ],
+
+  aboutSection: {
+    eyebrow: 'Who We Are',
+    title: 'Experienced Counsel, Nationwide Reach',
+    lead:
+      'Three seasoned trial lawyers founded McCoy Leavitt Laskey in 2013 to serve insurers with disciplined, innovative defense—today anchored in catastrophic fire and explosion litigation across all 50 states.',
+    stats: [
+      { value: '2013', label: 'Founded' },
+      { value: '50 States', label: 'National practice' },
+      { value: 'Fire & Explosion', label: 'Core focus' },
+    ],
+    ctaLabel: 'Our Story',
+    ctaLink: '/about',
+    image: '/images/home/laurence-h-leavitt-on-scene.jpg',
+  },
+
+  exploreLinks: [
     {
-      id: 'unmatched-experience',
-      eyebrow: 'Broad practice coverage',
-      title: 'Comprehensive Legal Support for Any of Your Needs',
-      body:
-        'Our attorneys have litigated thousands of consequential disputes across a wide range of practices and developed a national reputation for preparation, precision, and effective defense strategy.',
-      ctaLabel: 'Explore Full Practice Areas',
-      ctaLink: '/practice',
-      image: '/images/home/laurence-h-leavitt-on-scene.jpg'
+      label: 'Practice Areas',
+      title: 'Full-spectrum defense counsel',
+      description: 'Explore the practices our attorneys handle across complex casualty and commercial disputes.',
+      to: '/practice',
     },
     {
-      id: 'broader-litigation-strength',
-      eyebrow: 'National Reach',
-      title: 'Where You Need Us, When It Matters Most',
-      body:
-        'Our locations support clients across jurisdictions with responsive defense counsel, coordinated local insight, and the depth to handle complex matters wherever they arise.',
-      ctaLabel: 'View Our Locations',
-      ctaLink: '/offices',
-      image: '/images/home/mccoy-leavitt-laskey-office-map.png'
-    }
+      label: 'Locations',
+      title: 'National reach, local insight',
+      description: 'Find our offices and the jurisdictions where we support clients.',
+      to: '/offices',
+    },
   ],
 
   images: {
@@ -109,7 +158,7 @@ export const homeContent = {
 
   testimonialsSection: {
     eyebrow: 'Client Feedback',
-    title: 'What Our Clients Say About Our Defense Strategy',
+    title: 'What Our Clients Say About Us',
     quotes: [
       {
         quote:
