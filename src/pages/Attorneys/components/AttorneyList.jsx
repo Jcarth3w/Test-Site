@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { fetchPublicAttorneys } from '../../../services/attorneysApi';
 import { fetchPracticeAreas } from '../../../services/practicesApi';
@@ -7,6 +7,41 @@ import { resolveMediaUrl } from '../../../services/apiBaseUrl';
 function getLastName(name = '') {
   const parts = name.trim().split(/\s+/);
   return parts.length ? parts[parts.length - 1] : '';
+}
+
+function getLastNameInitial(name = '') {
+  const lastName = getLastName(name);
+  return lastName ? lastName.charAt(0).toUpperCase() : '';
+}
+
+const ALPHA_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const ROWS_PER_PAGE_OPTIONS = [
+  { value: '2', label: '2 rows per page' },
+  { value: '3', label: '3 rows per page' },
+  { value: '4', label: '4 rows per page' },
+  { value: '6', label: '6 rows per page' },
+  { value: 'all', label: 'Show all' },
+];
+
+function getGridColumnCount(width = window.innerWidth) {
+  if (width <= 680) return 1;
+  if (width <= 1024) return 2;
+  if (width <= 1200) return 3;
+  return 4;
+}
+
+function useGridColumnCount() {
+  const [columnCount, setColumnCount] = useState(() => getGridColumnCount());
+
+  useEffect(() => {
+    const updateColumnCount = () => setColumnCount(getGridColumnCount());
+
+    updateColumnCount();
+    window.addEventListener('resize', updateColumnCount);
+    return () => window.removeEventListener('resize', updateColumnCount);
+  }, []);
+
+  return columnCount;
 }
 
 function slugifyName(name = '') {
@@ -27,11 +62,15 @@ const AttorneyList = () => {
 
   const [attorneys, setAttorneys] = useState([]);
   const [query, setQuery] = useState(qFromUrl);
+  const [selectedLetter, setSelectedLetter] = useState('all');
   const [selectedOffice, setSelectedOffice] = useState('all');
   const [selectedPracticeArea, setSelectedPracticeArea] = useState('all');
   const [catalogPracticeTitles, setCatalogPracticeTitles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState('3');
+  const columnCount = useGridColumnCount();
 
   useEffect(() => {
     const loadData = async () => {
@@ -58,14 +97,6 @@ const AttorneyList = () => {
       if (attorneysOutcome.status === 'fulfilled') {
         const items = attorneysOutcome.value;
         const sorted = [...items].sort((a, b) => {
-          const displayA = Number.isFinite(Number(a.display_order)) ? Number(a.display_order) : 100;
-          const displayB = Number.isFinite(Number(b.display_order)) ? Number(b.display_order) : 100;
-          if (displayA !== displayB) return displayA - displayB;
-
-          const equityA = /equity\s+partner/i.test(a.title || '') ? 0 : 1;
-          const equityB = /equity\s+partner/i.test(b.title || '') ? 0 : 1;
-          if (equityA !== equityB) return equityA - equityB;
-
           const lastA = getLastName(a.name);
           const lastB = getLastName(b.name);
           if (lastA.localeCompare(lastB) !== 0) return lastA.localeCompare(lastB);
@@ -88,15 +119,30 @@ const AttorneyList = () => {
     setQuery(qFromUrl);
   }, [qFromUrl]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query, selectedLetter, selectedOffice, selectedPracticeArea, pageSize, columnCount]);
+
   const officeOptions = Array.from(
     new Set(attorneys.map((attorney) => (attorney.location || '').trim()).filter(Boolean))
   ).sort((a, b) => a.localeCompare(b));
+
+  const availableLetters = new Set(
+    attorneys
+      .map((attorney) => getLastNameInitial(attorney.name))
+      .filter((letter) => /^[A-Z]$/.test(letter))
+  );
 
   const filteredAttorneys = attorneys.filter((attorney) => {
     const normalizedQuery = query.trim().toLowerCase();
     const practiceAreas = Array.isArray(attorney.practice_areas)
       ? attorney.practice_areas.map((area) => normalizePracticeLabel(area)).filter(Boolean)
       : [];
+
+    if (selectedLetter !== 'all') {
+      const lastInitial = getLastNameInitial(attorney.name);
+      if (lastInitial !== selectedLetter) return false;
+    }
 
     if (selectedOffice !== 'all' && (attorney.location || '') !== selectedOffice) {
       return false;
@@ -124,15 +170,54 @@ const AttorneyList = () => {
     return searchText.includes(normalizedQuery);
   });
 
+  const fullRowAttorneys = useMemo(() => {
+    const fullRowCount = Math.floor(filteredAttorneys.length / columnCount) * columnCount;
+    return filteredAttorneys.slice(0, fullRowCount);
+  }, [filteredAttorneys, columnCount]);
+
+  const rowsPerPage = pageSize === 'all' ? null : Number(pageSize);
+  const attorneysPerPage = rowsPerPage ? rowsPerPage * columnCount : fullRowAttorneys.length;
+
+  const attorneyPages = useMemo(() => {
+    if (pageSize === 'all') {
+      return fullRowAttorneys.length ? [fullRowAttorneys] : [[]];
+    }
+
+    const pages = [];
+    for (let start = 0; start < fullRowAttorneys.length; start += attorneysPerPage) {
+      pages.push(fullRowAttorneys.slice(start, start + attorneysPerPage));
+    }
+
+    return pages.length ? pages : [[]];
+  }, [fullRowAttorneys, pageSize, attorneysPerPage]);
+
+  const totalPages = attorneyPages.length;
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedAttorneys = attorneyPages[safePage - 1] || [];
+
+  const resultsStart = paginatedAttorneys.length === 0
+    ? 0
+    : (safePage - 1) * attorneysPerPage + 1;
+  const resultsEnd = paginatedAttorneys.length === 0
+    ? 0
+    : resultsStart + paginatedAttorneys.length - 1;
+
+  const pageNumbers = useMemo(() => {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }, [totalPages]);
+
   const hasActiveFilters =
     query.trim().length > 0 ||
+    selectedLetter !== 'all' ||
     selectedOffice !== 'all' ||
     selectedPracticeArea !== 'all';
 
   const clearFilters = () => {
     setQuery('');
+    setSelectedLetter('all');
     setSelectedOffice('all');
     setSelectedPracticeArea('all');
+    setCurrentPage(1);
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       next.delete('q');
@@ -148,80 +233,187 @@ const AttorneyList = () => {
         {!loading && !errorMessage && attorneys.length === 0 && <p>No attorneys are currently published.</p>}
         {!loading && attorneys.length > 0 && (
           <div className="attorney-layout">
-            <aside className="attorney-filters" aria-label="Attorney filters">
-              <h3>Find Attorneys</h3>
-
+            <div className="attorney-toolbar" aria-label="Attorney filters">
+              <h1 className="attorney-directory-title">Meet Our Attorneys</h1>
               <div className="attorney-search-wrap">
                 <input
                   type="search"
                   className="attorney-search-input"
-                  placeholder="Search by name, area, or office"
+                  placeholder="Search attorneys by name, practice area, or office"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   aria-label="Search attorneys"
                 />
               </div>
 
-              <label className="filter-label" htmlFor="office-filter">Office</label>
-              <select
-                id="office-filter"
-                className="attorney-filter-select"
-                value={selectedOffice}
-                onChange={(event) => setSelectedOffice(event.target.value)}
-              >
-                <option value="all">All offices</option>
-                {officeOptions.map((office) => (
-                  <option key={office} value={office}>{office}</option>
-                ))}
-              </select>
+              <div className="attorney-alpha-bar" role="group" aria-label="Filter by last name">
+                <span className="attorney-alpha-label">Last name</span>
+                <div className="attorney-alpha-letters">
+                  <button
+                    type="button"
+                    className={`attorney-alpha-btn${selectedLetter === 'all' ? ' is-active' : ''}`}
+                    onClick={() => setSelectedLetter('all')}
+                    aria-pressed={selectedLetter === 'all'}
+                  >
+                    All
+                  </button>
+                  {ALPHA_LETTERS.map((letter) => {
+                    const hasAttorneys = availableLetters.has(letter);
+                    return (
+                      <button
+                        key={letter}
+                        type="button"
+                        className={`attorney-alpha-btn${selectedLetter === letter ? ' is-active' : ''}${hasAttorneys ? '' : ' is-disabled'}`}
+                        onClick={() => hasAttorneys && setSelectedLetter(letter)}
+                        disabled={!hasAttorneys}
+                        aria-pressed={selectedLetter === letter}
+                      >
+                        {letter}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
 
-              <label className="filter-label" htmlFor="practice-filter">Area of Practice</label>
-              <select
-                id="practice-filter"
-                className="attorney-filter-select"
-                value={selectedPracticeArea}
-                onChange={(event) => setSelectedPracticeArea(event.target.value)}
-              >
-                <option value="all">All practice areas</option>
-                {catalogPracticeTitles.map((area) => (
-                  <option key={area} value={area}>{area}</option>
-                ))}
-              </select>
-            </aside>
+              <div className="attorney-filter-row">
+                <div className="attorney-filter-field">
+                  <label className="filter-label" htmlFor="office-filter">Office</label>
+                  <select
+                    id="office-filter"
+                    className="attorney-filter-select"
+                    value={selectedOffice}
+                    onChange={(event) => setSelectedOffice(event.target.value)}
+                  >
+                    <option value="all">All offices</option>
+                    {officeOptions.map((office) => (
+                      <option key={office} value={office}>{office}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="attorney-filter-field">
+                  <label className="filter-label" htmlFor="practice-filter">Area of Practice</label>
+                  <select
+                    id="practice-filter"
+                    className="attorney-filter-select"
+                    value={selectedPracticeArea}
+                    onChange={(event) => setSelectedPracticeArea(event.target.value)}
+                  >
+                    <option value="all">All practice areas</option>
+                    {catalogPracticeTitles.map((area) => (
+                      <option key={area} value={area}>{area}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
 
             <div className="attorney-results">
               <div className="attorney-results-toolbar" aria-live="polite">
                 <p className="attorney-results-count">
-                  Showing {filteredAttorneys.length} of {attorneys.length} attorneys
+                  {filteredAttorneys.length === 0
+                    ? `Showing 0 of ${attorneys.length} attorneys`
+                    : `Showing ${resultsStart}–${resultsEnd} of ${fullRowAttorneys.length} attorneys`}
                 </p>
-                {hasActiveFilters && (
-                  <button type="button" className="clear-filters-btn" onClick={clearFilters}>
-                    Clear filters
-                  </button>
-                )}
+                <div className="attorney-results-actions">
+                  <label className="attorney-page-size-field" htmlFor="page-size-filter">
+                    <span className="filter-label">Per page</span>
+                    <select
+                      id="page-size-filter"
+                      className="attorney-filter-select attorney-page-size-select"
+                      value={pageSize}
+                      onChange={(event) => setPageSize(event.target.value)}
+                    >
+                      {ROWS_PER_PAGE_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                      ))}
+                    </select>
+                  </label>
+                  {hasActiveFilters && (
+                    <button type="button" className="clear-filters-btn" onClick={clearFilters}>
+                      Clear filters
+                    </button>
+                  )}
+                </div>
               </div>
               {filteredAttorneys.length === 0 && <p>No attorneys matched your search.</p>}
               <div className="cards-grid">
-                {filteredAttorneys.map((attorney, index) => (
-                  <div key={attorney.id || index} className="attorney-card">
-                    <Link className="attorney-photo-link" to={`/attorneys/${slugifyName(attorney.name)}`}>
-                      {attorney.photo_url ? (
-                        <img
-                          className="attorney-photo"
-                          src={resolveMediaUrl(attorney.photo_url)}
-                          alt={`${attorney.name || 'Attorney'} portrait`}
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="attorney-photo-placeholder" aria-label={`${attorney.name || 'Attorney'} profile`} />
+                {paginatedAttorneys.map((attorney, index) => (
+                  <article key={attorney.id || index} className="attorney-card">
+                    <div className="attorney-card-media">
+                      <Link className="attorney-photo-link" to={`/attorneys/${slugifyName(attorney.name)}`}>
+                        {attorney.photo_url ? (
+                          <img
+                            className="attorney-photo"
+                            src={resolveMediaUrl(attorney.photo_url)}
+                            alt={`${attorney.name || 'Attorney'} portrait`}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="attorney-photo-placeholder" aria-label={`${attorney.name || 'Attorney'} profile`} />
+                        )}
+                      </Link>
+                    </div>
+                    <div className="attorney-card-body">
+                      <h3>
+                        <Link to={`/attorneys/${slugifyName(attorney.name)}`}>{attorney.name}</Link>
+                      </h3>
+                      <p className="title">{attorney.title}</p>
+                      <p className="location">{attorney.location || attorney.specialty}</p>
+                      {(attorney.phone || attorney.email) && (
+                        <div className="attorney-card-contact">
+                          {attorney.phone && (
+                            <a className="attorney-card-phone" href={`tel:${attorney.phone}`}>
+                              {attorney.phone}
+                            </a>
+                          )}
+                          {attorney.email && (
+                            <a className="attorney-card-email" href={`mailto:${attorney.email}`}>
+                              {attorney.email}
+                            </a>
+                          )}
+                        </div>
                       )}
-                    </Link>
-                    <h3>{attorney.name}</h3>
-                    <p className="title">{attorney.title}</p>
-                    <p className="location">{attorney.location || attorney.specialty}</p>
-                  </div>
+                    </div>
+                  </article>
                 ))}
               </div>
+
+              {pageSize !== 'all' && totalPages > 1 && (
+                <nav className="attorney-pagination" aria-label="Attorney results pages">
+                  <button
+                    type="button"
+                    className="attorney-page-btn attorney-page-btn-nav"
+                    onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                    disabled={safePage === 1}
+                  >
+                    Previous
+                  </button>
+
+                  <div className="attorney-page-numbers">
+                    {pageNumbers.map((page) => (
+                      <button
+                        key={page}
+                        type="button"
+                        className={`attorney-page-btn${page === safePage ? ' is-active' : ''}`}
+                        onClick={() => setCurrentPage(page)}
+                        aria-current={page === safePage ? 'page' : undefined}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    className="attorney-page-btn attorney-page-btn-nav"
+                    onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                    disabled={safePage === totalPages}
+                  >
+                    Next
+                  </button>
+                </nav>
+              )}
             </div>
           </div>
         )}
