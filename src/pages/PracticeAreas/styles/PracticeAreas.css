@@ -6,73 +6,45 @@
   box-sizing: border-box;
 }
 
-.page-hero {
-  padding: 0.85rem 1.5rem 0.75rem;
-  text-align: center;
-  background: linear-gradient(135deg, #ffffff 0%, #e8eef6 100%);
-  border-bottom: 1px solid #e1e7ef;
-}
-
-.page-hero h1 {
-  color: #203f5f;
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1.25;
-}
-
-.page-hero p {
-  color: #54687d;
-  max-width: 720px;
-  margin: 0.15rem auto 0;
-  font-size: 0.85rem;
-  line-height: 1.4;
-}
-
-.practice-page-intro {
-  padding: 1.25rem 1.5rem 1rem;
-  border-bottom: 1px solid #e1e7ef;
-  background: #f7f8fb;
-}
-
-.practice-page-intro-inner {
-  max-width: 44rem;
-  margin: 0 auto;
-}
-
-.practice-page-intro p {
-  margin: 0 0 0.85rem;
-  color: #3d5266;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  text-align: left;
-}
-
-.practice-page-intro p:last-child {
-  margin-bottom: 0;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.practice-categories {
-  padding: 1.75rem 1.5rem 2.25rem;
+.practice-areas-main {
   flex: 1;
+  padding: 2.75rem 1.5rem 3rem;
 }
 
-.practice-categories .container {
+.practice-areas-main .container {
   max-width: 1280px;
   margin: 0 auto;
+}
+
+.practice-areas-header {
+  text-align: center;
+  margin-bottom: 2.75rem;
+}
+
+.practice-areas-header h1 {
+  margin: 0;
+  font-size: clamp(2.75rem, 7vw, 4.5rem);
+  font-weight: 700;
+  color: #203f5f;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.practice-areas-title-accent {
+  color: #2f5375;
+  font-weight: 600;
+}
+
+.practice-areas-title-rule {
+  width: 3.5rem;
+  height: 3px;
+  margin: 1.25rem auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #efbe45 0%, #d4a63a 100%);
+}
+
+.practice-areas-grid-wrap {
+  width: 100%;
 }
 
 .status-text {
@@ -80,98 +52,91 @@
   color: #54687d;
 }
 
-.practice-tabs {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
-  align-items: stretch;
-}
-
-.category-tab {
-  background: #ffffff;
-  border: 1px solid #cfd9e6;
-  border-radius: 12px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 6px 18px rgba(32, 63, 95, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.category-tab:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(32, 63, 95, 0.12);
-}
-
-.category-tab-header {
-  background: #2f5375;
-  color: #ffffff;
-  padding: 1rem 1.1rem 0.9rem;
-}
-
-.category-tab-header h2 {
-  margin: 0 0 0.25rem;
-  color: #ffffff;
-  font-size: 1.4rem;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-.category-subtitle {
-  margin: 0;
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.4;
-  font-weight: 500;
-}
-
-.category-practices {
+.practice-areas-grid {
+  --practice-columns: 4;
   list-style: none;
   margin: 0;
-  padding: 0.65rem 0.75rem 0.85rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  flex: 1;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--practice-columns), minmax(0, 1fr));
+  gap: 2.25rem 3rem;
 }
 
-.category-practices li {
+.practice-areas-grid li {
   margin: 0;
+  min-height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.category-practices a {
-  display: block;
-  color: #1f3a5a;
-  text-decoration: none;
+.practice-areas-spacer {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.practice-areas-link {
+  position: relative;
+  display: inline-block;
+  color: #203f5f;
   font-weight: 600;
-  font-size: 0.95rem;
-  line-height: 1.35;
-  padding: 0.45rem 0.6rem;
-  border-radius: 6px;
-  border-left: 3px solid transparent;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  transition:
+    color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.category-practices a:hover {
-  background: #eef3f9;
-  border-left-color: #efbe45;
-  color: #2f5375;
+.practice-areas-link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #efbe45;
+  transform: translateX(-50%);
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.practice-areas-link:hover {
+  color: #172d4b;
+  transform: translateX(10px) scale(1.04);
+}
+
+.practice-areas-link:hover::after {
+  width: 100%;
 }
 
 @media (max-width: 1100px) {
-  .practice-tabs {
-    grid-template-columns: repeat(2, 1fr);
+  .practice-areas-grid {
+    gap: 2rem 2.5rem;
+  }
+
+  .practice-areas-grid li {
+    min-height: 4rem;
   }
 }
 
 @media (max-width: 640px) {
-  .practice-tabs {
-    grid-template-columns: 1fr;
+  .practice-areas-main {
+    padding: 2.25rem 1rem 2.5rem;
   }
 
-  .category-tab-header h2 {
-    font-size: 1.25rem;
+  .practice-areas-header {
+    margin-bottom: 2rem;
+  }
+
+  .practice-areas-grid {
+    gap: 1.75rem;
+  }
+
+  .practice-areas-grid li {
+    min-height: 3.5rem;
   }
 }
 

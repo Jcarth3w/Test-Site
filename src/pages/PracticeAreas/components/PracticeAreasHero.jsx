@@ -1,11 +1,11 @@
 const PracticeAreasHero = () => {
   return (
-    <section className="page-hero">
-      <div className="container">
-        <h1>Practice Areas</h1>
-        <p>Coverage, defense, subrogation, and appellate matters.</p>
-      </div>
-    </section>
+    <header className="practice-areas-header">
+      <h1>
+        Practice <span className="practice-areas-title-accent">Areas</span>
+      </h1>
+      <div className="practice-areas-title-rule" aria-hidden="true" />
+    </header>
   );
 };
 

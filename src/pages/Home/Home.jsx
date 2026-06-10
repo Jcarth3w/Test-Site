@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import HeroSlider from './components/HeroSlider';
+import HomePracticeAreasSection from './components/HomePracticeAreasSection';
+import AboutSection from './components/AboutSection';
 import InsightsSection from './components/InsightsSection';
 import InsightsSectionToggle, {
   getStoredInsightsEnabled,
   setStoredInsightsEnabled,
 } from './components/InsightsSectionToggle';
-import ScrollStorySections from './components/ScrollStorySections';
-import AboutSection from './components/AboutSection';
-import ExploreLinksSection from './components/ExploreLinksSection';
 import TestimonialsSection from './components/TestimonialsSection';
 import FinalCtaSection from './components/FinalCtaSection';
 import { homeContent } from './content/homeContent';
@@ -26,14 +25,18 @@ const Home = () => {
   return (
     <div className="App">
       <HeroSlider />
+      <HomePracticeAreasSection section={homeContent.practiceAreasSection} />
+      <AboutSection section={homeContent.aboutSection} />
       {insightsConfig.showDevToggle ? (
         <InsightsSectionToggle enabled={insightsEnabled} onChange={handleInsightsToggle} />
       ) : null}
       {insightsEnabled ? <InsightsSection section={insightsConfig} /> : null}
-      <ScrollStorySections sections={homeContent.heroScrollSections} />
-      <AboutSection section={homeContent.aboutSection} />
-      <ExploreLinksSection links={homeContent.exploreLinks} />
-      <TestimonialsSection section={homeContent.testimonialsSection} image={homeContent.images.testimonials} />
+      {homeContent.testimonialsSection.enabled ? (
+        <TestimonialsSection
+          section={homeContent.testimonialsSection}
+          image={homeContent.images.testimonials}
+        />
+      ) : null}
       <FinalCtaSection cta={homeContent.finalCta} />
 
       <footer className="footer">

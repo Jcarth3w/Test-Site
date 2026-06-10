@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchPracticeAreas } from '../../services/practicesApi';
 import PracticeAreasHero from './components/PracticeAreasHero';
-import PracticeAreasIntro from './components/PracticeAreasIntro';
-import PracticeCategoryGrid from './components/PracticeCategoryGrid';
+import PracticeAreasGrid from './components/PracticeAreasGrid';
 import './styles/PracticeAreas.css';
 
 const PracticeAreas = () => {
@@ -28,9 +27,12 @@ const PracticeAreas = () => {
 
   return (
     <div className="practice-areas-page">
-      <PracticeAreasHero />
-      <PracticeAreasIntro />
-      <PracticeCategoryGrid loading={loading} errorMessage={errorMessage} practices={practices} />
+      <section className="practice-areas-main">
+        <div className="container">
+          <PracticeAreasHero />
+          <PracticeAreasGrid loading={loading} errorMessage={errorMessage} practices={practices} />
+        </div>
+      </section>
       <footer className="footer">
         <div className="container">
           <p>© 2013 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>

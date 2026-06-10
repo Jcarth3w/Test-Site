@@ -68,48 +68,29 @@ export const homeContent = {
     ],
   },
 
-  heroScrollSections: [
-    {
-      id: 'premier-fire-explosion',
-      eyebrow: 'Our Premier Focus',
-      title: 'Catastrophic Fire and Explosion Defense for Complex Claims',
-      body:
-        'We are known for defending high-stakes fire and explosion claims that demand immediate response, coordinated experts, and disciplined courtroom strategy.',
-      ctaLabel: 'Learn About Our Fire and Explosion Defense',
-      ctaLink: '/practice/fire-explosion',
-      image: '/images/home/catastrophic-fire-and-explosion-law-firm-4.jpg'
-    },
-  ],
+  practiceAreasSection: {
+    title: 'Practice Areas',
+    viewAllLabel: 'View all practice areas',
+    viewAllLink: '/practice',
+    featuredCount: 6,
+    featuredSlugs: [
+      'fire-explosion',
+      'fire-explostion',
+      'bad-faith',
+      'first-party-property',
+      'casualty',
+      'arson',
+      'products-liability',
+      'product-liability',
+    ],
+  },
 
   aboutSection: {
     eyebrow: 'Who We Are',
     title: 'Experienced Counsel, Nationwide Reach',
-    lead:
-      'Three seasoned trial lawyers founded McCoy Leavitt Laskey in 2013 to serve insurers with disciplined, innovative defense—today anchored in catastrophic fire and explosion litigation across all 50 states.',
-    stats: [
-      { value: '2013', label: 'Founded' },
-      { value: '50 States', label: 'National practice' },
-      { value: 'Fire & Explosion', label: 'Core focus' },
-    ],
-    ctaLabel: 'Our Story',
-    ctaLink: '/about',
+    foundedYear: 2013,
     image: '/images/home/laurence-h-leavitt-on-scene.jpg',
   },
-
-  exploreLinks: [
-    {
-      label: 'Practice Areas',
-      title: 'Full-spectrum defense counsel',
-      description: 'Explore the practices our attorneys handle across complex casualty and commercial disputes.',
-      to: '/practice',
-    },
-    {
-      label: 'Locations',
-      title: 'National reach, local insight',
-      description: 'Find our offices and the jurisdictions where we support clients.',
-      to: '/offices',
-    },
-  ],
 
   images: {
     processSide: '/images/home/mll-catastrophic-explosion-site-inspection.jpg',
@@ -157,6 +138,7 @@ export const homeContent = {
   },
 
   testimonialsSection: {
+    enabled: false,
     eyebrow: 'Client Feedback',
     title: 'What Our Clients Say About Us',
     quotes: [
