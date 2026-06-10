@@ -24,7 +24,7 @@
   width: min(620px, 60vw);
   height: min(620px, 60vw);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(239, 190, 69, 0.2) 0%, transparent 68%);
+  background: radial-gradient(circle, rgba(26, 74, 114, 0.45) 0%, transparent 68%);
   pointer-events: none;
 }
 
@@ -181,12 +181,11 @@
   padding-top: 1rem;
   font-size: 0.88rem;
   font-weight: 700;
-  color: #efbe45;
-  transition: gap 0.2s ease, color 0.2s ease;
+  color: #f7fbff;
+  transition: gap 0.2s ease;
 }
 
 .home-about-stat-link:hover .home-about-stat-cta {
-  color: #f3cd6f;
   gap: 0.55rem;
 }
 
