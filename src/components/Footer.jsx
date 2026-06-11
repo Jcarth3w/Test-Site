@@ -36,7 +36,13 @@ const Footer = () => {
             <Link to="/" className="site-footer__logo">
               <img src={logo} alt="McCoy Leavitt Laskey LLC" />
             </Link>
-            <p className="site-footer__tagline">{tagline}</p>
+            <p className="site-footer__tagline">
+              {tagline.map((line) => (
+                <span key={line} className="site-footer__tagline-line">
+                  {line}
+                </span>
+              ))}
+            </p>
           </div>
 
           <nav className="site-footer__nav" aria-label="Footer navigation">

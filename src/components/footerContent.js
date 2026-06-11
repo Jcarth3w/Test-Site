@@ -1,5 +1,5 @@
 export const footerContent = {
-  tagline: 'Catastrophic fire and explosion litigation nationwide.',
+  tagline: ['Building strong defenses', 'One case at a time'],
   navLinks: [
     { to: '/attorneys', label: 'Attorneys' },
     { to: '/practice', label: 'Practice Areas' },

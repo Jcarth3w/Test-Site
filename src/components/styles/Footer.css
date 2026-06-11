@@ -37,6 +37,10 @@
   font-size: 0.95rem;
 }
 
+.site-footer__tagline-line {
+  display: block;
+}
+
 .site-footer__heading {
   margin: 0 0 1rem;
   font-size: 0.72rem;
