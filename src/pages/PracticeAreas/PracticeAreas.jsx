@@ -27,17 +27,18 @@ const PracticeAreas = () => {
 
   return (
     <div className="practice-areas-page">
-      <section className="practice-areas-main">
+      <section className="practice-areas-hero-band" aria-labelledby="practice-areas-heading">
+        <div className="practice-areas-hero-texture" aria-hidden="true" />
         <div className="container">
           <PracticeAreasHero />
+        </div>
+      </section>
+
+      <section className="practice-areas-main">
+        <div className="container">
           <PracticeAreasGrid loading={loading} errorMessage={errorMessage} practices={practices} />
         </div>
       </section>
-      <footer className="footer">
-        <div className="container">
-          <p>© 2013 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
-        </div>
-      </footer>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './pages/Home/Home';
 import About from './pages/About/About';
 import Attorneys from './pages/Attorneys/Attorneys';
@@ -30,6 +31,7 @@ function App() {
         <Route path="/contact" element={<Navigate to="/attorneys" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <Footer />
     </>
   );
 }

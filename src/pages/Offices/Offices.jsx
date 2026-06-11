@@ -92,11 +92,6 @@ const Offices = () => {
     <div className="offices-page">
       <OfficeIntro />
       <OfficeList />
-      <footer className="footer">
-        <div className="container">
-          <p>© 2013 - 2026 McCoy Leavitt Laskey LLC | All Rights Reserved</p>
-        </div>
-      </footer>
     </div>
   );
 };
