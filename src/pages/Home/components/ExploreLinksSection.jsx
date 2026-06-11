@@ -7,11 +7,18 @@ const ExploreLinksSection = ({ links }) => {
       <div className="container">
         <div className="explore-links-grid">
           {links.map((link) => (
-            <Link key={link.to} to={link.to} className="explore-link-card">
+            <Link
+              key={link.to}
+              to={link.to}
+              className={`explore-link-card explore-link-card--${link.variant || 'secondary'}`}
+            >
               <span className="explore-link-label">{link.label}</span>
               <h3>{link.title}</h3>
               <p>{link.description}</p>
-              <span className="explore-link-arrow" aria-hidden="true">→</span>
+              <span className="explore-link-cta">
+                {link.ctaLabel || 'Learn more'}
+                <span className="explore-link-arrow" aria-hidden="true">→</span>
+              </span>
             </Link>
           ))}
         </div>

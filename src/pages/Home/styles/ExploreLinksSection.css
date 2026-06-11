@@ -1,5 +1,5 @@
 .home-explore-links {
-  padding: 2.75rem 2rem 3.25rem;
+  padding: 3rem 2rem 3.5rem;
   background: #16324e;
 }
 
@@ -10,75 +10,155 @@
 
 .explore-links-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.75fr);
+  gap: 1.25rem;
+  align-items: stretch;
 }
 
 .explore-link-card {
-  position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   text-align: left;
-  padding: 1.35rem 1.5rem;
-  border-radius: 4px;
-  border: 1px solid #dde6ef;
-  background: #ffffff;
   color: inherit;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.explore-link-card:hover {
-  border-color: #b8cfe3;
-  box-shadow: 0 8px 24px rgba(15, 45, 75, 0.06);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
 }
 
 .explore-link-label {
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.45rem;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #6888ab;
 }
 
 .explore-link-card h3 {
   margin: 0;
-  font-size: 1.1rem;
-  color: #1a4a72;
+  line-height: 1.25;
   font-weight: 600;
 }
 
 .explore-link-card p {
-  margin: 0.45rem 0 0;
-  max-width: 42ch;
-  color: #5a7088;
-  font-size: 0.9rem;
-  line-height: 1.55;
+  margin: 0.55rem 0 0;
+  line-height: 1.58;
+  flex: 1;
+}
+
+.explore-link-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: gap 0.35s ease, color 0.35s ease;
 }
 
 .explore-link-arrow {
-  position: absolute;
-  right: 1.35rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  color: #8aa8c4;
-  transition: transform 0.2s ease, color 0.2s ease;
+  font-size: 1.05em;
+  line-height: 1;
 }
 
-.explore-link-card:hover .explore-link-arrow {
+/* Primary — Practice Areas */
+.explore-link-card--primary {
+  padding: 2rem 2.1rem 1.85rem;
+  border-radius: 2px;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  border-left: 5px solid #efbe45;
+  box-shadow: 0 20px 48px rgba(4, 12, 24, 0.22);
+}
+
+.explore-link-card--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 28px 56px rgba(4, 12, 24, 0.28);
+}
+
+.explore-link-card--primary .explore-link-label {
   color: #1a4a72;
-  transform: translate(3px, -50%);
+}
+
+.explore-link-card--primary h3 {
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  color: #0f2a42;
+  letter-spacing: -0.02em;
+}
+
+.explore-link-card--primary p {
+  max-width: 48ch;
+  color: #2d4a63;
+  font-size: 1rem;
+}
+
+.explore-link-card--primary .explore-link-cta {
+  align-self: flex-start;
+  padding: 0.72rem 1.15rem;
+  border-radius: 2px;
+  background: #efbe45;
+  color: #16324e;
+  font-size: 0.92rem;
+  box-shadow: 0 8px 20px rgba(239, 190, 69, 0.28);
+}
+
+.explore-link-card--primary:hover .explore-link-cta {
+  background: #f3cd6f;
+  gap: 0.6rem;
+}
+
+/* Secondary — Locations */
+.explore-link-card--secondary {
+  padding: 1.35rem 1.4rem 1.25rem;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  justify-content: center;
+}
+
+.explore-link-card--secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.explore-link-card--secondary .explore-link-label {
+  color: #9eb5cb;
+}
+
+.explore-link-card--secondary h3 {
+  font-size: 1.05rem;
+  color: #e7f0fa;
+}
+
+.explore-link-card--secondary p {
+  max-width: 36ch;
+  color: #b8cfe3;
+  font-size: 0.88rem;
+}
+
+.explore-link-card--secondary .explore-link-cta {
+  margin-top: 0.95rem;
+  font-size: 0.86rem;
+  color: #d4e4f5;
+}
+
+.explore-link-card--secondary:hover .explore-link-cta {
+  color: #ffffff;
+  gap: 0.55rem;
+}
+
+@media (max-width: 900px) {
+  .explore-links-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .explore-link-card--secondary {
+    padding: 1.25rem 1.35rem;
+  }
 }
 
 @media (max-width: 680px) {
   .home-explore-links {
     padding-left: 1rem;
     padding-right: 1rem;
-  }
-
-  .explore-links-grid {
-    grid-template-columns: 1fr;
   }
 }

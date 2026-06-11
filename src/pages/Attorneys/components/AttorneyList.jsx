@@ -170,26 +170,23 @@ const AttorneyList = () => {
     return searchText.includes(normalizedQuery);
   });
 
-  const fullRowAttorneys = useMemo(() => {
-    const fullRowCount = Math.floor(filteredAttorneys.length / columnCount) * columnCount;
-    return filteredAttorneys.slice(0, fullRowCount);
-  }, [filteredAttorneys, columnCount]);
-
   const rowsPerPage = pageSize === 'all' ? null : Number(pageSize);
-  const attorneysPerPage = rowsPerPage ? rowsPerPage * columnCount : fullRowAttorneys.length;
+  const attorneysPerPage = rowsPerPage
+    ? rowsPerPage * columnCount
+    : filteredAttorneys.length;
 
   const attorneyPages = useMemo(() => {
     if (pageSize === 'all') {
-      return fullRowAttorneys.length ? [fullRowAttorneys] : [[]];
+      return filteredAttorneys.length ? [filteredAttorneys] : [[]];
     }
 
     const pages = [];
-    for (let start = 0; start < fullRowAttorneys.length; start += attorneysPerPage) {
-      pages.push(fullRowAttorneys.slice(start, start + attorneysPerPage));
+    for (let start = 0; start < filteredAttorneys.length; start += attorneysPerPage) {
+      pages.push(filteredAttorneys.slice(start, start + attorneysPerPage));
     }
 
     return pages.length ? pages : [[]];
-  }, [fullRowAttorneys, pageSize, attorneysPerPage]);
+  }, [filteredAttorneys, pageSize, attorneysPerPage]);
 
   const totalPages = attorneyPages.length;
   const safePage = Math.min(currentPage, totalPages);
@@ -313,7 +310,7 @@ const AttorneyList = () => {
                 <p className="attorney-results-count">
                   {filteredAttorneys.length === 0
                     ? `Showing 0 of ${attorneys.length} attorneys`
-                    : `Showing ${resultsStart}–${resultsEnd} of ${fullRowAttorneys.length} attorneys`}
+                    : `Showing ${resultsStart}–${resultsEnd} of ${filteredAttorneys.length} attorneys`}
                 </p>
                 <div className="attorney-results-actions">
                   <label className="attorney-page-size-field" htmlFor="page-size-filter">
