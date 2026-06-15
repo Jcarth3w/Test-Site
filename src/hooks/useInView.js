@@ -63,7 +63,8 @@ function useCountUp(target, active, duration = 1100) {
 export function useCountUpStats(stats, active) {
   const practiceCount = useCountUp(stats.practiceCount, active);
   const officeCount = useCountUp(stats.officeCount, active);
+  const attorneyCount = useCountUp(stats.attorneyCount, active);
   const yearsExperience = useCountUp(stats.yearsExperience, active);
 
-  return { practiceCount, officeCount, yearsExperience };
+  return { practiceCount, officeCount, attorneyCount, yearsExperience };
 }
