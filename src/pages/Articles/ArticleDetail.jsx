@@ -3,6 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 import { fetchPublicArticleBySlug } from '../../services/articlesApi';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
 import { resolveMediaUrl } from '../../services/apiBaseUrl';
+import {
+  getArticleCategoryLabel,
+  normalizeArticleCategory,
+} from '../../services/articleCategories';
 import './styles/Articles.css';
 
 function slugifyName(name = '') {
@@ -106,6 +110,13 @@ const ArticleDetail = () => {
 
           <div className="article-detail-header">
             <div className="article-detail-header-text">
+              <span
+                className={`article-category-badge article-category-badge--${normalizeArticleCategory(
+                  article.category
+                )}`}
+              >
+                {getArticleCategoryLabel(article.category)}
+              </span>
               <h1>{article.title}</h1>
               <div className="article-detail-meta">
                 {article.publication_date && (

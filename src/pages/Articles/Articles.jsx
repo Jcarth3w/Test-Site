@@ -1,9 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicArticles } from '../../services/articlesApi';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
 import { resolveMediaUrl } from '../../services/apiBaseUrl';
+import {
+  ARTICLE_CATEGORIES,
+  getArticleCategoryLabel,
+  normalizeArticleCategory,
+} from '../../services/articleCategories';
 import './styles/Articles.css';
+
+const FILTERS = [
+  { slug: 'all', title: 'All' },
+  ...ARTICLE_CATEGORIES.map(({ slug, title }) => ({ slug, title })),
+];
 
 function slugifyName(name = '') {
   return name
@@ -17,6 +27,7 @@ const Articles = () => {
   const [articles, setArticles] = useState([]);
   const [attorneys, setAttorneys] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState('all');
 
   useEffect(() => {
     const loadData = async () => {
@@ -48,6 +59,25 @@ const Articles = () => {
     return author ? slugifyName(author.name) : '';
   };
 
+  const counts = useMemo(() => {
+    const tally = { all: articles.length };
+    ARTICLE_CATEGORIES.forEach(({ slug }) => {
+      tally[slug] = 0;
+    });
+    articles.forEach((article) => {
+      const slug = normalizeArticleCategory(article.category);
+      tally[slug] = (tally[slug] || 0) + 1;
+    });
+    return tally;
+  }, [articles]);
+
+  const visibleArticles = useMemo(() => {
+    if (activeFilter === 'all') return articles;
+    return articles.filter(
+      (article) => normalizeArticleCategory(article.category) === activeFilter
+    );
+  }, [articles, activeFilter]);
+
   return (
     <main className="articles-page">
       <section className="page-hero">
@@ -59,13 +89,32 @@ const Articles = () => {
 
       <section className="articles-section">
         <div className="container">
+          {!loading && articles.length > 0 && (
+            <div className="article-filters" role="tablist" aria-label="Filter articles">
+              {FILTERS.map((filter) => (
+                <button
+                  key={filter.slug}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeFilter === filter.slug}
+                  className={`article-filter ${activeFilter === filter.slug ? 'is-active' : ''}`}
+                  onClick={() => setActiveFilter(filter.slug)}
+                >
+                  {filter.title}
+                  <span className="article-filter-count">{counts[filter.slug] ?? 0}</span>
+                </button>
+              ))}
+            </div>
+          )}
           {loading ? (
             <p>Loading articles...</p>
           ) : articles.length === 0 ? (
             <p>No articles available.</p>
+          ) : visibleArticles.length === 0 ? (
+            <p>No {getArticleCategoryLabel(activeFilter).toLowerCase()} articles available yet.</p>
           ) : (
             <div className="articles-grid">
-              {articles.map((article) => (
+              {visibleArticles.map((article) => (
                 <article key={article.id} className="article-card">
                   {article.image_url && (
                     <Link
@@ -80,6 +129,13 @@ const Articles = () => {
                     </Link>
                   )}
                   <div className="article-content">
+                    <span
+                      className={`article-category-badge article-category-badge--${normalizeArticleCategory(
+                        article.category
+                      )}`}
+                    >
+                      {getArticleCategoryLabel(article.category)}
+                    </span>
                     <Link
                       to={`/articles/${article.slug}`}
                       className="article-title-link"
