@@ -4,16 +4,39 @@ const { db } = require('../db');
 const { authenticateToken } = require('../middleware');
 const { logOperation } = require('../logger');
 const { normalizeBoolean } = require('../helpers');
+const {
+  ARTICLE_CATEGORIES,
+  isValidArticleCategory,
+  normalizeArticleCategory
+} = require('../articleCategories');
+
+// Public: list of selectable article categories (fixed enum)
+router.get('/public/article-categories', (req, res) => {
+  res.json(ARTICLE_CATEGORIES);
+});
+
+// CMS: same list, surfaced for the form dropdown
+router.get('/article-categories', authenticateToken, (req, res) => {
+  res.json(ARTICLE_CATEGORIES);
+});
 
 // Public: published articles
 router.get('/public/articles', (req, res) => {
-  const { author_id } = req.query;
+  const { author_id, category } = req.query;
   let query = 'SELECT * FROM articles WHERE is_published = 1';
   let params = [];
 
   if (author_id) {
     query += ' AND author_id = ?';
     params.push(author_id);
+  }
+
+  if (category) {
+    if (!isValidArticleCategory(category)) {
+      return res.status(400).json({ error: 'Invalid category' });
+    }
+    query += ' AND category = ?';
+    params.push(normalizeArticleCategory(category));
   }
 
   query += ' ORDER BY publication_date DESC';
@@ -52,13 +75,18 @@ router.get('/articles/:id', authenticateToken, (req, res) => {
 
 // CMS: create article
 router.post('/articles', authenticateToken, (req, res) => {
-  const { slug, title, summary, content, author_id, publication_date, image_url, source_url, is_published } = req.body;
+  const { slug, title, summary, content, author_id, publication_date, image_url, source_url, category, is_published } = req.body;
   const publishedValue = normalizeBoolean(is_published, 0);
 
+  if (!isValidArticleCategory(category)) {
+    return res.status(400).json({ error: 'Invalid category' });
+  }
+  const categoryValue = normalizeArticleCategory(category);
+
   db.run(
-    `INSERT INTO articles (slug, title, summary, content, author_id, publication_date, image_url, source_url, is_published)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [slug, title, summary, content, author_id || null, publication_date || null, image_url, source_url || '', publishedValue],
+    `INSERT INTO articles (slug, title, summary, content, author_id, publication_date, image_url, source_url, category, is_published)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [slug, title, summary, content, author_id || null, publication_date || null, image_url, source_url || '', categoryValue, publishedValue],
     function (err) {
       if (err) {
         logOperation('ARTICLE_CREATE_ERROR', { slug, error: err.message, by: req.user?.username });
@@ -67,7 +95,7 @@ router.post('/articles', authenticateToken, (req, res) => {
         }
         return res.status(500).json({ error: 'Database error' });
       }
-      logOperation('ARTICLE_CREATED', { id: this.lastID, slug, is_published: publishedValue, by: req.user?.username });
+      logOperation('ARTICLE_CREATED', { id: this.lastID, slug, category: categoryValue, is_published: publishedValue, by: req.user?.username });
       res.json({ id: this.lastID, message: 'Article created successfully' });
     }
   );
@@ -75,15 +103,20 @@ router.post('/articles', authenticateToken, (req, res) => {
 
 // CMS: update article
 router.put('/articles/:id', authenticateToken, (req, res) => {
-  const { slug, title, summary, content, author_id, publication_date, image_url, source_url, is_published } = req.body;
+  const { slug, title, summary, content, author_id, publication_date, image_url, source_url, category, is_published } = req.body;
   const publishedValue = normalizeBoolean(is_published, 0);
+
+  if (!isValidArticleCategory(category)) {
+    return res.status(400).json({ error: 'Invalid category' });
+  }
+  const categoryValue = normalizeArticleCategory(category);
 
   db.run(
     `UPDATE articles
      SET slug = ?, title = ?, summary = ?, content = ?, author_id = ?, publication_date = ?,
-         image_url = ?, source_url = ?, is_published = ?, updated_at = CURRENT_TIMESTAMP
+         image_url = ?, source_url = ?, category = ?, is_published = ?, updated_at = CURRENT_TIMESTAMP
      WHERE id = ?`,
-    [slug, title, summary, content, author_id || null, publication_date || null, image_url, source_url || '', publishedValue, req.params.id],
+    [slug, title, summary, content, author_id || null, publication_date || null, image_url, source_url || '', categoryValue, publishedValue, req.params.id],
     function (err) {
       if (err) {
         logOperation('ARTICLE_UPDATE_ERROR', { id: req.params.id, slug, error: err.message, by: req.user?.username });
@@ -93,7 +126,7 @@ router.put('/articles/:id', authenticateToken, (req, res) => {
         return res.status(500).json({ error: 'Database error' });
       }
       if (this.changes === 0) return res.status(404).json({ error: 'Article not found' });
-      logOperation('ARTICLE_UPDATED', { id: req.params.id, slug, is_published: publishedValue, by: req.user?.username });
+      logOperation('ARTICLE_UPDATED', { id: req.params.id, slug, category: categoryValue, is_published: publishedValue, by: req.user?.username });
       res.json({ message: 'Article updated successfully' });
     }
   );

@@ -69,6 +69,48 @@ function ensureAttorneyAwardsAffiliationsColumns() {
   });
 }
 
+function ensureArticleCategoryColumn() {
+  db.all('PRAGMA table_info(articles)', [], (err, rows) => {
+    if (err) {
+      console.error('Error reading articles schema:', err.message);
+      logOperation('DB_SCHEMA_READ_ERROR', { table: 'articles', error: err.message });
+      return;
+    }
+
+    const hasCategory = rows.some((r) => r.name === 'category');
+
+    const backfill = () => {
+      db.run(
+        `UPDATE articles
+         SET category = 'insights'
+         WHERE category IS NULL OR TRIM(category) = ''`,
+        (updateErr) => {
+          if (updateErr) {
+            console.error('Error backfilling article categories:', updateErr.message);
+            logOperation('DB_BACKFILL_ARTICLE_CATEGORY_ERROR', { error: updateErr.message });
+          }
+        }
+      );
+    };
+
+    if (hasCategory) {
+      backfill();
+      return;
+    }
+
+    db.run(`ALTER TABLE articles ADD COLUMN category TEXT DEFAULT 'insights'`, (alterErr) => {
+      if (alterErr) {
+        console.error('Error adding category to articles:', alterErr.message);
+        logOperation('DB_MIGRATION_ERROR', { table: 'articles', column: 'category', error: alterErr.message });
+        return;
+      }
+      console.log('Added category column to articles.');
+      logOperation('DB_MIGRATION_COLUMN_ADDED', { table: 'articles', column: 'category' });
+      backfill();
+    });
+  });
+}
+
 function fixAlbuquerqueLocationTypo() {
   db.run(
     `UPDATE attorneys
@@ -203,6 +245,7 @@ function initDatabase() {
         ensureColumn('practices', 'is_active', 'INTEGER DEFAULT 1');
         ensureColumn('practices', 'category', "TEXT DEFAULT ''");
         ensureColumn('articles', 'source_url', "TEXT DEFAULT ''");
+        ensureArticleCategoryColumn();
 
         fixAlbuquerqueLocationTypo();
 
