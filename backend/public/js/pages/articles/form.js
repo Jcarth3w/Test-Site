@@ -1,4 +1,4 @@
-import { createArticle, getArticleById, updateArticle, getAttorneys, uploadPhoto } from '../../core/api.js';
+import { createArticle, getArticleById, updateArticle, getAttorneys, getArticleCategories, uploadPhoto } from '../../core/api.js';
 import { bindLogout, getIdFromQuery, requireAuth } from '../../core/admin-helpers.js';
 
 if (!requireAuth()) {
@@ -15,6 +15,7 @@ const idEl = document.getElementById('article-id');
 const titleEl = document.getElementById('title');
 const slugEl = document.getElementById('slug');
 const authorIdEl = document.getElementById('author-id');
+const categoryEl = document.getElementById('category');
 const publicationDateEl = document.getElementById('publication-date');
 const sourceUrlEl = document.getElementById('source-url');
 const summaryEl = document.getElementById('summary');
@@ -34,10 +35,32 @@ function getPayload() {
     summary: summaryEl.value.trim(),
     content: contentEl.value.trim(),
     author_id: authorIdEl.value ? parseInt(authorIdEl.value, 10) : null,
+    category: categoryEl.value,
     publication_date: publicationDateEl.value || null,
     source_url: sourceUrlEl.value.trim(),
     is_published: publishedEl.checked ? 1 : 0
   };
+}
+
+function populateCategoryOptions(categories, selectedSlug = '') {
+  categoryEl.innerHTML = '';
+  categories.forEach((category) => {
+    const option = document.createElement('option');
+    option.value = category.slug;
+    option.textContent = category.title;
+    if (category.slug === selectedSlug) option.selected = true;
+    categoryEl.appendChild(option);
+  });
+}
+
+async function loadCategories(selectedSlug = '') {
+  try {
+    const categories = await getArticleCategories();
+    populateCategoryOptions(categories, selectedSlug);
+  } catch (error) {
+    categoryEl.innerHTML = '<option value="" disabled selected>Could not load categories</option>';
+    showMessage(error.message || 'Could not load article categories');
+  }
 }
 
 async function loadArticle(id) {
@@ -46,6 +69,7 @@ async function loadArticle(id) {
   titleEl.value = article.title || '';
   slugEl.value = article.slug || '';
   authorIdEl.value = article.author_id || '';
+  categoryEl.value = article.category || 'insights';
   sourceUrlEl.value = article.source_url || '';
   summaryEl.value = article.summary || '';
   contentEl.value = article.content || '';
@@ -110,7 +134,7 @@ form.addEventListener('submit', async (event) => {
 });
 
 (async () => {
-  await loadAttorneys();
+  await Promise.all([loadAttorneys(), loadCategories()]);
 
   const id = getIdFromQuery();
   if (!id) return;

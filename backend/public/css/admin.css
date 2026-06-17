@@ -135,6 +135,13 @@ body {
   color: var(--muted);
 }
 
+.field-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
 input,
 textarea,
 select {
@@ -400,6 +407,18 @@ a.btn {
   background: #2d1f00;
   color: #f5b942;
   border: 1px solid #6b4b00;
+}
+
+.status-chip.insights {
+  background: #0c2438;
+  color: #6fa8dc;
+  border: 1px solid #1f4f7a;
+}
+
+.status-chip.news {
+  background: #241a36;
+  color: #b89cf0;
+  border: 1px solid #4a3a73;
 }
 
 .attorney-item h3 {

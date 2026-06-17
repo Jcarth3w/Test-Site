@@ -202,6 +202,12 @@ export function removeOffice(id) {
 }
 
 // Articles API
+export function getArticleCategories() {
+  return request('/api/article-categories', {
+    headers: { ...getAuthHeader() }
+  });
+}
+
 export function getArticles() {
   return request('/api/articles', {
     headers: { ...getAuthHeader() }

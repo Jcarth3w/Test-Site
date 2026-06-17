@@ -22,7 +22,7 @@ async function loadArticles() {
     articleListEl.innerHTML = '';
 
     if (!articles.length) {
-      articleListEl.innerHTML = '<tr><td colspan="6" class="text-center">No articles yet. Add one to get started.</td></tr>';
+      articleListEl.innerHTML = '<tr><td colspan="7" class="text-center">No articles yet. Add one to get started.</td></tr>';
       return;
     }
 
@@ -30,8 +30,10 @@ async function loadArticles() {
       const author = attorneys.find((a) => a.id === article.author_id);
       const row = document.createElement('tr');
       const pubDate = article.publication_date ? new Date(article.publication_date).toLocaleDateString() : '-';
+      const categoryLabel = article.category === 'news' ? 'News' : 'Insights';
       row.innerHTML = `
         <td>${article.title || '-'}</td>
+        <td><span class="status-chip ${article.category === 'news' ? 'news' : 'insights'}">${categoryLabel}</span></td>
         <td>${author ? author.name : 'No author'}</td>
         <td>${article.slug || '-'}</td>
         <td>${pubDate}</td>
