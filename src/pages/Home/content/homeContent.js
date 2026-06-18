@@ -1,3 +1,5 @@
+import { homeImages } from '../../../content/siteImages';
+
 export const homeContent = {
   heroBanner: {
     eyebrow: '',
@@ -10,17 +12,25 @@ export const homeContent = {
 
   heroImageSlides: [
     {
-      image: '/images/home/catastrophic-fire-and-explosion-law-firm.jpg',
-      caption: 'Battle-Tested Attorneys. Battle-Proven Results.'
+      image: homeImages.truckExplosion,
+      caption: 'Battle-Tested Attorneys. Battle-Proven Results.',
     },
     {
-      image: '/images/home/catastrophic-fire-and-explosion-law-firm-2.jpg',
-      caption: 'Unmatched Experience'
+      image: homeImages.burningGolfCart,
+      caption: 'Practical Counsel Under Pressure',
     },
     {
-      image: '/images/home/catastrophic-fire-and-explosion-law-firm-3.jpg',
-      caption: 'Real-Time Analysis and Solutions'
-    }
+      image: homeImages.catastrophicFireFirm2,
+      caption: 'Unmatched Experience',
+    },
+    {
+      image: homeImages.hoverboardFire,
+      caption: 'Product and Causation Expertise',
+    },
+    {
+      image: homeImages.truckingCrash,
+      caption: 'Nationwide Response When It Matters Most',
+    },
   ],
 
   insightsSection: {
@@ -36,14 +46,19 @@ export const homeContent = {
       'New articles and firm perspectives are in development. Check back soon or contact us to discuss a topic with our team.',
     showcaseImages: [
       {
-        src: '/images/home/laurence-h-leavitt-on-scene.jpg',
-        alt: 'Attorney on site at a loss scene',
+        src: homeImages.wildfire,
+        alt: 'Wildfire loss scene investigation',
         layout: 'primary',
       },
       {
-        src: '/images/home/mll-catastrophic-explosion-site-inspection.jpg',
-        alt: 'Site inspection at a catastrophic loss',
+        src: homeImages.constructionDefect,
+        alt: 'Construction defect loss scene',
         layout: 'secondary',
+      },
+      {
+        src: homeImages.mllSiteInspection,
+        alt: 'Site inspection at a catastrophic loss',
+        layout: 'tertiary',
       },
     ],
     placeholders: [
@@ -88,13 +103,13 @@ export const homeContent = {
   aboutSection: {
     eyebrow: 'Who We Are',
     title: 'Experienced Counsel, Nationwide Reach',
-    foundedYear: 2013,
-    image: '/images/home/laurence-h-leavitt-on-scene.jpg',
+    combinedExperienceYears: 30,
+    image: homeImages.laurenceHLeavitt,
+    imageAlt: 'Attorney on site at a loss scene',
   },
 
   images: {
-    processSide: '/images/home/mll-catastrophic-explosion-site-inspection.jpg',
-    testimonials: '/images/home/client-testimonials.jpeg'
+    testimonials: homeImages.wildfire,
   },
 
   resultsSection: {
@@ -107,33 +122,6 @@ export const homeContent = {
       { amount: '$9.8M', description: 'Favorable resolution in trucking matter defending against injury claims.' },
       { amount: '$7.4M', description: 'Product liability defense with favorable settlement for manufacturer.' },
       { amount: '$5.1M', description: 'Premises liability defense negotiating reduced settlement exposure.' },
-    ]
-  },
-
-  processSection: {
-    eyebrow: 'How We Work',
-    title: 'A Disciplined Defense Framework for Complex Catastrophic Claims',
-    steps: [
-      {
-        step: '01',
-        title: 'Emergency Response and Evidence Preservation',
-        description: 'Immediate investigation, evidence preservation strategy, scene documentation, and coordinated response planning in the earliest hours.'
-      },
-      {
-        step: '02',
-        title: 'Forensic and Technical Analysis',
-        description: 'Integrated expert analysis across fire science, engineering, product systems, and damage causation to build strong defense positions.'
-      },
-      {
-        step: '03',
-        title: 'Strategic Claim Defense',
-        description: 'Focused discovery, strategic motion practice, liability analysis, and negotiations from a trial-ready defense posture.'
-      },
-      {
-        step: '04',
-        title: 'Favorable Resolution',
-        description: 'Whether through favorable settlement or trial, we pursue outcomes that effectively manage liability and protect our clients.'
-      }
     ]
   },
 
@@ -171,12 +159,9 @@ export const homeContent = {
   },
 
   finalCta: {
-    title: 'Discuss Your Claim With Us',
-    body:
-      'Find an attorney to discuss your claim and learn how we can provide effective defense counsel and strategy.',
-    primaryLabel: 'Find an attorney',
-    primaryLink: '/attorneys',
-    secondaryLabel: 'Meet Our Attorneys',
-    secondaryLink: '/attorneys'
+    title: 'Looking for a specific attorney?',
+    searchPlaceholder: 'Search by name',
+    link: '/attorneys',
+    linkLabel: 'View all attorneys',
   }
 };

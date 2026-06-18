@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { fetchPublicArticles } from '../../services/articlesApi';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
 import { resolveMediaUrl } from '../../services/apiBaseUrl';
+import { pageHeroImages } from '../../content/siteImages';
 import './styles/Articles.css';
 
 function slugifyName(name = '') {
@@ -50,7 +51,11 @@ const Articles = () => {
 
   return (
     <main className="articles-page">
-      <section className="page-hero">
+      <section
+        className="page-hero"
+        style={{ '--page-hero-image': `url("${pageHeroImages.articles}")` }}
+      >
+        <div className="page-hero-texture" aria-hidden="true" />
         <div className="container">
           <h1>Insights & News</h1>
           <p>Explore our latest articles on defense strategy, fire and explosion claims, and litigation insights.</p>

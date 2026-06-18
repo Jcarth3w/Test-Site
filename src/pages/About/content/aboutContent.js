@@ -1,14 +1,18 @@
+import { homeImages } from '../../../content/siteImages';
+
 export const aboutIntro = {
   eyebrow: 'McCoy Leavitt Laskey',
   title: 'Our Firm',
   description:
     'McCoy Leavitt Laskey LLC is a national litigation firm focused on helping clients navigate their most complex claims and disputes. Known for the depth and excellence of our fire and explosion practice, we work collaboratively to deliver practical, trial-ready solutions—from urgent scene response through resolution.',
-  image: '/images/home/catastrophic-fire-and-explosion-law-firm.jpg',
-  imageAlt: 'McCoy Leavitt Laskey attorneys at work',
+  image: homeImages.truckExplosion,
+  imageAlt: 'Catastrophic fire and explosion loss scene',
 };
 
 export const firmHistory = {
   title: 'Our History',
+  image: homeImages.constructionDefect,
+  imageAlt: 'Attorneys and experts reviewing a construction loss scene',
   partnersLabel: 'Founding partners',
   expandLabel: 'Read more',
   collapseLabel: 'Show less',

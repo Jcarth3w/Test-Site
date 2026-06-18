@@ -86,6 +86,18 @@ function parseStoredJsonArray(value) {
   }
 }
 
+function resolveAttorneyLevel(row) {
+  const stored = String(row.attorney_level || '').trim().toLowerCase();
+  if (stored === 'partner' || stored === 'associate' || stored === 'of_counsel') {
+    return stored;
+  }
+
+  const title = String(row.title || '').toLowerCase();
+  if (/partner|founding|managing|principal/.test(title)) return 'partner';
+  if (/of counsel/.test(title)) return 'of_counsel';
+  return 'associate';
+}
+
 function mapAttorneyRow(row) {
   const awards = parseStoredJsonArray(row.awards);
   const affiliations = parseStoredJsonArray(row.affiliations);
@@ -96,11 +108,13 @@ function mapAttorneyRow(row) {
   return {
     ...row,
     display_order: normalizeDisplayOrder(row.display_order, 100),
+    attorney_level: resolveAttorneyLevel(row),
     practice_areas: parseStoredPracticeAreas(row.practice_areas),
     education: parseStoredJsonArray(row.education),
     bar_admissions: parseStoredJsonArray(row.bar_admissions),
     awards: mergedAwards,
     affiliations,
+    case_work: parseStoredJsonArray(row.case_work),
     highlights: []
   };
 }

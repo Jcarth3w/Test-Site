@@ -11,14 +11,13 @@ const AboutSection = ({ section }) => {
   const [counts, setCounts] = useState({
     practiceCount: 0,
     officeCount: 0,
-    yearsExperience: new Date().getFullYear() - section.foundedYear,
+    yearsExperience: section.combinedExperienceYears ?? 0,
   });
 
   useEffect(() => {
     let cancelled = false;
 
     const loadCounts = async () => {
-      const yearsExperience = new Date().getFullYear() - section.foundedYear;
       let practiceCount = 0;
       let officeCount = 0;
 
@@ -37,7 +36,11 @@ const AboutSection = ({ section }) => {
       }
 
       if (!cancelled) {
-        setCounts({ practiceCount, officeCount, yearsExperience });
+        setCounts({
+          practiceCount,
+          officeCount,
+          yearsExperience: section.combinedExperienceYears ?? 0,
+        });
       }
     };
 
@@ -45,7 +48,7 @@ const AboutSection = ({ section }) => {
     return () => {
       cancelled = true;
     };
-  }, [section.foundedYear]);
+  }, [section.combinedExperienceYears]);
 
   const animatedCounts = useCountUpStats(counts, isInView);
 
@@ -53,7 +56,8 @@ const AboutSection = ({ section }) => {
     () => [
       {
         value: animatedCounts.yearsExperience,
-        label: 'Years of Experience',
+        suffix: '+',
+        label: 'Years Combined Experience',
         link: '/about',
         cta: 'Our story',
       },
@@ -82,7 +86,7 @@ const AboutSection = ({ section }) => {
       <div className="home-about-pattern" aria-hidden="true" />
       <div className="home-about-inner">
         <figure className="home-about-visual home-about-animate home-about-animate--image">
-          <img src={section.image} alt="" />
+          <img src={section.image} alt={section.imageAlt || ''} />
           <span className="home-about-visual-frame" aria-hidden="true" />
           <span className="home-about-visual-glow" aria-hidden="true" />
         </figure>
@@ -104,7 +108,9 @@ const AboutSection = ({ section }) => {
                 style={{ '--about-stat-delay': `${index * 90}ms` }}
               >
                 <Link to={stat.link} className="home-about-stat-link">
-                  <strong>{stat.value > 0 ? stat.value : '—'}</strong>
+                  <strong>
+                    {stat.value > 0 ? `${stat.value}${stat.suffix || ''}` : '—'}
+                  </strong>
                   <span className="home-about-stat-label">{stat.label}</span>
                   <span className="home-about-stat-cta">
                     {stat.cta}

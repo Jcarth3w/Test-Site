@@ -84,6 +84,8 @@ router.post('/attorneys', authenticateToken, (req, res) => {
     bar_admissions,
     awards,
     affiliations,
+    attorney_level,
+    case_work,
     photo_url,
     is_active
   } = req.body;
@@ -99,6 +101,8 @@ router.post('/attorneys', authenticateToken, (req, res) => {
   const barAdmissionsJson = JSON.stringify(Array.isArray(bar_admissions) ? bar_admissions : []);
   const awardsJson = JSON.stringify(Array.isArray(awards) ? awards : []);
   const affiliationsJson = JSON.stringify(Array.isArray(affiliations) ? affiliations : []);
+  const normalizedAttorneyLevel = String(attorney_level || '').trim().toLowerCase();
+  const caseWorkJson = JSON.stringify(Array.isArray(case_work) ? case_work : []);
   const normalizedPhotoUrl = (photo_url || '').trim();
 
   if (officeLocation === null) {
@@ -109,8 +113,8 @@ router.post('/attorneys', authenticateToken, (req, res) => {
   }
 
   db.run(
-    `INSERT INTO attorneys (name, title, email, phone, bio, specialty, location, display_order, practice_areas, education, bar_admissions, awards, affiliations, highlights, photo_url, is_active)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO attorneys (name, title, email, phone, bio, specialty, location, display_order, practice_areas, education, bar_admissions, awards, affiliations, attorney_level, case_work, highlights, photo_url, is_active)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       name,
       title,
@@ -125,6 +129,8 @@ router.post('/attorneys', authenticateToken, (req, res) => {
       barAdmissionsJson,
       awardsJson,
       affiliationsJson,
+      normalizedAttorneyLevel,
+      caseWorkJson,
       '[]',
       normalizedPhotoUrl,
       activeValue
@@ -168,6 +174,8 @@ router.put('/attorneys/:id', authenticateToken, (req, res) => {
     bar_admissions,
     awards,
     affiliations,
+    attorney_level,
+    case_work,
     photo_url,
     is_active
   } = req.body;
@@ -183,6 +191,8 @@ router.put('/attorneys/:id', authenticateToken, (req, res) => {
   const barAdmissionsJson = JSON.stringify(Array.isArray(bar_admissions) ? bar_admissions : []);
   const awardsJson = JSON.stringify(Array.isArray(awards) ? awards : []);
   const affiliationsJson = JSON.stringify(Array.isArray(affiliations) ? affiliations : []);
+  const normalizedAttorneyLevel = String(attorney_level || '').trim().toLowerCase();
+  const caseWorkJson = JSON.stringify(Array.isArray(case_work) ? case_work : []);
 
   if (officeLocation === null) {
     return res.status(400).json({ error: 'Invalid office location' });
@@ -191,7 +201,8 @@ router.put('/attorneys/:id', authenticateToken, (req, res) => {
   db.run(
     `UPDATE attorneys
      SET name = ?, title = ?, email = ?, phone = ?, bio = ?, specialty = ?, location = ?, display_order = ?,
-         practice_areas = ?, education = ?, bar_admissions = ?, awards = ?, affiliations = ?, highlights = '[]', photo_url = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
+         practice_areas = ?, education = ?, bar_admissions = ?, awards = ?, affiliations = ?,
+         attorney_level = ?, case_work = ?, highlights = '[]', photo_url = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
      WHERE id = ?`,
     [
       name,
@@ -207,6 +218,8 @@ router.put('/attorneys/:id', authenticateToken, (req, res) => {
       barAdmissionsJson,
       awardsJson,
       affiliationsJson,
+      normalizedAttorneyLevel,
+      caseWorkJson,
       photo_url,
       activeValue,
       req.params.id

@@ -416,7 +416,8 @@ a.btn {
 .bar-editor,
 .highlights-editor,
 .awards-editor,
-.affiliations-editor {
+.affiliations-editor,
+.case-work-editor {
   padding: 0.6rem;
   display: grid;
   gap: 0.6rem;
@@ -426,17 +427,23 @@ a.btn {
 .bar-input-row,
 .highlights-input-row,
 .awards-input-row,
-.affiliations-input-row {
+.affiliations-input-row,
+.case-work-input-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
   gap: 0.5rem;
+}
+
+.case-work-input-row {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 6rem auto;
 }
 
 .education-list,
 .bar-admissions-list,
 .highlights-list,
 .awards-list,
-.affiliations-list {
+.affiliations-list,
+.case-work-list {
   display: grid;
   gap: 0.45rem;
 }
@@ -445,7 +452,8 @@ a.btn {
 .bar-admission-item-display,
 .highlight-item-display,
 .award-item-display,
-.affiliation-item-display {
+.affiliation-item-display,
+.case-work-item-display {
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
   border: 1px solid #2a3f5e;
@@ -626,7 +634,8 @@ a.btn {
   .bar-input-row,
   .highlights-input-row,
   .awards-input-row,
-  .affiliations-input-row {
+  .affiliations-input-row,
+  .case-work-input-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
@@ -641,7 +650,9 @@ a.btn {
   .awards-input-row input,
   .awards-input-row button,
   .affiliations-input-row input,
-  .affiliations-input-row button {
+  .affiliations-input-row button,
+  .case-work-input-row input,
+  .case-work-input-row button {
     min-width: 0;
   }
 
@@ -693,7 +704,8 @@ a.btn {
   .bar-input-row,
   .highlights-input-row,
   .awards-input-row,
-  .affiliations-input-row {
+  .affiliations-input-row,
+  .case-work-input-row {
     grid-template-columns: 1fr;
   }
 
@@ -708,7 +720,9 @@ a.btn {
   .awards-input-row input,
   .awards-input-row button,
   .affiliations-input-row input,
-  .affiliations-input-row button {
+  .affiliations-input-row button,
+  .case-work-input-row input,
+  .case-work-input-row button {
     width: 100%;
   }
 

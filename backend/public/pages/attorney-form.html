@@ -36,6 +36,7 @@
           <input type="hidden" id="bar-admissions-json">
           <input type="hidden" id="awards-json">
           <input type="hidden" id="affiliations-json">
+          <input type="hidden" id="case-work-json">
 
           <label class="field field-half">
             <span>Name</span>
@@ -45,6 +46,16 @@
           <label class="field field-half">
             <span>Title</span>
             <input type="text" id="title" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Attorney Level</span>
+            <select id="attorney-level">
+              <option value="">Auto-detect from title</option>
+              <option value="partner">Partner</option>
+              <option value="of_counsel">Of Counsel</option>
+              <option value="associate">Associate</option>
+            </select>
           </label>
 
           <label class="field field-half">
@@ -166,6 +177,19 @@
                 <button id="add-affiliation" type="button" class="btn btn-ghost">Add</button>
               </div>
               <div id="affiliations-list" class="affiliations-list"></div>
+            </div>
+          </label>
+
+          <label class="field field-full" id="case-work-field">
+            <span>Notable Case Work <span class="muted">(partners / of counsel)</span></span>
+            <div class="case-work-editor">
+              <div class="case-work-input-row">
+                <input type="text" id="case-work-title" placeholder="Matter or case title">
+                <input type="text" id="case-work-description" placeholder="Description (optional)">
+                <input type="number" id="case-work-year" placeholder="Year" min="1900" max="2100">
+                <button id="add-case-work" type="button" class="btn btn-ghost">Add</button>
+              </div>
+              <div id="case-work-list" class="case-work-list"></div>
             </div>
           </label>
 

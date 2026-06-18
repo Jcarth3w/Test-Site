@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchPracticeAreas } from '../../services/practicesApi';
+import { practiceAreasContent } from './content/practiceAreasContent';
 import PracticeAreasHero from './components/PracticeAreasHero';
 import PracticeAreasGrid from './components/PracticeAreasGrid';
 import './styles/PracticeAreas.css';
@@ -27,7 +28,11 @@ const PracticeAreas = () => {
 
   return (
     <div className="practice-areas-page">
-      <section className="practice-areas-hero-band" aria-labelledby="practice-areas-heading">
+      <section
+        className="practice-areas-hero-band"
+        style={{ '--practice-hero-image': `url("${practiceAreasContent.heroBackgroundImage}")` }}
+        aria-labelledby="practice-areas-heading"
+      >
         <div className="practice-areas-hero-texture" aria-hidden="true" />
         <div className="container">
           <PracticeAreasHero />

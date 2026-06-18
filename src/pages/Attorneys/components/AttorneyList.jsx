@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { fetchPublicAttorneys } from '../../../services/attorneysApi';
 import { fetchPracticeAreas } from '../../../services/practicesApi';
-import { resolveMediaUrl } from '../../../services/apiBaseUrl';
+import AttorneyPhoto from './AttorneyPhoto';
+import { pageHeroImages } from '../../../content/siteImages';
 
 function getLastName(name = '') {
   const parts = name.trim().split(/\s+/);
@@ -223,15 +224,32 @@ const AttorneyList = () => {
   };
 
   return (
-    <section className="attorney-list">
-      <div className="container">
+    <>
+      <section
+        className="attorney-hero-band"
+        style={{ '--attorney-hero-image': `url("${pageHeroImages.attorneys}")` }}
+        aria-labelledby="attorney-directory-heading"
+      >
+        <div className="attorney-hero-texture" aria-hidden="true" />
+        <div className="container">
+          <h1 id="attorney-directory-heading" className="attorney-hero-title">
+            Meet Our Attorneys
+          </h1>
+          <p className="attorney-hero-lead">
+            Nationwide counsel for complex fire, explosion, and catastrophic claims.
+          </p>
+        </div>
+      </section>
+
+      <section className="attorney-list">
+        <div className="container">
         {loading && <p>Loading attorneys...</p>}
         {!loading && errorMessage && <p>{errorMessage}</p>}
         {!loading && !errorMessage && attorneys.length === 0 && <p>No attorneys are currently published.</p>}
         {!loading && attorneys.length > 0 && (
           <div className="attorney-layout">
             <div className="attorney-toolbar" aria-label="Attorney filters">
-              <h1 className="attorney-directory-title">Meet Our Attorneys</h1>
+              <h2 className="attorney-directory-title">Find an Attorney</h2>
               <div className="attorney-search-wrap">
                 <input
                   type="search"
@@ -340,11 +358,9 @@ const AttorneyList = () => {
                     <div className="attorney-card-media">
                       <Link className="attorney-photo-link" to={`/attorneys/${slugifyName(attorney.name)}`}>
                         {attorney.photo_url ? (
-                          <img
-                            className="attorney-photo"
-                            src={resolveMediaUrl(attorney.photo_url)}
+                          <AttorneyPhoto
+                            photoUrl={attorney.photo_url}
                             alt={`${attorney.name || 'Attorney'} portrait`}
-                            loading="lazy"
                           />
                         ) : (
                           <div className="attorney-photo-placeholder" aria-label={`${attorney.name || 'Attorney'} profile`} />
@@ -416,6 +432,7 @@ const AttorneyList = () => {
         )}
       </div>
     </section>
+    </>
   );
 };
 

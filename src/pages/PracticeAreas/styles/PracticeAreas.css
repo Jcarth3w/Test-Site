@@ -20,6 +20,25 @@
   background: linear-gradient(135deg, #ffffff 0%, #e8eff8 58%, #eef2f8 100%);
 }
 
+.practice-areas-hero-band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--practice-hero-image);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+.practice-areas-hero-band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0.92) 0%, rgba(232, 239, 248, 0.88) 100%);
+  pointer-events: none;
+}
+
 .practice-areas-hero-texture {
   position: absolute;
   inset: 0;

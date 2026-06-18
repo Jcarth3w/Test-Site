@@ -200,6 +200,8 @@ function initDatabase() {
         ensureColumn('attorneys', 'highlights', "TEXT DEFAULT '[]'");
         ensureAttorneyAwardsAffiliationsColumns();
         ensureColumn('attorneys', 'publications', "TEXT DEFAULT '[]'");
+        ensureColumn('attorneys', 'attorney_level', "TEXT DEFAULT ''");
+        ensureColumn('attorneys', 'case_work', "TEXT DEFAULT '[]'");
         ensureColumn('practices', 'is_active', 'INTEGER DEFAULT 1');
         ensureColumn('practices', 'category', "TEXT DEFAULT ''");
         ensureColumn('articles', 'source_url', "TEXT DEFAULT ''");

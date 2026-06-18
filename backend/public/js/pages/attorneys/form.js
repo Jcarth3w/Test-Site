@@ -14,8 +14,10 @@ const educationJsonEl = document.getElementById('education-json');
 const barAdmissionsJsonEl = document.getElementById('bar-admissions-json');
 const awardsJsonEl = document.getElementById('awards-json');
 const affiliationsJsonEl = document.getElementById('affiliations-json');
+const caseWorkJsonEl = document.getElementById('case-work-json');
 const nameEl = document.getElementById('name');
 const titleEl = document.getElementById('title');
+const attorneyLevelEl = document.getElementById('attorney-level');
 const displayOrderEl = document.getElementById('display-order');
 const specialtyEl = document.getElementById('specialty');
 const emailEl = document.getElementById('email');
@@ -54,12 +56,19 @@ const affiliationDescriptionEl = document.getElementById('affiliation-descriptio
 const addAffiliationBtnEl = document.getElementById('add-affiliation');
 const affiliationsListEl = document.getElementById('affiliations-list');
 
+const caseWorkTitleEl = document.getElementById('case-work-title');
+const caseWorkDescriptionEl = document.getElementById('case-work-description');
+const caseWorkYearEl = document.getElementById('case-work-year');
+const addCaseWorkBtnEl = document.getElementById('add-case-work');
+const caseWorkListEl = document.getElementById('case-work-list');
+
 let previewObjectUrl = '';
 let practiceAreas = [];
 let education = [];
 let barAdmissions = [];
 let awards = [];
 let affiliations = [];
+let caseWork = [];
 
 function normalizePracticeAreaText(value = '') {
   return value.trim().replace(/\s+/g, ' ');
@@ -410,6 +419,70 @@ function addAffiliation() {
   if (affiliationTitleEl) affiliationTitleEl.focus();
 }
 
+function renderCaseWorkList(containerEl, entries, onRemove) {
+  if (!containerEl) return;
+  containerEl.innerHTML = '';
+
+  if (!entries.length) {
+    const empty = document.createElement('p');
+    empty.className = 'muted';
+    empty.textContent = 'No case work entries added yet.';
+    containerEl.appendChild(empty);
+    return;
+  }
+
+  entries.forEach((entry, index) => {
+    const item = document.createElement('div');
+    item.className = 'case-work-item-display';
+    const descText = entry.description ? `<p>${entry.description}</p>` : '';
+    const yearText = entry.year ? `<p class="muted">${entry.year}</p>` : '';
+    item.innerHTML = `
+      <div>
+        <strong>${entry.title}</strong>${descText}${yearText}
+        <button type="button" data-index="${index}" aria-label="Remove" class="remove-btn">x</button>
+      </div>
+    `;
+    item.querySelector('.remove-btn').addEventListener('click', () => {
+      onRemove(index);
+    });
+    containerEl.appendChild(item);
+  });
+}
+
+function setCaseWork(nextValues = []) {
+  caseWork = nextValues.filter((item) => item && item.title);
+
+  if (caseWorkJsonEl) {
+    caseWorkJsonEl.value = JSON.stringify(caseWork);
+  }
+
+  renderCaseWorkList(caseWorkListEl, caseWork, (index) => {
+    setCaseWork(caseWork.filter((_, i) => i !== index));
+  });
+}
+
+function addCaseWork() {
+  const title = (caseWorkTitleEl?.value || '').trim();
+  const description = (caseWorkDescriptionEl?.value || '').trim();
+  const year = (caseWorkYearEl?.value || '').trim();
+
+  if (!title) return;
+
+  setCaseWork([
+    ...caseWork,
+    {
+      title,
+      description: description || null,
+      year: year ? parseInt(year, 10) : null,
+    },
+  ]);
+
+  if (caseWorkTitleEl) caseWorkTitleEl.value = '';
+  if (caseWorkDescriptionEl) caseWorkDescriptionEl.value = '';
+  if (caseWorkYearEl) caseWorkYearEl.value = '';
+  if (caseWorkTitleEl) caseWorkTitleEl.focus();
+}
+
 function resolvePhotoUrl(photoUrl = '') {
   if (!photoUrl) return '';
   if (/^https?:\/\//i.test(photoUrl)) return photoUrl;
@@ -480,6 +553,8 @@ function getPayload() {
     bar_admissions: [...barAdmissions],
     awards: [...awards],
     affiliations: [...affiliations],
+    attorney_level: attorneyLevelEl?.value || '',
+    case_work: [...caseWork],
     location: locationEl.value,
     bio: bioEl.value.trim(),
     photo_url: photoUrlEl.value || '',
@@ -493,6 +568,7 @@ async function loadAttorney(id) {
   photoUrlEl.value = attorney.photo_url || '';
   nameEl.value = attorney.name || '';
   titleEl.value = attorney.title || '';
+  if (attorneyLevelEl) attorneyLevelEl.value = attorney.attorney_level || '';
   displayOrderEl.value = Number.isFinite(Number(attorney.display_order)) ? Number(attorney.display_order) : 100;
   specialtyEl.value = attorney.specialty || '';
   emailEl.value = attorney.email || '';
@@ -502,6 +578,7 @@ async function loadAttorney(id) {
   setBarAdmissions(parseBarAdmissions(attorney.bar_admissions));
   setAwards(parseTitleDescriptionItems(attorney.awards));
   setAffiliations(parseTitleDescriptionItems(attorney.affiliations));
+  setCaseWork(parseTitleDescriptionItems(attorney.case_work));
   setOfficeSelection(attorney.location || '');
   bioEl.value = attorney.bio || '';
   activeEl.checked = Boolean(attorney.is_active);
@@ -569,6 +646,14 @@ affiliationDescriptionEl?.addEventListener('keydown', (event) => {
   addAffiliation();
 });
 
+addCaseWorkBtnEl?.addEventListener('click', addCaseWork);
+
+caseWorkYearEl?.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter') return;
+  event.preventDefault();
+  addCaseWork();
+});
+
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
@@ -607,6 +692,7 @@ form.addEventListener('submit', async (event) => {
   setBarAdmissions([]);
   setAwards([]);
   setAffiliations([]);
+  setCaseWork([]);
 
   await loadPracticeCatalog();
 

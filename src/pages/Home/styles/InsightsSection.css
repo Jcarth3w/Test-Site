@@ -66,6 +66,17 @@
   z-index: 2;
 }
 
+.insights-showcase-figure--tertiary {
+  position: absolute;
+  left: 8%;
+  bottom: 18%;
+  width: 46%;
+  height: 34%;
+  border: 2px solid #ffffff;
+  z-index: 1;
+  box-shadow: 0 12px 28px rgba(15, 42, 66, 0.14);
+}
+
 .home-insights .home-eyebrow {
   color: #1a4a72;
 }
