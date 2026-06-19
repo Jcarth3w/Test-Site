@@ -7,6 +7,7 @@
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
     "sync-uploads": "node scripts/sync-uploads-from-remote.js",
+    "sync-uploads:remote": "node scripts/sync-remote-uploads.js",
     "audit-attorney-photos": "node scripts/audit-attorney-photos.js"
   },
   "dependencies": {
