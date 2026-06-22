@@ -144,6 +144,17 @@ export function uploadPhoto(file) {
   });
 }
 
+export function uploadDocument(file) {
+  const formData = new FormData();
+  formData.append('document', file);
+
+  return request('/api/upload/document', {
+    method: 'POST',
+    headers: { ...getAuthHeader() },
+    body: formData
+  });
+}
+
 export function uploadPracticeImage(file) {
   return uploadPhoto(file);
 }
@@ -249,6 +260,59 @@ export function setArticleStatus(id, isPublished) {
 
 export function removeArticle(id) {
   return request(`/api/articles/${id}`, {
+    method: 'DELETE',
+    headers: { ...getAuthHeader() }
+  });
+}
+
+// Newsletters API
+export function getNewsletters() {
+  return request('/api/newsletters', {
+    headers: { ...getAuthHeader() }
+  });
+}
+
+export function getNewsletterById(id) {
+  return request(`/api/newsletters/${id}`, {
+    headers: { ...getAuthHeader() }
+  });
+}
+
+export function createNewsletter(payload) {
+  return request('/api/newsletters', {
+    method: 'POST',
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+}
+
+export function updateNewsletter(id, payload) {
+  return request(`/api/newsletters/${id}`, {
+    method: 'PUT',
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+}
+
+export function setNewsletterStatus(id, isPublished) {
+  return request(`/api/newsletters/${id}/status`, {
+    method: 'PATCH',
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ is_published: isPublished })
+  });
+}
+
+export function removeNewsletter(id) {
+  return request(`/api/newsletters/${id}`, {
     method: 'DELETE',
     headers: { ...getAuthHeader() }
   });

@@ -125,5 +125,6 @@ module.exports = {
   normalizeDisplayOrder,
   normalizePracticeAreas,
   parseStoredPracticeAreas,
+  parseStoredJsonArray,
   mapAttorneyRow,
 };

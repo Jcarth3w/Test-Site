@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicArticles } from '../../../services/articlesApi';
+import { fetchPublicAttorneys } from '../../../services/attorneysApi';
+import { getArticleCategory } from '../../../content/articleCategories';
+import { AuthorBylineText } from '../../../components/AuthorByline';
 import '../styles/HomeShared.css';
 import '../styles/InsightsSection.css';
 
@@ -14,6 +17,7 @@ function topicClassName(topic = '') {
 
 const InsightsSection = ({ section }) => {
   const [articles, setArticles] = useState([]);
+  const [attorneys, setAttorneys] = useState([]);
   const [loading, setLoading] = useState(true);
   const showcaseImages = section.showcaseImages ?? [];
 
@@ -22,13 +26,18 @@ const InsightsSection = ({ section }) => {
 
     const loadArticles = async () => {
       try {
-        const data = await fetchPublicArticles();
+        const [data, attorneysData] = await Promise.all([
+          fetchPublicArticles(),
+          fetchPublicAttorneys(),
+        ]);
         if (!cancelled) {
           setArticles(data.slice(0, 3));
+          setAttorneys(attorneysData);
         }
       } catch {
         if (!cancelled) {
           setArticles([]);
+          setAttorneys([]);
         }
       } finally {
         if (!cancelled) {
@@ -58,6 +67,9 @@ const InsightsSection = ({ section }) => {
               className={`insight-row insight-row--live ${index === 0 ? 'insight-row--lead' : ''}`}
             >
               <div className="insight-row-main">
+                <span className={`insight-topic insight-topic--${getArticleCategory(article.category).slug}`}>
+                  {getArticleCategory(article.category).label}
+                </span>
                 {article.publication_date && (
                   <time dateTime={article.publication_date}>
                     {new Date(article.publication_date).toLocaleDateString(undefined, {
@@ -69,7 +81,14 @@ const InsightsSection = ({ section }) => {
                 )}
                 <h3>{article.title}</h3>
                 {article.summary && <p>{article.summary}</p>}
-                <span className="insight-row-cta">Read insight →</span>
+                <AuthorBylineText
+                  article={article}
+                  attorneys={attorneys}
+                  className="insight-row-author"
+                />
+                <span className="insight-row-cta">
+                  Read {getArticleCategory(article.category).label.toLowerCase()} →
+                </span>
               </div>
             </Link>
           </li>

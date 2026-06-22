@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchPublicArticleBySlug } from '../../services/articlesApi';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
 import { resolveMediaUrl } from '../../services/apiBaseUrl';
+import { getArticleCategory } from '../../content/articleCategories';
+import { getArticleAuthors } from '../../utils/articleAuthors';
+import { AuthorByline } from '../../components/AuthorByline';
 import './styles/Articles.css';
 
 function slugifyName(name = '') {
@@ -37,22 +40,21 @@ function ArticleBody({ content }) {
 const ArticleDetail = () => {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
-  const [author, setAuthor] = useState(null);
+  const [attorneys, setAttorneys] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const articleData = await fetchPublicArticleBySlug(slug);
+        const [articleData, attorneysData] = await Promise.all([
+          fetchPublicArticleBySlug(slug),
+          fetchPublicAttorneys(),
+        ]);
         setArticle(articleData);
-
-        if (articleData.author_id) {
-          const attorneys = await fetchPublicAttorneys();
-          const authorData = attorneys.find((a) => a.id === articleData.author_id);
-          setAuthor(authorData);
-        }
+        setAttorneys(attorneysData);
       } catch {
         setArticle(null);
+        setAttorneys([]);
       } finally {
         setLoading(false);
       }
@@ -60,6 +62,12 @@ const ArticleDetail = () => {
 
     loadData();
   }, [slug]);
+
+  const articleAuthors = useMemo(
+    () => (article ? getArticleAuthors(article, attorneys) : []),
+    [article, attorneys]
+  );
+  const primaryAuthor = articleAuthors[0] ?? null;
 
   if (loading) {
     return (
@@ -106,6 +114,9 @@ const ArticleDetail = () => {
 
           <div className="article-detail-header">
             <div className="article-detail-header-text">
+              <span className={`article-category-badge article-category-badge--${getArticleCategory(article.category).slug}`}>
+                {getArticleCategory(article.category).label}
+              </span>
               <h1>{article.title}</h1>
               <div className="article-detail-meta">
                 {article.publication_date && (
@@ -117,29 +128,23 @@ const ArticleDetail = () => {
                     })}
                   </span>
                 )}
-                {author && (
-                  <>
-                    <span className="meta-separator">•</span>
-                    <Link
-                      to={`/attorneys/${slugifyName(author.name)}`}
-                      className="detail-author-link"
-                    >
-                      By {author.name}
-                    </Link>
-                  </>
-                )}
+                <AuthorByline
+                  article={article}
+                  attorneys={attorneys}
+                  showSeparator={Boolean(article.publication_date)}
+                />
               </div>
             </div>
-            {author && (
+            {primaryAuthor && articleAuthors.length === 1 && (
               <Link
-                to={`/attorneys/${slugifyName(author.name)}`}
+                to={`/attorneys/${slugifyName(primaryAuthor.name)}`}
                 className="article-author-photo-link"
-                aria-label={`${author.name} — view full profile`}
+                aria-label={`${primaryAuthor.name} — view full profile`}
               >
-                {author.photo_url ? (
+                {primaryAuthor.photo_url ? (
                   <img
                     className="article-author-photo"
-                    src={resolveMediaUrl(author.photo_url)}
+                    src={resolveMediaUrl(primaryAuthor.photo_url)}
                     alt=""
                   />
                 ) : (

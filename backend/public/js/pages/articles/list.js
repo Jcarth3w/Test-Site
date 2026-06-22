@@ -22,17 +22,35 @@ async function loadArticles() {
     articleListEl.innerHTML = '';
 
     if (!articles.length) {
-      articleListEl.innerHTML = '<tr><td colspan="6" class="text-center">No articles yet. Add one to get started.</td></tr>';
+      articleListEl.innerHTML = '<tr><td colspan="7" class="text-center">No articles yet. Add one to get started.</td></tr>';
       return;
     }
 
+    const categoryLabels = {
+      article: 'Article',
+      insight: 'Insight',
+      alert: 'Insight',
+      news: 'News',
+    };
+
     articles.forEach((article) => {
-      const author = attorneys.find((a) => a.id === article.author_id);
+      const authorNames = (Array.isArray(article.author_ids) && article.author_ids.length
+        ? article.author_ids
+        : article.author_id
+          ? [article.author_id]
+          : []
+      )
+        .map((id) => attorneys.find((a) => a.id === id)?.name)
+        .filter(Boolean)
+        .join(', ');
+
       const row = document.createElement('tr');
       const pubDate = article.publication_date ? new Date(article.publication_date).toLocaleDateString() : '-';
+      const categoryLabel = categoryLabels[article.category] || 'Article';
       row.innerHTML = `
         <td>${article.title || '-'}</td>
-        <td>${author ? author.name : 'No author'}</td>
+        <td>${categoryLabel}</td>
+        <td>${authorNames || 'No authors'}</td>
         <td>${article.slug || '-'}</td>
         <td>${pubDate}</td>
         <td><span class="status-chip ${article.is_published ? 'active' : 'inactive'}">${article.is_published ? 'Published' : 'Draft'}</span></td>

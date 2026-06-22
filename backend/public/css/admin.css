@@ -738,3 +738,98 @@ a.btn {
     width: 100%;
   }
 }
+
+.form-intro {
+  margin: 0 0 1rem;
+}
+
+.field-hint {
+  margin: 0;
+  font-size: 0.84rem;
+}
+
+.category-guidance {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(91, 155, 213, 0.06);
+}
+
+.category-guidance-label {
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.author-picker {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.author-picker-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.author-chip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.author-chip-empty {
+  font-size: 0.88rem;
+}
+
+.author-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.55rem 0.4rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.author-chip-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.author-chip-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.author-chip-remove {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.2rem;
+}
+
+.author-chip-remove:hover {
+  color: var(--danger);
+}
+
+.newsletter-cover-preview {
+  margin-top: 0.5rem;
+  min-height: 120px;
+}
+
+@media (max-width: 720px) {
+  .author-picker-controls {
+    grid-template-columns: 1fr;
+  }
+}

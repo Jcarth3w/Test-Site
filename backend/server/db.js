@@ -170,6 +170,21 @@ function initDatabase() {
     `);
 
     db.run(`
+      CREATE TABLE IF NOT EXISTS newsletters (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        slug TEXT UNIQUE,
+        title TEXT,
+        summary TEXT,
+        issue_date DATETIME,
+        pdf_url TEXT,
+        cover_image_url TEXT,
+        is_published INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    db.run(`
       CREATE TABLE IF NOT EXISTS articles (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         slug TEXT UNIQUE,
@@ -205,6 +220,26 @@ function initDatabase() {
         ensureColumn('practices', 'is_active', 'INTEGER DEFAULT 1');
         ensureColumn('practices', 'category', "TEXT DEFAULT ''");
         ensureColumn('articles', 'source_url', "TEXT DEFAULT ''");
+        ensureColumn('articles', 'category', "TEXT DEFAULT 'article'");
+        ensureColumn('articles', 'author_ids', "TEXT DEFAULT '[]'");
+
+        db.run(
+          "UPDATE articles SET category = 'article' WHERE category IS NULL OR category = ''",
+          (migrateErr) => {
+            if (migrateErr) {
+              console.error('Error migrating article categories:', migrateErr.message);
+            }
+          }
+        );
+
+        db.run(
+          "UPDATE articles SET category = 'insight' WHERE category = 'alert'",
+          (migrateErr) => {
+            if (migrateErr) {
+              console.error('Error migrating alert categories:', migrateErr.message);
+            }
+          }
+        );
 
         fixAlbuquerqueLocationTypo();
 

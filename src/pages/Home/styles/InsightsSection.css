@@ -238,6 +238,26 @@
   color: #4a6278;
 }
 
+.insight-topic--insight {
+  color: #6b4e12;
+}
+
+.insight-topic--article {
+  color: #1a4a72;
+}
+
+.insight-topic--news {
+  color: #4a6278;
+}
+
+.insight-row-author {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #3e668e;
+}
+
 .insight-row time {
   display: block;
   margin-bottom: 0.45rem;

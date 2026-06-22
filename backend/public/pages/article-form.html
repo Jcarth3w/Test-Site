@@ -16,7 +16,7 @@
         <span class="brand-mark"></span>
         <div>
           <h1>MLL CMS</h1>
-          <p>Article Editor</p>
+          <p>Insights & News Editor</p>
         </div>
       </div>
       <button id="logout-btn" class="btn btn-ghost" type="button">Log out</button>
@@ -25,12 +25,35 @@
     <main class="content">
       <section class="panel">
         <a class="back-link" href="/admin/articles" aria-label="Back to articles">&#8592;</a>
-        <h2 id="form-title">Add Article</h2>
+        <h2 id="form-title">Add Entry</h2>
+        <p class="muted form-intro">Choose a content type, add one or more authors, then write the listing summary and full body.</p>
         <div id="page-message" class="message hidden" role="alert"></div>
 
         <form id="article-form" class="grid-form">
           <input type="hidden" id="article-id">
           <input type="hidden" id="image-url">
+
+          <label class="field field-half">
+            <span>Content type</span>
+            <select id="category" required>
+              <option value="article">Article</option>
+              <option value="insight">Insight</option>
+              <option value="news">News</option>
+            </select>
+          </label>
+
+          <label class="field field-half inline-field">
+            <span>Status</span>
+            <label class="toggle-row">
+              <input type="checkbox" id="article-published">
+              <span>Published (visible on site)</span>
+            </label>
+          </label>
+
+          <div class="field field-full category-guidance" id="category-guidance">
+            <p class="category-guidance-label" id="category-label">Article</p>
+            <p class="muted" id="category-description"></p>
+          </div>
 
           <label class="field field-half">
             <span>Title</span>
@@ -43,38 +66,39 @@
           </label>
 
           <label class="field field-half">
-            <span>Author (Attorney)</span>
-            <select id="author-id">
-              <option value="">No author</option>
-            </select>
-          </label>
-
-          <label class="field field-half">
             <span>Publication Date</span>
             <input type="datetime-local" id="publication-date">
           </label>
 
-          <label class="field field-full">
-            <span>Source URL (link to original article)</span>
-            <input type="url" id="source-url" placeholder="https://example.com/article">
+          <label class="field field-half">
+            <span>Source URL (optional)</span>
+            <input type="url" id="source-url" placeholder="https://example.com/original-article">
           </label>
 
-          <label class="field field-half inline-field">
-            <span>Status</span>
-            <label class="toggle-row">
-              <input type="checkbox" id="article-published">
-              <span>Published (visible on site)</span>
-            </label>
-          </label>
+          <div class="field field-full">
+            <span>Authors</span>
+            <p class="field-hint muted">Add one or more attorneys. The first author is the primary byline on listings.</p>
+            <div class="author-picker">
+              <div class="author-picker-controls">
+                <select id="author-add-select">
+                  <option value="">Select an attorney…</option>
+                </select>
+                <button type="button" class="btn btn-ghost btn-sm" id="add-author-btn">Add author</button>
+              </div>
+              <ul id="author-list" class="author-chip-list" aria-live="polite"></ul>
+            </div>
+          </div>
 
           <label class="field field-full">
             <span>Summary</span>
-            <textarea id="summary" rows="3" placeholder="Brief description for article listings"></textarea>
+            <textarea id="summary" rows="3" placeholder="Brief description for listings"></textarea>
+            <p class="field-hint muted" id="summary-hint"></p>
           </label>
 
           <label class="field field-full">
             <span>Content</span>
-            <textarea id="content" rows="10" required placeholder="Full article content (supports HTML)"></textarea>
+            <textarea id="content" rows="14" required placeholder="Full entry body (supports HTML)"></textarea>
+            <p class="field-hint muted" id="content-hint"></p>
           </label>
 
           <div class="form-actions field-full">

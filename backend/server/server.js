@@ -9,6 +9,7 @@ const attorneyRoutes = require('./routes/attorneys');
 const practiceRoutes = require('./routes/practices');
 const officeRoutes = require('./routes/offices');
 const articleRoutes = require('./routes/articles');
+const newsletterRoutes = require('./routes/newsletters');
 const uploadRoutes = require('./routes/upload');
 const { serveUploads } = require('./serveUploads');
 const { syncBundledUploadsIfMissing } = require('./syncBundledUploads');
@@ -51,6 +52,7 @@ app.use('/api', attorneyRoutes);
 app.use('/api', practiceRoutes);
 app.use('/api', officeRoutes);
 app.use('/api', articleRoutes);
+app.use('/api', newsletterRoutes);
 app.use('/api', uploadRoutes);
 
 // Admin pages
@@ -86,6 +88,24 @@ app.get('/admin/articles/form', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'article-form.html'));
 });
 
-app.listen(PORT, () => {
+app.get('/admin/newsletters', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'newsletters.html'));
+});
+
+app.get('/admin/newsletters/form', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'newsletter-form.html'));
+});
+
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Stop the other server process, then restart.`);
+    console.error(`  lsof -ti :${PORT} | xargs kill -9`);
+    process.exit(1);
+  }
+
+  throw err;
 });

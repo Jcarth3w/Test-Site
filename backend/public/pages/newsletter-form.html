@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLL CMS | Newsletter Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <div>
+          <h1>MLL CMS</h1>
+          <p>Newsletter Editor</p>
+        </div>
+      </div>
+      <button id="logout-btn" class="btn btn-ghost" type="button">Log out</button>
+    </header>
+
+    <main class="content">
+      <section class="panel">
+        <a class="back-link" href="/admin/newsletters" aria-label="Back to newsletters">&#8592;</a>
+        <h2 id="form-title">Add Newsletter</h2>
+        <p class="muted form-intro">Upload the PDF and optional cover image. Issues are ordered by issue date on the site.</p>
+        <div id="page-message" class="message hidden" role="alert"></div>
+
+        <form id="newsletter-form" class="grid-form">
+          <input type="hidden" id="newsletter-id">
+          <input type="hidden" id="pdf-url">
+          <input type="hidden" id="cover-image-url">
+
+          <label class="field field-half">
+            <span>Title</span>
+            <input type="text" id="title" required placeholder="Spring 2026 Newsletter">
+          </label>
+
+          <label class="field field-half">
+            <span>Slug (URL-friendly)</span>
+            <input type="text" id="slug" required>
+          </label>
+
+          <label class="field field-half">
+            <span>Issue Date</span>
+            <input type="date" id="issue-date" required>
+          </label>
+
+          <label class="field field-half inline-field">
+            <span>Status</span>
+            <label class="toggle-row">
+              <input type="checkbox" id="newsletter-published">
+              <span>Published (visible on site)</span>
+            </label>
+          </label>
+
+          <label class="field field-full">
+            <span>Summary (optional)</span>
+            <textarea id="summary" rows="3" placeholder="Short description for the featured newsletter card"></textarea>
+          </label>
+
+          <div class="field field-half">
+            <span>Newsletter PDF</span>
+            <input type="file" id="pdf-file" accept="application/pdf,.pdf">
+            <p class="field-hint muted" id="pdf-file-name">No PDF selected</p>
+          </div>
+
+          <div class="field field-half">
+            <span>Cover Image (optional)</span>
+            <input type="file" id="cover-image" accept="image/*">
+            <div class="photo-preview-wrap newsletter-cover-preview">
+              <img id="cover-preview" class="photo-preview hidden" alt="">
+              <p id="cover-preview-empty" class="muted">No cover image</p>
+            </div>
+          </div>
+
+          <div class="form-actions field-full">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-ghost" href="/admin/newsletters">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/js/pages/newsletters/form.js"></script>
+</body>
+</html>
