@@ -80,7 +80,6 @@ const InsightsSection = ({ section }) => {
                   </time>
                 )}
                 <h3>{article.title}</h3>
-                {article.summary && <p>{article.summary}</p>}
                 <AuthorBylineText
                   article={article}
                   attorneys={attorneys}
@@ -109,7 +108,6 @@ const InsightsSection = ({ section }) => {
                     {item.topic}
                   </span>
                   <h3>{item.title}</h3>
-                  <p>{item.description}</p>
                 </div>
                 <span className="insight-row-badge">Coming soon</span>
               </article>
@@ -142,13 +140,15 @@ const InsightsSection = ({ section }) => {
 
           {showcaseImages.length > 0 ? (
             <aside className="home-insights-showcase" aria-label="Firm photography">
-              <div className="insights-showcase-collage">
+              <div className="insights-showcase-grid">
                 {showcaseImages.map((image) => (
-                  <figure
-                    key={image.src}
-                    className={`insights-showcase-figure insights-showcase-figure--${image.layout}`}
-                  >
+                  <figure key={image.src} className="insights-showcase-figure">
                     <img src={image.src} alt={image.alt} loading="lazy" />
+                    {image.description ? (
+                      <figcaption className="insights-showcase-caption">
+                        <p>{image.description}</p>
+                      </figcaption>
+                    ) : null}
                   </figure>
                 ))}
               </div>

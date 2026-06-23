@@ -74,12 +74,6 @@ const FirmHistory = () => {
           {firmHistory.title}
         </h2>
 
-        {firmHistory.image ? (
-          <figure className="firm-history-visual about-reveal about-reveal--image">
-            <img src={firmHistory.image} alt={firmHistory.imageAlt || ''} loading="lazy" />
-          </figure>
-        ) : null}
-
         <div className="firm-history-layout about-reveal about-reveal--body">
           <div className="firm-history-main">
             <p className="firm-history-preview">{previewParagraph}</p>

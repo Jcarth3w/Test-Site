@@ -3,7 +3,7 @@ import { homeImages } from '../../../content/siteImages';
 export const homeContent = {
   heroBanner: {
     eyebrow: '',
-    tagline: 'From first notice to resolution Coordinated, Prepared, Direct',
+    tagline: 'From First Notice to Resolution Coordinated, Prepared, Direct',
     primaryCtaLabel: 'Find an attorney',
     primaryCtaLink: '/attorneys',
     secondaryCtaLabel: 'Meet Our Attorneys',
@@ -31,6 +31,18 @@ export const homeContent = {
       image: homeImages.truckingCrash,
       caption: 'Nationwide Response When It Matters Most',
     },
+    {
+      image: homeImages.autoAx,
+      caption: 'Vehicle Fire and Causation Expertise',
+    },
+    {
+      image: homeImages.boatFire,
+      caption: 'Marine and Vessel Loss Response',
+    },
+    {
+      image: homeImages.constructionDef,
+      caption: 'Construction Defect and Complex Property Claims',
+    },
   ],
 
   insightsSection: {
@@ -46,19 +58,24 @@ export const homeContent = {
       'New articles and firm perspectives are in development. Check back soon or contact us to discuss a topic with our team.',
     showcaseImages: [
       {
-        src: homeImages.wildfire,
-        alt: 'Wildfire loss scene investigation',
-        layout: 'primary',
-      },
-      {
         src: homeImages.constructionDefect,
-        alt: 'Construction defect loss scene',
-        layout: 'secondary',
+        alt: 'Lithum Ion Battery failure',
+        description: 'Faulty lithum ion battery investigation.',
       },
       {
         src: homeImages.mllSiteInspection,
         alt: 'Site inspection at a catastrophic loss',
-        layout: 'tertiary',
+        description: 'Attorneys and experts on site at a catastrophic explosion loss.',
+      },
+      {
+        src: homeImages.liftAx,
+        alt: 'Construction Lift Crash',
+        description: 'Mechanical lift crash at construction site.',
+      },
+      {
+        src: homeImages.sbWildFire,
+        alt: 'Southern California wildfire loss',
+        description: 'Southern California wildfire scene with widespread property damage.',
       },
     ],
     placeholders: [
@@ -89,14 +106,12 @@ export const homeContent = {
     viewAllLink: '/practice',
     featuredCount: 6,
     featuredSlugs: [
-      'fire-explosion',
       'fire-explostion',
-      'bad-faith',
-      'first-party-property',
-      'casualty',
-      'arson',
-      'products-liability',
+      'trucking',
       'product-liability',
+      'admiralty-marine',
+      'construction-defect',
+      'casualty',
     ],
   },
 

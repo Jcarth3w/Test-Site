@@ -14,9 +14,9 @@
 .about-intro-eyebrow {
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.72rem;
-  font-weight: 800;
+  letter-spacing: 0.1em;
+  font-size: clamp(1.15rem, 2.8vw, 1.65rem);
+  font-weight: 700;
   color: #efbe45;
 }
 

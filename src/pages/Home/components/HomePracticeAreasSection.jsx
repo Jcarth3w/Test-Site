@@ -49,8 +49,23 @@ const HomePracticeAreasSection = ({ section }) => {
   }, [practices, section.featuredSlugs, section.featuredCount]);
 
   const [leftColumn, rightColumn] = useMemo(() => {
-    const midpoint = Math.ceil(featuredPractices.length / 2);
-    return [featuredPractices.slice(0, midpoint), featuredPractices.slice(midpoint)];
+    const left = [];
+    const right = [];
+
+    featuredPractices.forEach((practice, index) => {
+      if (index === 0) {
+        left.push(practice);
+        return;
+      }
+
+      if (index % 2 === 1) {
+        right.push(practice);
+      } else {
+        left.push(practice);
+      }
+    });
+
+    return [left, right];
   }, [featuredPractices]);
 
   return (
