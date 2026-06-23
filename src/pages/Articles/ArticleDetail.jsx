@@ -88,7 +88,7 @@ const ArticleDetail = () => {
           <div className="container">
             <h1>Article Not Found</h1>
             <p>The requested article is not available.</p>
-            <Link className="article-link" to="/articles">Back to Articles</Link>
+            <Link className="article-link" to="/articles">Back to Insights & News</Link>
           </div>
         </section>
       </div>
@@ -99,9 +99,9 @@ const ArticleDetail = () => {
     <div className="article-detail-page">
       <section className="article-detail">
         <div className="container">
-          <Link className="article-back" to="/articles" aria-label="Back to Articles">
+          <Link className="article-back" to="/articles" aria-label="Back to Insights & News">
             <span className="article-back-icon" aria-hidden="true"></span>
-            <span>Back to Articles</span>
+            <span>Back to Insights & News</span>
           </Link>
 
           {article.image_url && (
@@ -156,12 +156,6 @@ const ArticleDetail = () => {
               </Link>
             )}
           </div>
-
-          {article.summary && (
-            <div className="article-summary-box">
-              {article.summary}
-            </div>
-          )}
 
           <ArticleBody content={article.content} />
 

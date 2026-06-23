@@ -233,10 +233,19 @@ function initDatabase() {
         );
 
         db.run(
-          "UPDATE articles SET category = 'insight' WHERE category = 'alert'",
+          "UPDATE articles SET category = 'alert' WHERE category IN ('insight', 'alert')",
           (migrateErr) => {
             if (migrateErr) {
-              console.error('Error migrating alert categories:', migrateErr.message);
+              console.error('Error migrating insight categories:', migrateErr.message);
+            }
+          }
+        );
+
+        db.run(
+          "UPDATE articles SET category = 'announcement' WHERE category = 'news'",
+          (migrateErr) => {
+            if (migrateErr) {
+              console.error('Error migrating news categories:', migrateErr.message);
             }
           }
         );

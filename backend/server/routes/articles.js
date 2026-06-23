@@ -4,7 +4,7 @@ const { db } = require('../db');
 const { authenticateToken } = require('../middleware');
 const { logOperation } = require('../logger');
 const { normalizeBoolean } = require('../helpers');
-const { isValidArticleCategory, normalizeArticleCategory } = require('../articleCategories');
+const { isValidArticleCategory, normalizeArticleCategory, getCategoryFilterValues } = require('../articleCategories');
 const { normalizeAuthorIds, serializeAuthorIds, mapArticleRow } = require('../articleHelpers');
 
 function buildPublicArticleQuery({ author_id, category } = {}) {
@@ -25,14 +25,11 @@ function buildPublicArticleQuery({ author_id, category } = {}) {
   }
 
   if (category) {
-    const normalizedCategory = normalizeArticleCategory(category);
-    if (normalizedCategory === 'article') {
-      query += " AND (category = 'article' OR category IS NULL OR category = '')";
-    } else if (normalizedCategory === 'insight') {
-      query += " AND (category = 'insight' OR category = 'alert')";
-    } else {
-      query += ' AND category = ?';
-      params.push(normalizedCategory);
+    const filterValues = getCategoryFilterValues(category);
+    if (filterValues?.length) {
+      const placeholders = filterValues.map(() => '?').join(', ');
+      query += ` AND category IN (${placeholders})`;
+      params.push(...filterValues);
     }
   }
 

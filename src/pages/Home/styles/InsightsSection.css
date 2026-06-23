@@ -256,15 +256,20 @@
   color: #4a6278;
 }
 
-.insight-topic--insight {
-  color: #6b4e12;
-}
-
-.insight-topic--article {
+.insight-topic--article,
+.insight-topic--alert {
   color: #1a4a72;
 }
 
-.insight-topic--news {
+.insight-topic--alert {
+  color: #6b4e12;
+}
+
+.insight-topic--award,
+.insight-topic--new-hire,
+.insight-topic--speaking,
+.insight-topic--media,
+.insight-topic--announcement {
   color: #4a6278;
 }
 
@@ -296,14 +301,6 @@
 
 .insight-row--live:hover .insight-row-main h3 {
   color: #1a4a72;
-}
-
-.insight-row-main p {
-  margin: 0.45rem 0 0;
-  max-width: 62ch;
-  color: #2d4a63;
-  font-size: 0.86rem;
-  line-height: 1.55;
 }
 
 .insight-row-cta {

@@ -34,11 +34,19 @@
           <input type="hidden" id="image-url">
 
           <label class="field field-half">
-            <span>Content type</span>
+            <span>Category</span>
             <select id="category" required>
-              <option value="article">Article</option>
-              <option value="insight">Insight</option>
-              <option value="news">News</option>
+              <optgroup label="Insights">
+                <option value="article">Article</option>
+                <option value="alert">Alert</option>
+              </optgroup>
+              <optgroup label="News">
+                <option value="award">Award</option>
+                <option value="new-hire">New Hire</option>
+                <option value="speaking">Speaking</option>
+                <option value="media">Media Coverage</option>
+                <option value="announcement">Announcement</option>
+              </optgroup>
             </select>
           </label>
 
