@@ -80,7 +80,6 @@ const InsightsSection = ({ section }) => {
                   </time>
                 )}
                 <h3>{article.title}</h3>
-                {article.summary && <p>{article.summary}</p>}
                 <AuthorBylineText
                   article={article}
                   attorneys={attorneys}

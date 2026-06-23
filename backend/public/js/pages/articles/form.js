@@ -11,23 +11,52 @@ const CATEGORY_META = {
   article: {
     label: 'Article',
     description:
-      'In-depth firm perspectives and practical guidance — typically one primary author, with structured sections.',
+      'In-depth firm perspectives — typically one primary author, with structured sections.',
     summaryHint: 'Lead with the practical takeaway readers should remember.',
     contentHint: 'Full article body. Use headings for sections. HTML is supported.',
   },
-  insight: {
-    label: 'Insight',
+  alert: {
+    label: 'Alert',
     description:
-      'Commentary on a case, ruling, or development — often shorter and commonly co-authored.',
+      'Timely commentary on a ruling, development, or trend — often shorter and co-authored.',
     summaryHint: 'Summarize the ruling or development and why it matters to your audience.',
     contentHint: 'Analysis of the decision or trend. Cite the court or source when possible.',
   },
-  news: {
-    label: 'News',
-    description: 'Firm announcements, media coverage, speaking engagements, and honors.',
+  award: {
+    label: 'Award',
+    description: 'Honors, rankings, and recognition received by the firm or its attorneys.',
+    summaryHint: 'Name the honor and who received it.',
+    contentHint: 'Details of the award, selection criteria, and any relevant quote.',
+  },
+  'new-hire': {
+    label: 'New Hire',
+    description: 'Welcome announcements for attorneys and staff joining the firm.',
+    summaryHint: 'Introduce the new team member and their role.',
+    contentHint: 'Background, practice focus, and prior experience.',
+  },
+  speaking: {
+    label: 'Speaking',
+    description: 'Conferences, panels, CLE programs, and other speaking engagements.',
+    summaryHint: 'Event name, date, and topic.',
+    contentHint: 'Event details, session title, and registration link if applicable.',
+  },
+  media: {
+    label: 'Media Coverage',
+    description: 'Press mentions, interviews, and external coverage of the firm.',
+    summaryHint: 'Outlet and headline angle.',
+    contentHint: 'Brief context and link to the original coverage via Source URL.',
+  },
+  announcement: {
+    label: 'Announcement',
+    description: 'General firm news, office updates, and other announcements.',
     summaryHint: 'Brief announcement text for listings.',
     contentHint: 'Event details, quote, or press release body. Use Source URL for external coverage.',
   },
+};
+
+const LEGACY_CATEGORY_ALIASES = {
+  insight: 'alert',
+  news: 'announcement',
 };
 
 const form = document.getElementById('article-form');
@@ -61,8 +90,9 @@ function showMessage(text, type = 'error') {
 }
 
 function normalizeCategory(value) {
-  if (value === 'alert') return 'insight';
-  return CATEGORY_META[value] ? value : 'article';
+  const slug = String(value || '').trim().toLowerCase();
+  const resolved = LEGACY_CATEGORY_ALIASES[slug] ?? slug;
+  return CATEGORY_META[resolved] ? resolved : 'article';
 }
 
 function updateCategoryGuidance() {

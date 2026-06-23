@@ -3,7 +3,7 @@ import { homeImages } from '../../../content/siteImages';
 export const homeContent = {
   heroBanner: {
     eyebrow: '',
-    tagline: 'From first notice to resolution Coordinated, Prepared, Direct',
+    tagline: 'From First Notice to Resolution Coordinated, Prepared, Direct',
     primaryCtaLabel: 'Find an attorney',
     primaryCtaLink: '/attorneys',
     secondaryCtaLabel: 'Meet Our Attorneys',

@@ -28,9 +28,14 @@ async function loadArticles() {
 
     const categoryLabels = {
       article: 'Article',
-      insight: 'Insight',
-      alert: 'Insight',
-      news: 'News',
+      alert: 'Alert',
+      award: 'Award',
+      'new-hire': 'New Hire',
+      speaking: 'Speaking',
+      media: 'Media Coverage',
+      announcement: 'Announcement',
+      insight: 'Alert',
+      news: 'Announcement',
     };
 
     articles.forEach((article) => {
