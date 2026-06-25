@@ -102,7 +102,7 @@ const AttorneyDetail = () => {
             barAdmissions={barAdmissions}
             awards={awards}
             affiliations={affiliations}
-            showSidebar={senior}
+            showExtendedProfile={senior}
           />
         </div>
       </div>

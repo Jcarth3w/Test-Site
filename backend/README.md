@@ -72,6 +72,7 @@ Required env vars:
 - `ALLOWED_ORIGINS=https://<your-frontend>.onrender.com,https://<your-backend>.onrender.com`
 - `SQLITE_PATH=/var/data/attorneys.db`
 - `UPLOAD_DIR=/var/data/uploads`
+- `SYNC_BUNDLED_DB=true` — on each deploy, copies `backend/attorneys.db` from the repo onto the persistent disk when the bundled file is newer (so git-pushed DB updates reach production)
 
 You can provide multiple origins as CSV:
 

@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const { DB_PATH, ADMIN_USERNAME, ADMIN_PASSWORD } = require('./config');
 const { logOperation } = require('./logger');
+const { syncBundledDatabaseIfConfigured } = require('./syncBundledDatabase');
+
+syncBundledDatabaseIfConfigured();
 
 const dbDir = path.dirname(DB_PATH);
 if (!fs.existsSync(dbDir)) {

@@ -6,17 +6,17 @@ const AttorneyDetailBody = ({
   barAdmissions = [],
   awards = [],
   affiliations = [],
-  showSidebar = true,
+  showExtendedProfile = true,
 }) => {
   const hasBio = Boolean(bio);
-  const hasCaseWork = showSidebar && caseWork.length > 0;
+  const hasCaseWork = showExtendedProfile && caseWork.length > 0;
   const hasMain = hasBio || hasCaseWork;
 
-  const hasPracticeAreas = showSidebar && practiceAreas.length > 0;
-  const hasEducation = showSidebar && education.length > 0;
-  const hasBar = showSidebar && barAdmissions.length > 0;
-  const hasAwards = showSidebar && awards.length > 0;
-  const hasAffiliations = showSidebar && affiliations.length > 0;
+  const hasPracticeAreas = showExtendedProfile && practiceAreas.length > 0;
+  const hasEducation = education.length > 0;
+  const hasBar = barAdmissions.length > 0;
+  const hasAwards = awards.length > 0;
+  const hasAffiliations = affiliations.length > 0;
   const hasSidebar =
     hasPracticeAreas || hasEducation || hasBar || hasAwards || hasAffiliations;
 
