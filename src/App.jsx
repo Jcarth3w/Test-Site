@@ -8,6 +8,7 @@ import Attorneys from './pages/Attorneys/Attorneys';
 import AttorneyDetail from './pages/Attorneys/AttorneyDetail';
 import PracticeAreas from './pages/PracticeAreas/PracticeAreas';
 import PracticeDetail from './pages/PracticeAreas/PracticeDetail';
+import PracticeCategoryDetail from './pages/PracticeAreas/PracticeCategoryDetail';
 import Offices from './pages/Offices/Offices';
 import OfficeDetail from './pages/Offices/OfficeDetail';
 import Articles from './pages/Articles/Articles';
@@ -23,6 +24,7 @@ function App() {
         <Route path="/attorneys" element={<Attorneys />} />
         <Route path="/attorneys/:slug" element={<AttorneyDetail />} />
         <Route path="/practice" element={<PracticeAreas />} />
+        <Route path="/practice/category/:slug" element={<PracticeCategoryDetail />} />
         <Route path="/practice/:slug" element={<PracticeDetail />} />
         <Route path="/offices" element={<Offices />} />
         <Route path="/offices/:slug" element={<OfficeDetail />} />

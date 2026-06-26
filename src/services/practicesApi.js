@@ -1,4 +1,5 @@
 import fallbackPractices from '../data/practices';
+import { practiceCategorySections } from '../data/practiceCategorySections';
 import { getPracticeAreaImage } from '../content/siteImages';
 import { getApiBaseUrl, resolveMediaUrl } from './apiBaseUrl';
 
@@ -53,4 +54,8 @@ export async function fetchPracticeBySlug(slug) {
     }
     throw error;
   }
+}
+
+export async function fetchPracticeCategories() {
+  return practiceCategorySections;
 }

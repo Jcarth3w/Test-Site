@@ -1,0 +1,116 @@
+import { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { fetchPracticeCategories } from '../../services/practicesApi';
+import { getPracticeCategoryImage } from '../../content/siteImages';
+import './styles/PracticeDetail.css';
+import './styles/PracticeCategoryDetail.css';
+
+const PracticeCategoryDetail = () => {
+  const { slug } = useParams();
+  const [category, setCategory] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const categories = await fetchPracticeCategories();
+        const match = categories.find((item) => item.slug === slug) || null;
+        setCategory(match);
+      } catch {
+        setCategory(null);
+        setErrorMessage('Unable to load this practice category right now.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="practice-category-detail-page">
+        <div className="container">
+          <h1>Loading...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (!category) {
+    return (
+      <div className="practice-category-detail-page">
+        <div className="container">
+          <h1>Category Not Found</h1>
+          <p>{errorMessage || 'The requested practice category could not be found.'}</p>
+          <Link to="/practice" className="btn btn-primary">
+            View All Practice Areas
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const categoryImage = getPracticeCategoryImage(category.slug);
+  const practices = category.practices || [];
+  const overviewParagraphs = Array.isArray(category.description)
+    ? category.description
+    : category.description
+      ? [category.description]
+      : [];
+
+  return (
+    <div className="practice-category-detail-page">
+      <section className="practice-category-intro">
+        <div className="container">
+          <Link to="/practice" className="practice-category-back" aria-label="Back to practice areas">
+            ← Back to Practice Areas
+          </Link>
+
+          <div className="practice-category-intro-grid">
+            <div className="practice-category-intro-copy">
+              <p className="practice-category-kicker">Practice Category</p>
+              <h1>{category.title}</h1>
+
+              {overviewParagraphs.length > 0 ? (
+                <div className="practice-category-overview">
+                  {overviewParagraphs.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
+            {categoryImage ? (
+              <figure className="practice-category-figure">
+                <img src={categoryImage} alt="" />
+              </figure>
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      <section className="practice-category-content">
+        <div className="container">
+          <div className="practice-category-practices">
+            <h2>Related Practices</h2>
+            {practices.length === 0 ? (
+              <p className="practice-category-empty">No practices are currently listed in this category.</p>
+            ) : (
+              <ul className="practice-category-tag-grid" aria-label="Practice areas in this category">
+                {practices.map((practice) => (
+                  <li key={practice} className="practice-category-tag">
+                    {practice}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default PracticeCategoryDetail;

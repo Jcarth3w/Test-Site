@@ -63,3 +63,18 @@ export const practiceAreaImages = {
 export function getPracticeAreaImage(slug) {
   return practiceAreaImages[slug] || homeImages.constructionDefect;
 }
+
+/** Default hero imagery for practice category pages. */
+export const practiceCategoryImages = {
+  'insurance-coverage-contract-bad-faith': homeImages.rvExplosion,
+  'commercial-liability-defense': homeImages.constructionDefect,
+  'property-fire-casualty-claims': homeImages.truckExplosion,
+  'general-liability-casualty-defense': homeImages.crushedVehicle,
+  'transportation-maritime-defense': homeImages.truckingCrash,
+  'construction-products-complex-tort': homeImages.hoverboardFire,
+  'professional-healthcare-management-liability': homeImages.crushedVehicle,
+};
+
+export function getPracticeCategoryImage(slug) {
+  return practiceCategoryImages[slug] || homeImages.constructionDefect;
+}

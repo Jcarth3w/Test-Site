@@ -3,12 +3,21 @@ import { fetchPracticeAreas } from '../../services/practicesApi';
 import { practiceAreasContent } from './content/practiceAreasContent';
 import PracticeAreasHero from './components/PracticeAreasHero';
 import PracticeAreasGrid from './components/PracticeAreasGrid';
+import PracticeCategoryGrid from './components/PracticeCategoryGrid';
+import PracticeAreasLayoutToggle, {
+  getStoredCategoryLayoutEnabled,
+  setStoredCategoryLayoutEnabled,
+} from './components/PracticeAreasLayoutToggle';
 import './styles/PracticeAreas.css';
 
 const PracticeAreas = () => {
+  const layoutConfig = practiceAreasContent.layoutToggle;
   const [practices, setPractices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [categoryLayoutEnabled, setCategoryLayoutEnabled] = useState(() =>
+    getStoredCategoryLayoutEnabled(layoutConfig.categoryLayoutByDefault === true)
+  );
 
   useEffect(() => {
     const loadData = async () => {
@@ -26,8 +35,17 @@ const PracticeAreas = () => {
     loadData();
   }, []);
 
+  const handleLayoutToggle = (next) => {
+    setCategoryLayoutEnabled(next);
+    setStoredCategoryLayoutEnabled(next);
+  };
+
   return (
-    <div className="practice-areas-page">
+    <div className={`practice-areas-page${categoryLayoutEnabled ? ' practice-areas-page--blocks' : ''}`}>
+      {layoutConfig.showDevToggle ? (
+        <PracticeAreasLayoutToggle enabled={categoryLayoutEnabled} onChange={handleLayoutToggle} />
+      ) : null}
+
       <section
         className="practice-areas-hero-band"
         style={{ '--practice-hero-image': `url("${practiceAreasContent.heroBackgroundImage}")` }}
@@ -39,9 +57,15 @@ const PracticeAreas = () => {
         </div>
       </section>
 
-      <section className="practice-areas-main">
+      <section
+        className={`practice-areas-main${categoryLayoutEnabled ? ' practice-areas-main--blocks' : ''}`}
+      >
         <div className="container">
-          <PracticeAreasGrid loading={loading} errorMessage={errorMessage} practices={practices} />
+          {categoryLayoutEnabled ? (
+            <PracticeCategoryGrid />
+          ) : (
+            <PracticeAreasGrid loading={loading} errorMessage={errorMessage} practices={practices} />
+          )}
         </div>
       </section>
     </div>
