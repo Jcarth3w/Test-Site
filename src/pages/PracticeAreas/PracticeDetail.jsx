@@ -1,21 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { fetchPublicAttorneys } from '../../services/attorneysApi';
 import { fetchPracticeBySlug } from '../../services/practicesApi';
+import PracticeRelatedPartners from './components/PracticeRelatedPartners';
+import { getRelatedPartnersForPractice } from './utils/practiceAttorneyMatching';
 import './styles/PracticeDetail.css';
 
 const PracticeDetail = () => {
   const { slug } = useParams();
   const [practice, setPractice] = useState(null);
+  const [attorneys, setAttorneys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const loadPractice = async () => {
       try {
-        const data = await fetchPracticeBySlug(slug);
-        setPractice(data);
+        const [practiceData, attorneysData] = await Promise.all([
+          fetchPracticeBySlug(slug),
+          fetchPublicAttorneys().catch(() => []),
+        ]);
+        setPractice(practiceData);
+        setAttorneys(attorneysData);
       } catch (error) {
         setPractice(null);
+        setAttorneys([]);
         setErrorMessage('Unable to load this practice area right now.');
       } finally {
         setLoading(false);
@@ -24,6 +33,11 @@ const PracticeDetail = () => {
 
     loadPractice();
   }, [slug]);
+
+  const relatedPartners = useMemo(
+    () => (practice ? getRelatedPartnersForPractice(practice, attorneys) : []),
+    [practice, attorneys]
+  );
 
   if (loading) {
     return (
@@ -57,7 +71,7 @@ const PracticeDetail = () => {
           <div className="hero-grid">
             <div className="hero-content">
               <h1>{practice.title}</h1>
-              <p>{practice.description}</p>
+              <p className="hero-description">{practice.content || practice.description}</p>
             </div>
             {practice.image && (
               <div className="hero-image">
@@ -65,25 +79,7 @@ const PracticeDetail = () => {
               </div>
             )}
           </div>
-        </div>
-      </section>
-      <section className="practice-content">
-        <div className="container">
-          <div className="content-wrapper">
-            <div className="content-text">
-              <p>{practice.content}</p>
-            </div>
-            <div className="content-cta">
-              <h3>Ready to Discuss Your Case?</h3>
-              <p>Get a free, confidential case review with our experienced attorneys.</p>
-              <Link
-                to={{ pathname: '/attorneys', search: `?q=${encodeURIComponent(practice.title)}` }}
-                className="btn btn-primary"
-              >
-                Find an attorney
-              </Link>
-            </div>
-          </div>
+          <PracticeRelatedPartners partners={relatedPartners} />
         </div>
       </section>
     </div>
