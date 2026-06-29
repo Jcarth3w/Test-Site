@@ -14,34 +14,42 @@ export const homeContent = {
     {
       image: homeImages.truckExplosion,
       caption: 'Battle-Tested Attorneys. Battle-Proven Results.',
+      isFire: true,
     },
     {
       image: homeImages.burningGolfCart,
       caption: 'Practical Counsel Under Pressure',
+      isFire: true,
     },
     {
       image: homeImages.catastrophicFireFirm2,
       caption: 'Unmatched Experience',
+      isFire: true,
     },
     {
       image: homeImages.hoverboardFire,
       caption: 'Product and Causation Expertise',
+      isFire: true,
     },
     {
       image: homeImages.truckingCrash,
       caption: 'Nationwide Response When It Matters Most',
+      isFire: false,
     },
     {
       image: homeImages.autoAx,
       caption: 'Vehicle Fire and Causation Expertise',
+      isFire: false,
     },
     {
       image: homeImages.boatFire,
       caption: 'Marine and Vessel Loss Response',
+      isFire: true,
     },
     {
       image: homeImages.constructionDef,
       caption: 'Construction Defect and Complex Property Claims',
+      isFire: false,
     },
   ],
 
@@ -118,7 +126,8 @@ export const homeContent = {
   aboutSection: {
     eyebrow: 'Who We Are',
     title: 'Experienced Counsel, Nationwide Reach',
-    combinedExperienceYears: 30,
+    combinedExperienceYears: 80,
+    practiceAreaCount: 33,
     image: homeImages.laurenceHLeavitt,
     imageAlt: 'Attorney on site at a loss scene',
   },

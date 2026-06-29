@@ -1,7 +1,7 @@
 .home-practice-areas {
   position: relative;
   overflow: hidden;
-  padding: 2.5rem 1.5rem 2.75rem;
+  padding: 1.65rem 1.5rem 2.75rem;
   background: linear-gradient(180deg, #f7f8fb 0%, #eef2f7 100%);
 }
 
@@ -28,7 +28,7 @@
   display: grid;
   grid-template-columns: minmax(200px, 0.38fr) minmax(0, 0.62fr);
   gap: 2.5rem 3.5rem;
-  align-items: center;
+  align-items: start;
 }
 
 .home-practice-areas-intro {

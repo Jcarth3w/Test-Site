@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchPracticeAreas } from '../../../services/practicesApi';
 import { fetchPublicOffices } from '../../../services/officesApi';
 import { fetchPublicAttorneys } from '../../../services/attorneysApi';
 import { useCountUpStats, useInView } from '../../../hooks/useInView';
@@ -8,27 +7,20 @@ import { firmStats } from '../content/aboutContent';
 const FirmStats = () => {
   const [ref, isInView] = useInView();
   const [counts, setCounts] = useState({
-    practiceCount: 0,
+    practiceCount: firmStats.practiceAreaCount ?? 0,
     officeCount: 0,
     attorneyCount: 0,
-    yearsExperience: new Date().getFullYear() - firmStats.foundedYear,
+    yearsExperience: firmStats.combinedExperienceYears ?? 0,
   });
 
   useEffect(() => {
     let cancelled = false;
 
     const loadCounts = async () => {
-      const yearsExperience = new Date().getFullYear() - firmStats.foundedYear;
-      let practiceCount = 0;
+      const yearsExperience = firmStats.combinedExperienceYears ?? 0;
+      const practiceCount = firmStats.practiceAreaCount ?? 0;
       let officeCount = 0;
       let attorneyCount = 0;
-
-      try {
-        const practices = await fetchPracticeAreas();
-        practiceCount = practices.length;
-      } catch {
-        practiceCount = 0;
-      }
 
       try {
         const offices = await fetchPublicOffices();
@@ -61,10 +53,12 @@ const FirmStats = () => {
     () => [
       {
         value: animatedCounts.yearsExperience,
-        label: 'Years of firm history',
+        suffix: '+',
+        label: 'Years combined experience',
       },
       {
         value: animatedCounts.practiceCount,
+        suffix: '+',
         label: 'Practice areas',
       },
       {
@@ -98,7 +92,9 @@ const FirmStats = () => {
               className="firm-stat about-reveal about-reveal--card"
               style={{ '--about-reveal-delay': `${index * 70}ms` }}
             >
-              <span className="firm-stat-value">{stat.value > 0 ? stat.value : '—'}</span>
+              <span className="firm-stat-value">
+                {stat.value > 0 ? `${stat.value}${stat.suffix || ''}` : '—'}
+              </span>
               <span className="firm-stat-label">{stat.label}</span>
             </li>
           ))}

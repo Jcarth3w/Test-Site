@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/HeroSlider.css';
 import { homeContent } from '../content/homeContent';
+import { shuffleHeroSlides } from '../utils/shuffleHeroSlides';
 
 const HeroSlider = () => {
-  const slides = homeContent.heroImageSlides;
+  const slides = useMemo(
+    () => shuffleHeroSlides(homeContent.heroImageSlides),
+    []
+  );
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -12,7 +16,7 @@ const HeroSlider = () => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 10000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   const nextSlide = () => setCurrent((prev) => (prev + 1) % slides.length);
   const prevSlide = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
@@ -22,10 +26,17 @@ const HeroSlider = () => {
       <div className="slides">
         {slides.map((slide, index) => (
           <div
-            key={index}
+            key={slide.image}
             className={`slide hero-image-slide ${index === current ? 'active' : ''}`}
-            style={{ '--hero-slide-image': `url("${slide.image}")` }}
-          />
+          >
+            <img
+              src={slide.image}
+              alt=""
+              className="hero-slide-image"
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          </div>
         ))}
       </div>
 

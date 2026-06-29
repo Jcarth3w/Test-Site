@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchPracticeAreas } from '../../../services/practicesApi';
 import { fetchPublicOffices } from '../../../services/officesApi';
 import { useCountUpStats, useInView } from '../../../hooks/useInView';
 import '../styles/HomeShared.css';
@@ -9,7 +8,7 @@ import '../styles/AboutSection.css';
 const AboutSection = ({ section }) => {
   const [ref, isInView] = useInView();
   const [counts, setCounts] = useState({
-    practiceCount: 0,
+    practiceCount: section.practiceAreaCount ?? 0,
     officeCount: 0,
     yearsExperience: section.combinedExperienceYears ?? 0,
   });
@@ -18,15 +17,7 @@ const AboutSection = ({ section }) => {
     let cancelled = false;
 
     const loadCounts = async () => {
-      let practiceCount = 0;
       let officeCount = 0;
-
-      try {
-        const practices = await fetchPracticeAreas();
-        practiceCount = practices.length;
-      } catch {
-        practiceCount = 0;
-      }
 
       try {
         const offices = await fetchPublicOffices();
@@ -37,7 +28,7 @@ const AboutSection = ({ section }) => {
 
       if (!cancelled) {
         setCounts({
-          practiceCount,
+          practiceCount: section.practiceAreaCount ?? 0,
           officeCount,
           yearsExperience: section.combinedExperienceYears ?? 0,
         });
@@ -48,7 +39,7 @@ const AboutSection = ({ section }) => {
     return () => {
       cancelled = true;
     };
-  }, [section.combinedExperienceYears]);
+  }, [section.combinedExperienceYears, section.practiceAreaCount]);
 
   const animatedCounts = useCountUpStats(counts, isInView);
 
@@ -63,6 +54,7 @@ const AboutSection = ({ section }) => {
       },
       {
         value: animatedCounts.practiceCount,
+        suffix: '+',
         label: 'Practice Areas',
         link: '/practice',
         cta: 'View practice areas',
