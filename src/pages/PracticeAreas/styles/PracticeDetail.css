@@ -3,7 +3,7 @@
 }
 
 .practice-hero {
-  padding: 2rem 2rem 4rem;
+  padding: 1.75rem 2rem 3rem;
   background: linear-gradient(135deg, #ffffff 0%, #e8eef6 100%);
 }
 
@@ -31,121 +31,61 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
 }
 
 .hero-content h1 {
+  width: 100%;
+  max-width: 42rem;
   color: #203f5f;
   margin-bottom: 0.8rem;
   font-family: var(--heading);
-  font-size: 3.2rem;
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
   font-weight: 700;
   letter-spacing: -0.03em;
+  text-align: center;
 }
 
-.hero-content p,
 .hero-description {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 42rem;
+}
+
+.hero-description p {
   color: #54687d;
-  font-size: 1.1rem;
+  font-size: 1.02rem;
   line-height: 1.75;
   margin: 0;
-  max-width: 38rem;
 }
 
-
-
-.practice-related-partners {
-  max-width: 1200px;
-  margin: 3.5rem auto 0;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgba(32, 63, 95, 0.1);
-}
-
-.practice-related-partners h3 {
-  color: #203f5f;
-  margin: 0 0 1.75rem;
-  font-size: 1.5rem;
-  font-family: var(--heading);
+.practice-attorneys-btn-wrap {
+  margin-top: 1.25rem;
+  width: 100%;
+  max-width: 42rem;
   text-align: center;
 }
 
-.practice-related-partners-empty {
-  color: #5f6f83;
-  margin: 0 0 1.25rem;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  text-align: center;
-}
-
-.practice-related-partners-link {
-  color: #2f5375;
-  font-weight: 600;
-  text-decoration: none;
-  display: block;
-  text-align: center;
-}
-
-.practice-related-partners-link:hover {
-  text-decoration: underline;
-}
-
-.practice-related-partners-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 2rem 1.5rem;
-}
-
-.practice-related-partner-card {
-  display: flex;
-  flex-direction: column;
+.practice-attorneys-btn {
+  display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  text-align: center;
-  text-decoration: none;
-  color: inherit;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.practice-related-partner-card:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-}
-
-.practice-related-partner-photo {
-  width: 7.5rem;
-  height: 7.5rem;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-  border: 1px solid rgba(32, 63, 95, 0.1);
-  box-shadow: 0 6px 18px rgba(23, 45, 75, 0.1);
-}
-
-.practice-related-partner-photo--placeholder {
-  background: linear-gradient(135deg, #d8e4f0 0%, #b8c9db 100%);
-}
-
-.practice-related-partner-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  min-width: 0;
-}
-
-.practice-related-partner-name {
+  justify-content: center;
+  width: fit-content;
+  padding: 0.5rem 0.9rem;
+  background: #efbe45;
   color: #203f5f;
   font-weight: 700;
-  font-size: 1.05rem;
-  line-height: 1.35;
+  font-size: 0.88rem;
+  text-decoration: none;
+  border-radius: 999px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
-.practice-related-partner-title {
-  color: #5f6f83;
-  font-size: 0.9rem;
-  line-height: 1.4;
+.practice-attorneys-btn:hover {
+  background: #f5d56c;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(23, 45, 75, 0.12);
 }
 
 .btn-primary {
@@ -171,9 +111,9 @@
 .hero-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .hero-image {
@@ -184,7 +124,7 @@
 
 .hero-image img {
   width: 100%;
-  max-width: 500px;
+  max-width: 360px;
   height: auto;
   border-radius: 3px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
@@ -193,21 +133,5 @@
 @media (max-width: 767px) {
   .hero-grid {
     grid-template-columns: 1fr;
-  }
-
-  .practice-related-partners-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.75rem 1.25rem;
-  }
-
-  .practice-related-partner-photo {
-    width: 6.5rem;
-    height: 6.5rem;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  .practice-related-partners-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

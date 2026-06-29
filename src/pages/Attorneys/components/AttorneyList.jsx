@@ -4,6 +4,12 @@ import { fetchPublicAttorneys } from '../../../services/attorneysApi';
 import { fetchPracticeAreas } from '../../../services/practicesApi';
 import AttorneyPhoto from './AttorneyPhoto';
 import { pageHeroImages } from '../../../content/siteImages';
+import {
+  attorneyMatchesPractice,
+  getPracticeDisplayTitle,
+  resolvePracticeFromParam,
+  sortAttorneysForPracticeResults,
+} from '../../PracticeAreas/utils/practiceAttorneyMatching';
 
 function getLastName(name = '') {
   const parts = name.trim().split(/\s+/);
@@ -60,6 +66,7 @@ function normalizePracticeLabel(value = '') {
 const AttorneyList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const qFromUrl = searchParams.get('q') ?? '';
+  const practiceFromUrl = searchParams.get('practice') ?? '';
 
   const [attorneys, setAttorneys] = useState([]);
   const [query, setQuery] = useState(qFromUrl);
@@ -67,11 +74,22 @@ const AttorneyList = () => {
   const [selectedOffice, setSelectedOffice] = useState('all');
   const [selectedPracticeArea, setSelectedPracticeArea] = useState('all');
   const [catalogPracticeTitles, setCatalogPracticeTitles] = useState([]);
+  const [practiceCatalog, setPracticeCatalog] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState('3');
   const columnCount = useGridColumnCount();
+
+  const activePracticeFilter = useMemo(
+    () => resolvePracticeFromParam(practiceFromUrl, practiceCatalog),
+    [practiceFromUrl, practiceCatalog]
+  );
+
+  const activePracticeTitle = useMemo(
+    () => (activePracticeFilter ? getPracticeDisplayTitle(activePracticeFilter, practiceCatalog) : ''),
+    [activePracticeFilter, practiceCatalog]
+  );
 
   useEffect(() => {
     const loadData = async () => {
@@ -81,8 +99,10 @@ const AttorneyList = () => {
       ]);
 
       if (practicesOutcome.status === 'fulfilled') {
+        const practices = practicesOutcome.value;
+        setPracticeCatalog(practices);
         const uniqueByKey = new Map();
-        practicesOutcome.value.forEach((practice) => {
+        practices.forEach((practice) => {
           const title = normalizePracticeLabel(practice.title || '');
           if (!title) return;
           const key = title.toLowerCase();
@@ -92,6 +112,7 @@ const AttorneyList = () => {
           Array.from(uniqueByKey.values()).sort((a, b) => a.localeCompare(b))
         );
       } else {
+        setPracticeCatalog([]);
         setCatalogPracticeTitles([]);
       }
 
@@ -121,8 +142,17 @@ const AttorneyList = () => {
   }, [qFromUrl]);
 
   useEffect(() => {
+    if (!practiceFromUrl || !practiceCatalog.length) return;
+
+    const resolved = resolvePracticeFromParam(practiceFromUrl, practiceCatalog);
+    if (resolved?.title) {
+      setSelectedPracticeArea(resolved.title);
+    }
+  }, [practiceFromUrl, practiceCatalog]);
+
+  useEffect(() => {
     setCurrentPage(1);
-  }, [query, selectedLetter, selectedOffice, selectedPracticeArea, pageSize, columnCount]);
+  }, [query, selectedLetter, selectedOffice, selectedPracticeArea, pageSize, columnCount, practiceFromUrl]);
 
   const officeOptions = Array.from(
     new Set(attorneys.map((attorney) => (attorney.location || '').trim()).filter(Boolean))
@@ -134,42 +164,52 @@ const AttorneyList = () => {
       .filter((letter) => /^[A-Z]$/.test(letter))
   );
 
-  const filteredAttorneys = attorneys.filter((attorney) => {
-    const normalizedQuery = query.trim().toLowerCase();
-    const practiceAreas = Array.isArray(attorney.practice_areas)
-      ? attorney.practice_areas.map((area) => normalizePracticeLabel(area)).filter(Boolean)
-      : [];
+  const filteredAttorneys = useMemo(() => {
+    const matches = attorneys.filter((attorney) => {
+      const normalizedQuery = query.trim().toLowerCase();
+      const practiceAreas = Array.isArray(attorney.practice_areas)
+        ? attorney.practice_areas.map((area) => normalizePracticeLabel(area)).filter(Boolean)
+        : [];
 
-    if (selectedLetter !== 'all') {
-      const lastInitial = getLastNameInitial(attorney.name);
-      if (lastInitial !== selectedLetter) return false;
+      if (selectedLetter !== 'all') {
+        const lastInitial = getLastNameInitial(attorney.name);
+        if (lastInitial !== selectedLetter) return false;
+      }
+
+      if (selectedOffice !== 'all' && (attorney.location || '') !== selectedOffice) {
+        return false;
+      }
+
+      if (activePracticeFilter) {
+        if (!attorneyMatchesPractice(attorney, activePracticeFilter)) return false;
+      } else if (selectedPracticeArea !== 'all') {
+        const selectedKey = normalizePracticeLabel(selectedPracticeArea).toLowerCase();
+        const hasPractice = practiceAreas.some((area) => area.toLowerCase() === selectedKey);
+        if (!hasPractice) return false;
+      }
+
+      if (!normalizedQuery) return true;
+
+      const searchText = [
+        attorney.name,
+        attorney.title,
+        attorney.specialty,
+        attorney.location,
+        practiceAreas.join(' ')
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      return searchText.includes(normalizedQuery);
+    });
+
+    if (activePracticeFilter) {
+      return sortAttorneysForPracticeResults(activePracticeFilter, matches);
     }
 
-    if (selectedOffice !== 'all' && (attorney.location || '') !== selectedOffice) {
-      return false;
-    }
-
-    if (selectedPracticeArea !== 'all') {
-      const selectedKey = normalizePracticeLabel(selectedPracticeArea).toLowerCase();
-      const hasPractice = practiceAreas.some((area) => area.toLowerCase() === selectedKey);
-      if (!hasPractice) return false;
-    }
-
-    if (!normalizedQuery) return true;
-
-    const searchText = [
-      attorney.name,
-      attorney.title,
-      attorney.specialty,
-      attorney.location,
-      practiceAreas.join(' ')
-    ]
-      .filter(Boolean)
-      .join(' ')
-      .toLowerCase();
-
-    return searchText.includes(normalizedQuery);
-  });
+    return matches;
+  }, [attorneys, query, selectedLetter, selectedOffice, selectedPracticeArea, activePracticeFilter]);
 
   const rowsPerPage = pageSize === 'all' ? null : Number(pageSize);
   const attorneysPerPage = rowsPerPage
@@ -208,7 +248,8 @@ const AttorneyList = () => {
     query.trim().length > 0 ||
     selectedLetter !== 'all' ||
     selectedOffice !== 'all' ||
-    selectedPracticeArea !== 'all';
+    selectedPracticeArea !== 'all' ||
+    Boolean(practiceFromUrl);
 
   const clearFilters = () => {
     setQuery('');
@@ -219,6 +260,23 @@ const AttorneyList = () => {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       next.delete('q');
+      next.delete('practice');
+      return next;
+    }, { replace: true });
+  };
+
+  const handlePracticeAreaChange = (value) => {
+    setSelectedPracticeArea(value);
+    setCurrentPage(1);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (value === 'all') {
+        next.delete('practice');
+      } else {
+        const resolved = resolvePracticeFromParam(value, practiceCatalog);
+        const slug = resolved?.slug || value;
+        next.set('practice', slug);
+      }
       return next;
     }, { replace: true });
   };
@@ -226,7 +284,7 @@ const AttorneyList = () => {
   return (
     <>
       <section
-        className="attorney-hero-band"
+        className={`attorney-hero-band${activePracticeFilter ? ' attorney-hero-band--compact' : ''}`}
         style={{ '--attorney-hero-image': `url("${pageHeroImages.attorneys}")` }}
         aria-labelledby="attorney-directory-heading"
       >
@@ -235,13 +293,20 @@ const AttorneyList = () => {
           <h1 id="attorney-directory-heading" className="attorney-hero-title">
             Meet Our Attorneys
           </h1>
-          <p className="attorney-hero-lead">
-            Nationwide counsel for complex fire, explosion, and catastrophic claims.
-          </p>
+          {!activePracticeFilter && (
+            <p className="attorney-hero-lead">
+              Nationwide counsel for complex fire, explosion, and catastrophic claims.
+            </p>
+          )}
+          {activePracticeTitle && (
+            <p className="attorney-hero-filter-note">
+              Showing results for {activePracticeTitle}
+            </p>
+          )}
         </div>
       </section>
 
-      <section className="attorney-list">
+      <section className={`attorney-list${activePracticeFilter ? ' attorney-list--filtered' : ''}`}>
         <div className="container">
         {loading && <p>Loading attorneys...</p>}
         {!loading && errorMessage && <p>{errorMessage}</p>}
@@ -249,7 +314,9 @@ const AttorneyList = () => {
         {!loading && attorneys.length > 0 && (
           <div className="attorney-layout">
             <div className="attorney-toolbar" aria-label="Attorney filters">
-              <h2 className="attorney-directory-title">Find an Attorney</h2>
+              {!activePracticeFilter && (
+                <h2 className="attorney-directory-title">Find an Attorney</h2>
+              )}
               <div className="attorney-search-wrap">
                 <input
                   type="search"
@@ -312,7 +379,7 @@ const AttorneyList = () => {
                     id="practice-filter"
                     className="attorney-filter-select"
                     value={selectedPracticeArea}
-                    onChange={(event) => setSelectedPracticeArea(event.target.value)}
+                    onChange={(event) => handlePracticeAreaChange(event.target.value)}
                   >
                     <option value="all">All practice areas</option>
                     {catalogPracticeTitles.map((area) => (

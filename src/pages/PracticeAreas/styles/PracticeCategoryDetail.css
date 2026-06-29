@@ -124,14 +124,36 @@
 }
 
 .practice-category-tag {
+  display: block;
   margin: 0;
   padding: 0.85rem 1rem;
   color: #334a63;
   font-size: 0.94rem;
   line-height: 1.4;
   text-align: left;
+  text-decoration: none;
   border: 1px solid rgba(32, 63, 95, 0.14);
   background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 1px 2px rgba(23, 45, 75, 0.04);
+  transition:
+    border-color 0.22s ease,
+    background 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    color 0.22s ease;
+}
+
+.practice-category-tag:hover {
+  border-color: rgba(62, 102, 142, 0.45);
+  background: #ffffff;
+  color: #203f5f;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(23, 45, 75, 0.1);
+}
+
+.practice-category-tag:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(23, 45, 75, 0.08);
 }
 
 .practice-category-empty {

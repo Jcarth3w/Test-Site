@@ -36,6 +36,14 @@
   text-align: center;
 }
 
+.attorney-hero-band--compact .container {
+  padding: 1.35rem 2rem 1.1rem;
+}
+
+.attorney-hero-band--compact .attorney-hero-title {
+  font-size: clamp(1.55rem, 3.5vw, 2.1rem);
+}
+
 .attorney-hero-title {
   margin: 0;
   color: #203f5f;
@@ -50,6 +58,15 @@
   color: #54687d;
   font-size: 1.02rem;
   line-height: 1.6;
+}
+
+.attorney-hero-filter-note {
+  max-width: 640px;
+  margin: 0.65rem auto 0;
+  color: #6b8198;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-weight: 500;
 }
 
 .attorney-intro {
@@ -84,6 +101,22 @@
 /* Directory page only — avoid collision with ul.attorney-list on profile pages */
 section.attorney-list {
   padding: 2rem 2rem 4rem;
+}
+
+section.attorney-list--filtered {
+  padding-top: 1.25rem;
+}
+
+section.attorney-list--filtered .attorney-layout {
+  gap: 1.35rem;
+}
+
+section.attorney-list--filtered .attorney-search-wrap {
+  margin-bottom: 0.85rem;
+}
+
+section.attorney-list--filtered .attorney-alpha-bar {
+  padding: 0.75rem 0;
 }
 
 section.attorney-list .container {

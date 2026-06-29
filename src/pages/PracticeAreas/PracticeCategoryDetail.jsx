@@ -1,22 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchPracticeCategories } from '../../services/practicesApi';
+import { fetchPracticeAreas, fetchPracticeCategories } from '../../services/practicesApi';
 import { getPracticeCategoryImage } from '../../content/siteImages';
+import { getAttorneySearchPathForLabel } from './utils/practiceAttorneyMatching';
 import './styles/PracticeDetail.css';
 import './styles/PracticeCategoryDetail.css';
 
 const PracticeCategoryDetail = () => {
   const { slug } = useParams();
   const [category, setCategory] = useState(null);
+  const [practiceCatalog, setPracticeCatalog] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const categories = await fetchPracticeCategories();
+        const [categories, practices] = await Promise.all([
+          fetchPracticeCategories(),
+          fetchPracticeAreas().catch(() => []),
+        ]);
         const match = categories.find((item) => item.slug === slug) || null;
         setCategory(match);
+        setPracticeCatalog(practices);
       } catch {
         setCategory(null);
         setErrorMessage('Unable to load this practice category right now.');
@@ -94,14 +100,19 @@ const PracticeCategoryDetail = () => {
       <section className="practice-category-content">
         <div className="container">
           <div className="practice-category-practices">
-            <h2>Related Practices</h2>
+            <h2>View attorneys in related practice areas</h2>
             {practices.length === 0 ? (
               <p className="practice-category-empty">No practices are currently listed in this category.</p>
             ) : (
               <ul className="practice-category-tag-grid" aria-label="Practice areas in this category">
                 {practices.map((practice) => (
-                  <li key={practice} className="practice-category-tag">
-                    {practice}
+                  <li key={practice}>
+                    <Link
+                      to={getAttorneySearchPathForLabel(practice, practiceCatalog)}
+                      className="practice-category-tag"
+                    >
+                      {practice}
+                    </Link>
                   </li>
                 ))}
               </ul>

@@ -5,7 +5,8 @@ import {
   slugifyName,
 } from '../../Attorneys/utils/attorneyUtils';
 
-const MAX_RELATED_PARTNERS = 5;
+export const FIRE_EXPLOSION_SLUGS = new Set(['fire-explosion', 'fire-explostion']);
+const FIRE_EXPLOSION_PARTNER_PRIORITY_COUNT = 5;
 
 const PRACTICE_MATCH_CONFIG = {
   'admiralty-marine': {
@@ -32,8 +33,12 @@ const PRACTICE_MATCH_CONFIG = {
     tags: ['excess liability'],
     bio: ['excess liability'],
   },
+  'fire-explosion': {
+    tags: ['fire & explosion', 'fire & explosions', 'explosions'],
+    bio: ['fire & explosion', 'fire and explosion', 'fire and explosion cases'],
+  },
   'fire-explostion': {
-    tags: ['fire & explosion', 'explosions'],
+    tags: ['fire & explosion', 'fire & explosions', 'explosions'],
     bio: ['fire & explosion', 'fire and explosion', 'fire and explosion cases'],
   },
   'first-party-property': {
@@ -82,8 +87,34 @@ const PRACTICE_MATCH_CONFIG = {
   },
 };
 
+const PRACTICE_LABEL_ALIASES = {
+  'bad faith litigation': 'bad-faith',
+  'breach of contract': 'liability',
+  'construction defect litigation': 'construction-defect',
+  'excess and umbrella coverage litigation': 'excess-liability',
+  'fire & explosions': 'fire-explosion',
+  'fire and casualty claims': 'casualty',
+  'first-party property defense': 'first-party-property',
+  'general liability defense': 'liability',
+  'insurance coverage disputes': 'liability',
+  'maritime and admiralty insurance defense': 'admiralty-marine',
+  'medical malpractice defense': 'medical-malpractice',
+  'personal injury defense': 'personal-injury',
+  'premises liability': 'premises-liability',
+  'products liability': 'products-liability',
+  'professional liability defense': 'professional-liability',
+  'reinsurance disputes': 'reinsurance',
+  'subrogation defense': 'subrogation',
+  'toxic tort defense': 'toxic-torts',
+  'trucking and transportation defense': 'transportation',
+};
+
 function normalizeText(value = '') {
   return String(value).trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function normalizeSlug(value = '') {
+  return normalizeText(value).replace(/\s+/g, '-');
 }
 
 function escapeRegExp(value = '') {
@@ -116,8 +147,34 @@ function areaMatchesPhrase(area, phrase) {
   return false;
 }
 
+function getLastName(name = '') {
+  const parts = String(name).trim().split(/\s+/);
+  return parts.length ? parts[parts.length - 1] : '';
+}
+
+function compareByLastName(left, right) {
+  const lastA = getLastName(left?.name);
+  const lastB = getLastName(right?.name);
+  if (lastA.localeCompare(lastB) !== 0) return lastA.localeCompare(lastB);
+  return String(left?.name || '').localeCompare(String(right?.name || ''));
+}
+
+function compareByDisplayOrder(left, right) {
+  const leftOrder = Number(left?.display_order);
+  const rightOrder = Number(right?.display_order);
+  const leftFinite = Number.isFinite(leftOrder);
+  const rightFinite = Number.isFinite(rightOrder);
+
+  if (leftFinite && rightFinite && leftOrder !== rightOrder) {
+    return leftOrder - rightOrder;
+  }
+  if (leftFinite && !rightFinite) return -1;
+  if (!leftFinite && rightFinite) return 1;
+  return compareByLastName(left, right);
+}
+
 export function getPracticeMatchTerms(practice = {}) {
-  const slug = normalizeText(practice.slug).replace(/\s+/g, '-');
+  const slug = normalizeSlug(practice.slug);
   const title = normalizeText(practice.title);
   const config = PRACTICE_MATCH_CONFIG[slug] || { tags: [title], bio: [title] };
 
@@ -127,7 +184,11 @@ export function getPracticeMatchTerms(practice = {}) {
   };
 }
 
-function attorneyMatchesPractice(attorney, matchTerms) {
+export function attorneyMatchesPractice(attorney, practiceOrMatchTerms) {
+  const matchTerms = Array.isArray(practiceOrMatchTerms?.tags)
+    ? practiceOrMatchTerms
+    : getPracticeMatchTerms(practiceOrMatchTerms);
+
   const practiceAreas = getAttorneyPracticeAreas(attorney);
   const searchableText = [attorney.bio, attorney.specialty, attorney.title].filter(Boolean).join(' ');
 
@@ -138,14 +199,163 @@ function attorneyMatchesPractice(attorney, matchTerms) {
   return matchTerms.bio.some((phrase) => textContainsPhrase(searchableText, phrase));
 }
 
-export function getRelatedPartnersForPractice(practice, attorneys = []) {
-  const matchTerms = getPracticeMatchTerms(practice);
+export function isFireExplosionPractice(practice = {}) {
+  const slug = normalizeSlug(practice.slug);
+  const title = normalizeText(practice.title);
+  if (FIRE_EXPLOSION_SLUGS.has(slug)) return true;
+  return title.includes('fire') && title.includes('explosion');
+}
 
-  return attorneys
+export function sortAttorneysForPracticeResults(practice, attorneys = []) {
+  if (!isFireExplosionPractice(practice)) {
+    return [...attorneys].sort(compareByLastName);
+  }
+
+  const partners = attorneys
     .filter((attorney) => resolveAttorneyLevel(attorney) === 'partner')
-    .filter((attorney) => attorneyMatchesPractice(attorney, matchTerms))
-    .sort((left, right) => String(left.name || '').localeCompare(String(right.name || '')))
-    .slice(0, MAX_RELATED_PARTNERS);
+    .sort(compareByDisplayOrder)
+    .slice(0, FIRE_EXPLOSION_PARTNER_PRIORITY_COUNT);
+
+  const priorityIds = new Set(partners.map((attorney) => attorney.id).filter(Boolean));
+  const priorityNames = new Set(partners.map((attorney) => normalizeText(attorney.name)).filter(Boolean));
+
+  const remaining = attorneys
+    .filter((attorney) => {
+      if (attorney.id && priorityIds.has(attorney.id)) return false;
+      const normalizedName = normalizeText(attorney.name);
+      return !normalizedName || !priorityNames.has(normalizedName);
+    })
+    .sort(compareByLastName);
+
+  return [...partners, ...remaining];
+}
+
+export function getAttorneysForPractice(practice, attorneys = []) {
+  return sortAttorneysForPracticeResults(
+    practice,
+    attorneys.filter((attorney) => attorneyMatchesPractice(attorney, practice))
+  );
+}
+
+const PRACTICE_SLUG_ALIASES = {
+  'fire-explostion': 'fire-explosion',
+};
+
+function slugToDisplayTitle(slug = '') {
+  const knownTitles = {
+    'fire-explosion': 'Fire & Explosion',
+    'first-party-property': 'First-Party Property',
+    'admiralty-marine': 'Admiralty & Marine',
+    'construction-defect': 'Construction Defect',
+    'excess-liability': 'Excess Liability',
+    'general-liability': 'Liability',
+    'professional-liability': 'Professional Liability',
+    'products-liability': 'Products Liability',
+    'personal-injury': 'Personal Injury',
+    'premises-liability': 'Premises Liability',
+    'medical-malpractice': 'Medical Malpractice',
+    'architects-engineers': 'Architects & Engineers',
+    'appeals-trials': 'Appeals & Trials',
+    'insurance-defence': 'Insurance Defence',
+    'mass-torts': 'Toxic Torts',
+    'prof-liability': 'Professional Liability',
+    'product-liability': 'Products Liability',
+    'trucking-accidents': 'Transportation',
+    'wrongful-death': 'Wrongful Death',
+  };
+
+  const normalized = normalizeSlug(slug);
+  if (knownTitles[normalized]) return knownTitles[normalized];
+
+  return normalized
+    .split('-')
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+function isSlugLikeTitle(value = '') {
+  const text = String(value || '').trim();
+  return /^[a-z0-9]+(-[a-z0-9]+)+$/i.test(text);
+}
+
+export function getPracticeDisplayTitle(practice = {}, catalog = []) {
+  if (!practice) return '';
+
+  const slug = normalizeSlug(practice.slug || (isSlugLikeTitle(practice.title) ? practice.title : ''));
+  const aliasedSlug = PRACTICE_SLUG_ALIASES[slug] || slug;
+
+  const fromCatalog = catalog.find((item) => {
+    const itemSlug = normalizeSlug(item.slug);
+    return itemSlug === slug || itemSlug === aliasedSlug;
+  });
+  if (fromCatalog?.title) return fromCatalog.title;
+
+  const title = String(practice.title || '').trim();
+  if (title && !isSlugLikeTitle(title)) return title;
+
+  return slugToDisplayTitle(aliasedSlug || slug);
+}
+
+export function resolvePracticeFromParam(param = '', catalog = []) {
+  const raw = String(param || '').trim();
+  if (!raw) return null;
+
+  const normalizedParam = normalizeSlug(raw);
+  const aliasedParam = PRACTICE_SLUG_ALIASES[normalizedParam] || normalizedParam;
+
+  const bySlug = catalog.find((practice) => {
+    const practiceSlug = normalizeSlug(practice.slug);
+    return practiceSlug === normalizedParam || practiceSlug === aliasedParam;
+  });
+  if (bySlug) return bySlug;
+
+  const normalizedTitle = normalizeText(raw);
+  const byTitle = catalog.find((practice) => normalizeText(practice.title) === normalizedTitle);
+  if (byTitle) return byTitle;
+
+  const aliasSlug = PRACTICE_LABEL_ALIASES[normalizedTitle];
+  if (aliasSlug) {
+    const byAlias = catalog.find((practice) => normalizeSlug(practice.slug) === aliasSlug);
+    if (byAlias) return byAlias;
+  }
+
+  return {
+    slug: aliasedParam,
+    title: slugToDisplayTitle(aliasedParam),
+  };
+}
+
+export function resolvePracticeSlugFromLabel(label = '', catalog = []) {
+  const raw = String(label || '').trim();
+  if (!raw) return '';
+
+  const resolved = resolvePracticeFromParam(raw, catalog);
+  if (resolved?.slug) return resolved.slug;
+
+  const normalizedLabel = normalizeText(raw);
+  const aliasSlug = PRACTICE_LABEL_ALIASES[normalizedLabel];
+  if (aliasSlug) return aliasSlug;
+
+  if (normalizedLabel.startsWith('fire & explosion')) return 'fire-explosion';
+
+  const byPartialTitle = catalog.find((practice) => {
+    const title = normalizeText(practice.title);
+    return normalizedLabel.includes(title) || title.includes(normalizedLabel);
+  });
+  if (byPartialTitle?.slug) return byPartialTitle.slug;
+
+  return normalizeSlug(raw);
+}
+
+export function getAttorneySearchPathForPractice(practice = {}) {
+  const slug = normalizeSlug(practice.slug || practice.title);
+  return `/attorneys?practice=${encodeURIComponent(slug)}`;
+}
+
+export function getAttorneySearchPathForLabel(label = '', catalog = []) {
+  const slug = resolvePracticeSlugFromLabel(label, catalog);
+  return slug ? `/attorneys?practice=${encodeURIComponent(slug)}` : '/attorneys';
 }
 
 export function getAttorneyProfilePath(attorney) {
