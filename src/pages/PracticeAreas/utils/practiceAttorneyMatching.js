@@ -97,11 +97,13 @@ const PRACTICE_LABEL_ALIASES = {
   'first-party property defense': 'first-party-property',
   'general liability defense': 'liability',
   'insurance coverage disputes': 'liability',
+  'insurance defense': 'insurance-defence',
   'maritime and admiralty insurance defense': 'admiralty-marine',
   'medical malpractice defense': 'medical-malpractice',
   'personal injury defense': 'personal-injury',
   'premises liability': 'premises-liability',
-  'products liability': 'products-liability',
+  'product liability': 'product-liability',
+  'products liability': 'product-liability',
   'professional liability defense': 'professional-liability',
   'reinsurance disputes': 'reinsurance',
   'subrogation defense': 'subrogation',
@@ -239,7 +241,56 @@ export function getAttorneysForPractice(practice, attorneys = []) {
 
 const PRACTICE_SLUG_ALIASES = {
   'fire-explostion': 'fire-explosion',
+  'products-liability': 'product-liability',
+  'product-liability': 'products-liability',
 };
+
+function practiceSlugsMatch(left = '', right = '') {
+  const leftSlug = normalizeSlug(left);
+  const rightSlug = normalizeSlug(right);
+  if (!leftSlug || !rightSlug) return false;
+  if (leftSlug === rightSlug) return true;
+
+  const leftAlias = PRACTICE_SLUG_ALIASES[leftSlug] || leftSlug;
+  const rightAlias = PRACTICE_SLUG_ALIASES[rightSlug] || rightSlug;
+  return leftAlias === rightSlug || leftSlug === rightAlias || leftAlias === rightAlias;
+}
+
+function normalizePracticeWords(value = '') {
+  return normalizeText(value).replace(/&/g, 'and');
+}
+
+function findCatalogPracticeForLabel(label = '', catalog = []) {
+  const raw = String(label || '').trim();
+  if (!raw || !catalog.length) return null;
+
+  const normalizedLabel = normalizePracticeWords(raw);
+
+  const byExactTitle = catalog.find(
+    (practice) => normalizePracticeWords(practice.title) === normalizedLabel
+  );
+  if (byExactTitle) return byExactTitle;
+
+  const aliasSlug = PRACTICE_LABEL_ALIASES[normalizedLabel] || PRACTICE_LABEL_ALIASES[normalizeText(raw)];
+  if (aliasSlug) {
+    const byAlias = catalog.find((practice) => practiceSlugsMatch(practice.slug, aliasSlug));
+    if (byAlias) return byAlias;
+  }
+
+  if (normalizedLabel.startsWith('fire and explosion')) {
+    const firePractice = catalog.find((practice) => practiceSlugsMatch(practice.slug, 'fire-explosion'));
+    if (firePractice) return firePractice;
+  }
+
+  const byPartialTitle = catalog.find((practice) => {
+    const title = normalizePracticeWords(practice.title);
+    if (!title || title.length < 8) return false;
+    return normalizedLabel.startsWith(title);
+  });
+  if (byPartialTitle) return byPartialTitle;
+
+  return null;
+}
 
 function slugToDisplayTitle(slug = '') {
   const knownTitles = {
@@ -306,7 +357,7 @@ export function resolvePracticeFromParam(param = '', catalog = []) {
 
   const bySlug = catalog.find((practice) => {
     const practiceSlug = normalizeSlug(practice.slug);
-    return practiceSlug === normalizedParam || practiceSlug === aliasedParam;
+    return practiceSlugsMatch(practiceSlug, normalizedParam) || practiceSlugsMatch(practiceSlug, aliasedParam);
   });
   if (bySlug) return bySlug;
 
@@ -316,7 +367,7 @@ export function resolvePracticeFromParam(param = '', catalog = []) {
 
   const aliasSlug = PRACTICE_LABEL_ALIASES[normalizedTitle];
   if (aliasSlug) {
-    const byAlias = catalog.find((practice) => normalizeSlug(practice.slug) === aliasSlug);
+    const byAlias = catalog.find((practice) => practiceSlugsMatch(practice.slug, aliasSlug));
     if (byAlias) return byAlias;
   }
 
@@ -330,18 +381,20 @@ export function resolvePracticeSlugFromLabel(label = '', catalog = []) {
   const raw = String(label || '').trim();
   if (!raw) return '';
 
-  const resolved = resolvePracticeFromParam(raw, catalog);
-  if (resolved?.slug) return resolved.slug;
+  const catalogMatch = findCatalogPracticeForLabel(raw, catalog);
+  if (catalogMatch?.slug) return catalogMatch.slug;
 
   const normalizedLabel = normalizeText(raw);
   const aliasSlug = PRACTICE_LABEL_ALIASES[normalizedLabel];
   if (aliasSlug) return aliasSlug;
 
-  if (normalizedLabel.startsWith('fire & explosion')) return 'fire-explosion';
+  if (normalizePracticeWords(raw).startsWith('fire and explosion')) return 'fire-explosion';
 
   const byPartialTitle = catalog.find((practice) => {
-    const title = normalizeText(practice.title);
-    return normalizedLabel.includes(title) || title.includes(normalizedLabel);
+    const title = normalizePracticeWords(practice.title);
+    const labelText = normalizePracticeWords(raw);
+    if (!title || title.length < 8) return false;
+    return labelText.startsWith(title);
   });
   if (byPartialTitle?.slug) return byPartialTitle.slug;
 
@@ -356,6 +409,15 @@ export function getAttorneySearchPathForPractice(practice = {}) {
 export function getAttorneySearchPathForLabel(label = '', catalog = []) {
   const slug = resolvePracticeSlugFromLabel(label, catalog);
   return slug ? `/attorneys?practice=${encodeURIComponent(slug)}` : '/attorneys';
+}
+
+export function getPracticeLinkPathForLabel(label = '', catalog = []) {
+  const catalogMatch = findCatalogPracticeForLabel(label, catalog);
+  if (catalogMatch?.slug) {
+    return `/practice/${catalogMatch.slug}`;
+  }
+
+  return getAttorneySearchPathForLabel(label, catalog);
 }
 
 export function getAttorneyProfilePath(attorney) {

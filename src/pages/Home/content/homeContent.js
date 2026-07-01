@@ -54,8 +54,6 @@ export const homeContent = {
   ],
 
   insightsSection: {
-    enabledByDefault: true,
-    showDevToggle: true,
     eyebrow: 'Insights & News',
     title: 'Perspectives on Defense Strategy and Complex Claims',
     lead:
@@ -108,6 +106,7 @@ export const homeContent = {
     ],
   },
 
+  // Spotlight practices with in-depth CMS pages (heavy hitters).
   practiceAreasSection: {
     title: 'Practice Areas',
     viewAllLabel: 'View all practice areas',

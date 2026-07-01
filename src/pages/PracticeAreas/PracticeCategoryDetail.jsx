@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchPracticeAreas, fetchPracticeCategories } from '../../services/practicesApi';
 import { getPracticeCategoryImage } from '../../content/siteImages';
-import { getAttorneySearchPathForLabel } from './utils/practiceAttorneyMatching';
+import { getPracticeLinkPathForLabel } from './utils/practiceAttorneyMatching';
 import './styles/PracticeDetail.css';
 import './styles/PracticeCategoryDetail.css';
 
@@ -100,7 +100,7 @@ const PracticeCategoryDetail = () => {
       <section className="practice-category-content">
         <div className="container">
           <div className="practice-category-practices">
-            <h2>View attorneys in related practice areas</h2>
+            <h2>Related practice areas</h2>
             {practices.length === 0 ? (
               <p className="practice-category-empty">No practices are currently listed in this category.</p>
             ) : (
@@ -108,7 +108,7 @@ const PracticeCategoryDetail = () => {
                 {practices.map((practice) => (
                   <li key={practice}>
                     <Link
-                      to={getAttorneySearchPathForLabel(practice, practiceCatalog)}
+                      to={getPracticeLinkPathForLabel(practice, practiceCatalog)}
                       className="practice-category-tag"
                     >
                       {practice}
