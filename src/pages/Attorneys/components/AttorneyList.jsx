@@ -8,8 +8,9 @@ import {
   attorneyMatchesPractice,
   getPracticeDisplayTitle,
   resolvePracticeFromParam,
-  sortAttorneysForPracticeResults,
 } from '../../PracticeAreas/utils/practiceAttorneyMatching';
+import { attorneyMatchesSearchQuery } from '../utils/attorneySearch';
+import { sortAttorneysByDisplayPriority } from '../utils/attorneyUtils';
 
 function getLastName(name = '') {
   const parts = name.trim().split(/\s+/);
@@ -190,22 +191,18 @@ const AttorneyList = () => {
 
       if (!normalizedQuery) return true;
 
-      const searchText = [
-        attorney.name,
-        attorney.title,
-        attorney.specialty,
-        attorney.location,
-        practiceAreas.join(' ')
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-
-      return searchText.includes(normalizedQuery);
+      return attorneyMatchesSearchQuery(attorney, query);
     });
 
-    if (activePracticeFilter) {
-      return sortAttorneysForPracticeResults(activePracticeFilter, matches);
+    const hasSearchOrFilters =
+      query.trim().length > 0 ||
+      selectedLetter !== 'all' ||
+      selectedOffice !== 'all' ||
+      selectedPracticeArea !== 'all' ||
+      Boolean(activePracticeFilter);
+
+    if (hasSearchOrFilters) {
+      return sortAttorneysByDisplayPriority(matches);
     }
 
     return matches;
@@ -321,7 +318,7 @@ const AttorneyList = () => {
                 <input
                   type="search"
                   className="attorney-search-input"
-                  placeholder="Search attorneys by name, practice area, or office"
+                  placeholder="Search by name, practice area, bio keywords, and more"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   aria-label="Search attorneys"

@@ -183,7 +183,7 @@ export const homeContent = {
 
   finalCta: {
     title: 'Looking for a specific attorney?',
-    searchPlaceholder: 'Search by name',
+    searchPlaceholder: 'Search attorneys by name or keywords',
     link: '/attorneys',
     linkLabel: 'View all attorneys',
   }

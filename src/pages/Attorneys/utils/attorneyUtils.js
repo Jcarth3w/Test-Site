@@ -43,6 +43,57 @@ export function isSeniorAttorney(attorney) {
   return level === 'partner' || level === 'of_counsel';
 }
 
+function normalizeComparableText(value = '') {
+  return String(value).trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function getLastName(name = '') {
+  const parts = String(name).trim().split(/\s+/);
+  return parts.length ? parts[parts.length - 1] : '';
+}
+
+function compareByLastName(left, right) {
+  const lastA = getLastName(left?.name);
+  const lastB = getLastName(right?.name);
+  if (lastA.localeCompare(lastB) !== 0) return lastA.localeCompare(lastB);
+  return String(left?.name || '').localeCompare(String(right?.name || ''));
+}
+
+function compareByDisplayOrder(left, right) {
+  const leftOrder = Number(left?.display_order);
+  const rightOrder = Number(right?.display_order);
+  const leftFinite = Number.isFinite(leftOrder);
+  const rightFinite = Number.isFinite(rightOrder);
+
+  if (leftFinite && rightFinite && leftOrder !== rightOrder) {
+    return leftOrder - rightOrder;
+  }
+  if (leftFinite && !rightFinite) return -1;
+  if (!leftFinite && rightFinite) return 1;
+  return compareByLastName(left, right);
+}
+
+export function sortAttorneysByDisplayPriority(attorneys = []) {
+  const partners = attorneys
+    .filter((attorney) => resolveAttorneyLevel(attorney) === 'partner')
+    .sort(compareByDisplayOrder);
+
+  const priorityIds = new Set(partners.map((attorney) => attorney.id).filter(Boolean));
+  const priorityNames = new Set(
+    partners.map((attorney) => normalizeComparableText(attorney.name)).filter(Boolean)
+  );
+
+  const remaining = attorneys
+    .filter((attorney) => {
+      if (attorney.id && priorityIds.has(attorney.id)) return false;
+      const normalizedName = normalizeComparableText(attorney.name);
+      return !normalizedName || !priorityNames.has(normalizedName);
+    })
+    .sort(compareByDisplayOrder);
+
+  return [...partners, ...remaining];
+}
+
 function escapeVCardValue(value = '') {
   return String(value)
     .replace(/\\/g, '\\\\')

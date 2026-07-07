@@ -1,12 +1,11 @@
 import {
   parseJsonArray,
   practiceAreaLabel,
-  resolveAttorneyLevel,
   slugifyName,
+  sortAttorneysByDisplayPriority,
 } from '../../Attorneys/utils/attorneyUtils';
 
 export const FIRE_EXPLOSION_SLUGS = new Set(['fire-explosion', 'fire-explostion']);
-const FIRE_EXPLOSION_PARTNER_PRIORITY_COUNT = 5;
 
 const PRACTICE_MATCH_CONFIG = {
   'admiralty-marine': {
@@ -149,32 +148,6 @@ function areaMatchesPhrase(area, phrase) {
   return false;
 }
 
-function getLastName(name = '') {
-  const parts = String(name).trim().split(/\s+/);
-  return parts.length ? parts[parts.length - 1] : '';
-}
-
-function compareByLastName(left, right) {
-  const lastA = getLastName(left?.name);
-  const lastB = getLastName(right?.name);
-  if (lastA.localeCompare(lastB) !== 0) return lastA.localeCompare(lastB);
-  return String(left?.name || '').localeCompare(String(right?.name || ''));
-}
-
-function compareByDisplayOrder(left, right) {
-  const leftOrder = Number(left?.display_order);
-  const rightOrder = Number(right?.display_order);
-  const leftFinite = Number.isFinite(leftOrder);
-  const rightFinite = Number.isFinite(rightOrder);
-
-  if (leftFinite && rightFinite && leftOrder !== rightOrder) {
-    return leftOrder - rightOrder;
-  }
-  if (leftFinite && !rightFinite) return -1;
-  if (!leftFinite && rightFinite) return 1;
-  return compareByLastName(left, right);
-}
-
 export function getPracticeMatchTerms(practice = {}) {
   const slug = normalizeSlug(practice.slug);
   const title = normalizeText(practice.title);
@@ -201,35 +174,8 @@ export function attorneyMatchesPractice(attorney, practiceOrMatchTerms) {
   return matchTerms.bio.some((phrase) => textContainsPhrase(searchableText, phrase));
 }
 
-export function isFireExplosionPractice(practice = {}) {
-  const slug = normalizeSlug(practice.slug);
-  const title = normalizeText(practice.title);
-  if (FIRE_EXPLOSION_SLUGS.has(slug)) return true;
-  return title.includes('fire') && title.includes('explosion');
-}
-
-export function sortAttorneysForPracticeResults(practice, attorneys = []) {
-  if (!isFireExplosionPractice(practice)) {
-    return [...attorneys].sort(compareByLastName);
-  }
-
-  const partners = attorneys
-    .filter((attorney) => resolveAttorneyLevel(attorney) === 'partner')
-    .sort(compareByDisplayOrder)
-    .slice(0, FIRE_EXPLOSION_PARTNER_PRIORITY_COUNT);
-
-  const priorityIds = new Set(partners.map((attorney) => attorney.id).filter(Boolean));
-  const priorityNames = new Set(partners.map((attorney) => normalizeText(attorney.name)).filter(Boolean));
-
-  const remaining = attorneys
-    .filter((attorney) => {
-      if (attorney.id && priorityIds.has(attorney.id)) return false;
-      const normalizedName = normalizeText(attorney.name);
-      return !normalizedName || !priorityNames.has(normalizedName);
-    })
-    .sort(compareByLastName);
-
-  return [...partners, ...remaining];
+export function sortAttorneysForPracticeResults(_practice, attorneys = []) {
+  return sortAttorneysByDisplayPriority(attorneys);
 }
 
 export function getAttorneysForPractice(practice, attorneys = []) {
