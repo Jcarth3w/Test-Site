@@ -1,7 +1,7 @@
 -- Varied long-form practice content
-UPDATE practices SET content = 'Maritime casualties are governed by a distinct body of federal law and industry custom. Collisions, cargo losses, allisions, and waterfront injuries require counsel comfortable in admiralty jurisdiction and familiar with how vessels, terminals, and marine contractors actually operate.
+UPDATE practices SET content = 'Maritime casualties are governed by a distinct body of federal law and industry custom. Collisions, cargo losses, allisions, and waterfront injuries require counsel comfortable in maritime jurisdiction and familiar with how vessels, terminals, and marine contractors actually operate.
 
-We represent vessel owners, cargo interests, marine contractors, and insurers from emergency response through trial, coordinating with surveyors, naval architects, and regulatory authorities to preserve evidence and develop specialized defenses.' WHERE slug = 'admiralty-marine';
+We represent vessel owners, cargo interests, marine contractors, and insurers from emergency response through trial, coordinating with surveyors, naval architects, and regulatory authorities to preserve evidence and develop specialized defenses.' WHERE slug = 'marine';
 UPDATE practices SET content = 'When a claim-handling decision is challenged in court, outcomes often turn on documentation, timing, and the reasonableness of the insurer''s conduct—not just the policy language. We defend carriers in first-party and third-party bad faith matters arising from settlement pressure, investigation delays, reservation-of-rights disputes, and alleged failures to investigate or pay.
 
 Our attorneys work inside the claims process as much as in the courtroom, helping clients build defensible files, evaluate extra-contractual exposure early, and respond to systemic or class allegations without losing sight of practical business objectives.' WHERE slug = 'bad-faith';

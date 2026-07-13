@@ -92,8 +92,8 @@ const practices = [
     buttonText: 'Get Legal Support'
   },
   {
-    slug: 'admiralty-marine',
-    title: 'Admiralty & Marine',
+    slug: 'marine',
+    title: 'Marine',
     category: 'defense',
     description: 'Defense and risk counsel for maritime and marine-related claims.',
     buttonText: 'Get Legal Support'

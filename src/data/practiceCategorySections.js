@@ -69,7 +69,7 @@ export const practiceCategorySections = [
       'Automobile liability defense',
       'Trucking and transportation defense',
       'Aviation insurance defense',
-      'Maritime and admiralty insurance defense',
+      'Marine transportation defense',
     ],
   },
   {

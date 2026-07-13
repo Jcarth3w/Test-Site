@@ -50,6 +50,7 @@ export const practiceAreaImages = {
   'professional-liability': homeImages.constructionDefect,
   reinsurance: homeImages.constructionDefect,
   'toxic-torts': homeImages.foodTruck,
+  marine: homeImages.boatFire,
   'admiralty-marine': homeImages.boatFire,
   'admirality-marine': homeImages.boatFire,
   trucking: homeImages.truckingCrash,

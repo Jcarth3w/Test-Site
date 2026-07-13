@@ -15,7 +15,7 @@ export const footerContent = {
     },
     {
       label: 'Facebook',
-      href: 'https://www.facebook.com/MLLLaw',
+      href: 'https://www.facebook.com/profile.php?id=100064706541072',
       icon: 'facebook',
     },
   ],

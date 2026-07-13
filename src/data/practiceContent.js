@@ -36,7 +36,7 @@ We handle facultative and treaty matters involving follow-the-settlements clause
 
 We develop coordinated expert strategy, challenge general-causation assumptions, and manage the procedural demands of MDL and mass-filing environments without losing sight of case-specific defenses.`,
 
-  'admiralty-marine': `Maritime casualties are governed by a distinct body of federal law and industry custom. Collisions, cargo losses, allisions, and waterfront injuries require counsel comfortable in admiralty jurisdiction and familiar with how vessels, terminals, and marine contractors actually operate.
+  marine: `Maritime casualties are governed by a distinct body of federal law and industry custom. Collisions, cargo losses, allisions, and waterfront injuries require counsel comfortable in maritime jurisdiction and familiar with how vessels, terminals, and marine contractors actually operate.
 
 We represent vessel owners, cargo interests, marine contractors, and insurers from emergency response through trial, coordinating with surveyors, naval architects, and regulatory authorities to preserve evidence and develop specialized defenses.`,
 
@@ -110,6 +110,9 @@ We represent insurers and insureds in high-exposure survivorship matters, coordi
 };
 
 const practiceContentAliases = {
+  'admiralty-marine': 'marine',
+  admirality: 'marine',
+  'admirality-marine': 'marine',
   'general-liability': 'liability',
   'product-liability': 'products-liability',
   'prof-liability': 'professional-liability',

@@ -8,9 +8,13 @@ import {
 export const FIRE_EXPLOSION_SLUGS = new Set(['fire-explosion', 'fire-explostion']);
 
 const PRACTICE_MATCH_CONFIG = {
+  marine: {
+    tags: ['marine', 'maritime'],
+    bio: ['marine', 'maritime'],
+  },
   'admiralty-marine': {
-    tags: ['admiralty & marine', 'admiralty', 'marine'],
-    bio: ['admiralty', 'maritime'],
+    tags: ['marine', 'maritime'],
+    bio: ['marine', 'maritime'],
   },
   'bad-faith': {
     tags: ['bad faith'],
@@ -97,7 +101,10 @@ const PRACTICE_LABEL_ALIASES = {
   'general liability defense': 'liability',
   'insurance coverage disputes': 'liability',
   'insurance defense': 'insurance-defence',
-  'maritime and admiralty insurance defense': 'admiralty-marine',
+  'maritime insurance defense': 'marine',
+  'maritime and admiralty insurance defense': 'marine',
+  'admiralty & marine': 'marine',
+  admiralty: 'marine',
   'medical malpractice defense': 'medical-malpractice',
   'personal injury defense': 'personal-injury',
   'premises liability': 'premises-liability',
@@ -189,6 +196,8 @@ const PRACTICE_SLUG_ALIASES = {
   'fire-explostion': 'fire-explosion',
   'products-liability': 'product-liability',
   'product-liability': 'products-liability',
+  'admiralty-marine': 'marine',
+  'admirality-marine': 'marine',
 };
 
 function practiceSlugsMatch(left = '', right = '') {
@@ -242,7 +251,8 @@ function slugToDisplayTitle(slug = '') {
   const knownTitles = {
     'fire-explosion': 'Fire & Explosion',
     'first-party-property': 'First-Party Property',
-    'admiralty-marine': 'Admiralty & Marine',
+    marine: 'Marine',
+    'admiralty-marine': 'Marine',
     'construction-defect': 'Construction Defect',
     'excess-liability': 'Excess Liability',
     'general-liability': 'Liability',

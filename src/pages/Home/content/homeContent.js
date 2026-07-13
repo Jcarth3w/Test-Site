@@ -116,7 +116,7 @@ export const homeContent = {
       'fire-explostion',
       'trucking',
       'product-liability',
-      'admiralty-marine',
+      'marine',
       'construction-defect',
       'casualty',
     ],

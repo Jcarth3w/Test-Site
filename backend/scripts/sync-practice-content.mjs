@@ -8,7 +8,7 @@ const dbPath = path.join(__dirname, '..', 'attorneys.db');
 const sqlPath = path.join(__dirname, 'update-practice-descriptions.sql');
 
 const slugs = [
-  'admiralty-marine',
+  'marine',
   'bad-faith',
   'construction-defect',
   'environmental',
