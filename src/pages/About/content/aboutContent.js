@@ -5,7 +5,7 @@ export const aboutIntro = {
   title: 'Our Firm',
   description:
     'McCoy Leavitt Laskey LLC is a national litigation firm dedicated to helping clients navigate their most significant claims, disputes, and high-stakes matters. While we are widely known for the depth and excellence of our fire and explosion practice, our experience extends well beyond that work to a broad range of complex litigation involving catastrophic losses, product liability, commercial disputes, premises liability, transportation matters, construction-related claims, and other technically and factually demanding cases. We work collaboratively with clients, experts, insurers and stakeholders to deliver practical, trial-ready solutions at every stage—from urgent scene response and early investigation through litigation, resolution and trial.',
-  image: homeImages.sbWildFire,
+  image: homeImages.catastrophicFireFirm3,
   imageAlt: 'Southern California wildfire loss scene',
 };
 

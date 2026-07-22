@@ -4,7 +4,7 @@ export const homeContent = {
   // Lead slide stays first. Remaining slides rotate image + tagline together by practice area.
   heroImageSlides: [
     {
-      image: homeImages.truckExplosion,
+      image: homeImages.catastrophicFireFirm4,
       eyebrow: 'Fire & Explosion',
       tagline: "The Nation's Premier Catastrophic Fire and Explosion Law Firm",
     },

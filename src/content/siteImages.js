@@ -17,8 +17,16 @@ export const homeImages = {
   crushedVehicle: `${HOME}/CrushedVehicle.PNG`,
   burningGolfCart: `${HOME}/BurningGolfCart.webp`,
   catastrophicFireFirm2: `${HOME}/catastrophic-fire-and-explosion-law-firm-2.jpg`,
+  catastrophicFireFirm3: `${HOME}/catastrophic-fire-and-explosion-law-firm-3.jpg`,
+  catastrophicFireFirm4: `${HOME}/catastrophic-fire-and-explosion-law-firm-4.jpg`,
   laurenceHLeavitt: `${HOME}/laurence-h-leavitt-on-scene.jpg`,
   mllSiteInspection: `${HOME}/mll-catastrophic-explosion-site-inspection.jpg`,
+  damagedKitchen: `${HOME}/damaged-kitchen.jpg`,
+  houseWreck: `${HOME}/mll-house-wreck.JPG`,
+  propertyFireCasualtyClaims: `${HOME}/mll-construction-site.jpg`,
+  generalLiability: `${HOME}/Photo-with-experts.jpg`,
+  medMal: `${HOME}/Medical-malpractice.jpg`,
+
 };
 
 /** Subtle hero backgrounds for interior listing pages. */
@@ -67,13 +75,14 @@ export function getPracticeAreaImage(slug) {
 
 /** Default hero imagery for practice category pages. */
 export const practiceCategoryImages = {
-  'insurance-coverage-contract-bad-faith': homeImages.rvExplosion,
-  'commercial-liability-defense': homeImages.constructionDefect,
-  'property-fire-casualty-claims': homeImages.truckExplosion,
-  'general-liability-casualty-defense': homeImages.crushedVehicle,
+  'insurance-coverage-contract-bad-faith': homeImages.damagedKitchen,
+  'commercial-liability-defense': homeImages.houseWreck,
+  'property-fire-casualty-claims': homeImages.propertyFireCasualtyClaims,
+  'general-liability-casualty-defense': homeImages.generalLiability,
   'transportation-maritime-defense': homeImages.truckingCrash,
   'construction-products-complex-tort': homeImages.hoverboardFire,
-  'professional-healthcare-management-liability': homeImages.crushedVehicle,
+  'professional-healthcare-management-liability': homeImages.medMal,
+  
 };
 
 export function getPracticeCategoryImage(slug) {

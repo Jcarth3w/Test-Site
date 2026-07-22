@@ -1,6 +1,7 @@
 .hero-slider {
   position: relative;
-  --home-practice-peek: 13.25rem;
+  /* How much of Practice Areas peeks under the fold — lower = taller hero */
+  --home-practice-peek: 7.5rem;
   height: calc(100svh - var(--navbar-height) - var(--home-practice-peek));
   max-height: calc(100svh - var(--navbar-height) - var(--home-practice-peek));
   overflow: hidden;
@@ -8,23 +9,23 @@
 }
 
 .slides {
-  position: relative;
+  display: flex;
   height: 100%;
+  will-change: transform;
+}
+
+.slides.is-animated {
+  transition: transform 700ms ease;
 }
 
 .slide {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  flex: 0 0 auto;
+  height: 100%;
   display: flex;
   align-items: center;
-  opacity: 0;
-  transition: opacity 700ms ease;
-  pointer-events: none;
-}
-
-.slide.active {
-  opacity: 1;
-  pointer-events: auto;
+  overflow: hidden;
+  background: #091528;
 }
 
 .hero-image-slide {
@@ -148,7 +149,7 @@
 
 @media (max-width: 820px) {
   .hero-slider {
-    --home-practice-peek: 14.5rem;
+    --home-practice-peek: 8.25rem;
   }
 }
 
@@ -171,12 +172,12 @@
 
 @media (max-width: 680px) {
   .hero-slider {
-    --home-practice-peek: 16.5rem;
+    --home-practice-peek: 9rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .slide {
+  .slides.is-animated {
     transition: none;
   }
 

@@ -88,7 +88,7 @@ export const practiceCategorySections = [
   },
   {
     slug: 'professional-healthcare-management-liability',
-    title: 'Professional, Healthcare & Management Liability Defense',
+    title: 'Medical Malpractice & Professional Liability Defense',
     description: [
       'McCoy Leavitt Laskey LLC provides specialized representation to healthcare providers, professional service firms, and their insurers in high-stakes bodily injury and economic loss disputes. We focus on early case evaluation, the application of applicable standards of care, and the strategic management of coverage obligations to protect carrier interests. MLL conducts immediate case evaluation to assess the viability of the claim and the strength of the defense. In healthcare matters, we retain qualified medical experts to evaluate whether the alleged treatment deviation falls below the applicable standard of care. In professional liability matters, we engage industry specialists to assess whether the professional\'s conduct conformed to accepted practices within their discipline. We document the factual record regarding the claimant\'s pre-existing conditions, intervening causes, and comparative fault. By establishing a clear causation analysis early, we provide carriers with an accurate assessment of indemnity exposure and a roadmap for defense strategy.',
     ],
