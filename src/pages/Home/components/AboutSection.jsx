@@ -43,7 +43,7 @@ const AboutSection = ({ section }) => {
       if (!cancelled) {
         setCounts({
           practiceCount: roundDownToNearestFive(section.practiceAreaCount ?? 0),
-          officeCount: roundDownToNearestFive(officeCount),
+          officeCount,
           attorneyCount: roundDownToNearestFive(attorneyCount),
         });
       }

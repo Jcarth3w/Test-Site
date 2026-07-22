@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicOffices } from '../../services/officesApi';
 import { resolveMediaUrl } from '../../services/apiBaseUrl';
+import { OfficeAddress } from './formatOfficeAddress';
 import './styles/Offices.css';
 
 const OfficeIntro = () => {
@@ -75,7 +76,7 @@ const OfficeList = () => {
               )}
               <div className="office-card-content">
                 <h2>{office.name}</h2>
-                {office.address && <p className="office-address">{office.address}</p>}
+                <OfficeAddress address={office.address} className="office-address" />
                 {office.phone && <p className="office-phone">{office.phone}</p>}
                 <span className="office-link-arrow">Learn More →</span>
               </div>

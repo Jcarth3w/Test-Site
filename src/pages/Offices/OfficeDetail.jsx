@@ -4,6 +4,7 @@ import { fetchPublicAttorneys } from '../../services/attorneysApi';
 import { fetchPublicOffices, fetchPublicOfficeBySlug } from '../../services/officesApi';
 import { resolveMediaUrl } from '../../services/apiBaseUrl';
 import OfficeMapEmbed from './components/OfficeMapEmbed';
+import { OfficeAddress } from './formatOfficeAddress';
 import { attorneysForOffice, slugifyAttorneyName } from './officeAttorneyMatch';
 import './styles/Offices.css';
 
@@ -97,9 +98,7 @@ const OfficeDetail = () => {
 
                 <div className="office-detail-content">
                   <h1>{office.name}</h1>
-                  {office.address && (
-                    <p className="office-detail-address">{office.address}</p>
-                  )}
+                  <OfficeAddress address={office.address} className="office-detail-address" />
                   {office.phone && (
                     <p className="office-detail-phone">
                       <strong>Phone:</strong> <a href={`tel:${office.phone}`}>{office.phone}</a>
