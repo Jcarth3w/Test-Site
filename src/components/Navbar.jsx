@@ -17,10 +17,10 @@ const Navbar = () => {
         </button>
         <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
           <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">Who We Are</Link></li>
           <li><Link to="/attorneys">Attorneys</Link></li>
           <li><Link to="/practice">Practice Areas</Link></li>
           <li><Link to="/articles">Insights & News</Link></li>
-          <li><Link to="/about">Who We Are</Link></li>
           <li><Link to="/offices">Locations</Link></li>
         </ul>
       </div>

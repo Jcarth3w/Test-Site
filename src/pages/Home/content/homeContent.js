@@ -1,55 +1,37 @@
 import { homeImages } from '../../../content/siteImages';
 
 export const homeContent = {
-  heroBanner: {
-    eyebrow: '',
-    tagline: 'From First Notice to Resolution Coordinated, Prepared, Direct',
-    primaryCtaLabel: 'Find an attorney',
-    primaryCtaLink: '/attorneys',
-    secondaryCtaLabel: 'Meet Our Attorneys',
-    secondaryCtaLink: '/attorneys'
-  },
-
+  // Lead slide stays first. Remaining slides rotate image + tagline together by practice area.
   heroImageSlides: [
     {
       image: homeImages.truckExplosion,
-      caption: 'Battle-Tested Attorneys. Battle-Proven Results.',
-      isFire: true,
-    },
-    {
-      image: homeImages.burningGolfCart,
-      caption: 'Practical Counsel Under Pressure',
-      isFire: true,
-    },
-    {
-      image: homeImages.catastrophicFireFirm2,
-      caption: 'Unmatched Experience',
-      isFire: true,
-    },
-    {
-      image: homeImages.hoverboardFire,
-      caption: 'Product and Causation Expertise',
-      isFire: true,
+      eyebrow: 'Fire & Explosion',
+      tagline: "The Nation's Premier Catastrophic Fire and Explosion Law Firm",
     },
     {
       image: homeImages.truckingCrash,
-      caption: 'Nationwide Response When It Matters Most',
-      isFire: false,
+      eyebrow: 'Trucking & Transportation',
+      tagline: 'Nationwide Trucking Defense When Every Mile Matters',
     },
     {
-      image: homeImages.autoAx,
-      caption: 'Vehicle Fire and Causation Expertise',
-      isFire: false,
+      image: homeImages.hoverboardFire,
+      eyebrow: 'Product Liability',
+      tagline: 'Product Failure Defense Built on Causation Expertise',
     },
     {
       image: homeImages.boatFire,
-      caption: 'Marine and Vessel Loss Response',
-      isFire: true,
+      eyebrow: 'Marine',
+      tagline: 'Marine and Vessel Loss Response From Dock to Trial',
     },
     {
       image: homeImages.constructionDef,
-      caption: 'Construction Defect and Complex Property Claims',
-      isFire: false,
+      eyebrow: 'Construction Defect',
+      tagline: 'Construction Defect Defense for Complex Property Claims',
+    },
+    {
+      image: homeImages.crushedVehicle,
+      eyebrow: 'Casualty',
+      tagline: 'Casualty Defense for High-Exposure Liability Claims',
     },
   ],
 
@@ -114,18 +96,17 @@ export const homeContent = {
     featuredCount: 6,
     featuredSlugs: [
       'fire-explostion',
-      'trucking',
+      'insurance-defence',
       'product-liability',
-      'marine',
+      'transportation',
       'construction-defect',
-      'casualty',
+      'marine',
     ],
   },
 
   aboutSection: {
     eyebrow: 'Who We Are',
     title: 'Experienced Counsel, Nationwide Reach',
-    combinedExperienceYears: 80,
     practiceAreaCount: 33,
     image: homeImages.laurenceHLeavitt,
     imageAlt: 'Attorney on site at a loss scene',

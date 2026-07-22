@@ -1,16 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicOffices } from '../../../services/officesApi';
+import { fetchPublicAttorneys } from '../../../services/attorneysApi';
 import { useCountUpStats, useInView } from '../../../hooks/useInView';
 import '../styles/HomeShared.css';
 import '../styles/AboutSection.css';
 
+function roundDownToNearestFive(value) {
+  if (!Number.isFinite(value) || value <= 0) return 0;
+  return Math.floor(value / 5) * 5;
+}
+
 const AboutSection = ({ section }) => {
   const [ref, isInView] = useInView();
   const [counts, setCounts] = useState({
-    practiceCount: section.practiceAreaCount ?? 0,
+    practiceCount: roundDownToNearestFive(section.practiceAreaCount ?? 0),
     officeCount: 0,
-    yearsExperience: section.combinedExperienceYears ?? 0,
+    attorneyCount: 0,
   });
 
   useEffect(() => {
@@ -18,6 +24,7 @@ const AboutSection = ({ section }) => {
 
     const loadCounts = async () => {
       let officeCount = 0;
+      let attorneyCount = 0;
 
       try {
         const offices = await fetchPublicOffices();
@@ -26,11 +33,18 @@ const AboutSection = ({ section }) => {
         officeCount = 0;
       }
 
+      try {
+        const attorneys = await fetchPublicAttorneys();
+        attorneyCount = attorneys.length;
+      } catch {
+        attorneyCount = 0;
+      }
+
       if (!cancelled) {
         setCounts({
-          practiceCount: section.practiceAreaCount ?? 0,
-          officeCount,
-          yearsExperience: section.combinedExperienceYears ?? 0,
+          practiceCount: roundDownToNearestFive(section.practiceAreaCount ?? 0),
+          officeCount: roundDownToNearestFive(officeCount),
+          attorneyCount: roundDownToNearestFive(attorneyCount),
         });
       }
     };
@@ -39,18 +53,18 @@ const AboutSection = ({ section }) => {
     return () => {
       cancelled = true;
     };
-  }, [section.combinedExperienceYears, section.practiceAreaCount]);
+  }, [section.practiceAreaCount]);
 
   const animatedCounts = useCountUpStats(counts, isInView);
 
   const highlights = useMemo(
     () => [
       {
-        value: animatedCounts.yearsExperience,
+        value: animatedCounts.attorneyCount,
         suffix: '+',
-        label: 'Years Combined Experience',
-        link: '/about',
-        cta: 'Our story',
+        label: 'Attorneys Strong',
+        link: '/attorneys',
+        cta: 'Meet our team',
       },
       {
         value: animatedCounts.practiceCount,

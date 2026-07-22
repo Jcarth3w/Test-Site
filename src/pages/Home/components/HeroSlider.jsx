@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import '../styles/HeroSlider.css';
 import { homeContent } from '../content/homeContent';
 import { shuffleHeroSlides } from '../utils/shuffleHeroSlides';
@@ -10,11 +9,12 @@ const HeroSlider = () => {
     []
   );
   const [current, setCurrent] = useState(0);
+  const activeSlide = slides[current] ?? slides[0];
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 10000);
+    }, 4500);
     return () => clearInterval(timer);
   }, [slides.length]);
 
@@ -40,22 +40,30 @@ const HeroSlider = () => {
         ))}
       </div>
 
-      <div className="hero-banner-content">
-        <p className="hero-eyebrow">{homeContent.heroBanner.eyebrow}</p>
-        <h1>{homeContent.heroBanner.tagline}</h1>
-        <div className="hero-actions">
-          <Link to={homeContent.heroBanner.primaryCtaLink} className="hero-btn hero-btn-primary">{homeContent.heroBanner.primaryCtaLabel}</Link>
-        </div>
+      <div className="hero-banner-content" key={current}>
+        {activeSlide?.eyebrow ? (
+          <p className="hero-eyebrow">{activeSlide.eyebrow}</p>
+        ) : null}
+        <h1>{activeSlide?.tagline}</h1>
       </div>
 
-      <button className="prev" onClick={prevSlide}>❮</button>
-      <button className="next" onClick={nextSlide}>❯</button>
+      <button className="prev" onClick={prevSlide} type="button" aria-label="Previous slide">❮</button>
+      <button className="next" onClick={nextSlide} type="button" aria-label="Next slide">❯</button>
       <div className="indicators">
-        {slides.map((_, index) => (
+        {slides.map((slide, index) => (
           <span
-            key={index}
+            key={slide.image}
             className={index === current ? 'active' : ''}
             onClick={() => setCurrent(index)}
+            role="button"
+            tabIndex={0}
+            aria-label={`Go to ${slide.eyebrow || 'slide'} ${index + 1}`}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                setCurrent(index);
+              }
+            }}
           ></span>
         ))}
       </div>

@@ -44,28 +44,16 @@ const HomePracticeAreasSection = ({ section }) => {
       return matched;
     }
 
-    const extras = practices.filter((practice) => !seen.has(practice.slug));
-    return [...matched, ...extras].slice(0, section.featuredCount);
+    // Only show explicitly featured practices — never pad with unrelated areas.
+    return matched.slice(0, section.featuredCount);
   }, [practices, section.featuredSlugs, section.featuredCount]);
 
   const [leftColumn, rightColumn] = useMemo(() => {
-    const left = [];
-    const right = [];
-
-    featuredPractices.forEach((practice, index) => {
-      if (index === 0) {
-        left.push(practice);
-        return;
-      }
-
-      if (index % 2 === 1) {
-        right.push(practice);
-      } else {
-        left.push(practice);
-      }
-    });
-
-    return [left, right];
+    const midpoint = Math.ceil(featuredPractices.length / 2);
+    return [
+      featuredPractices.slice(0, midpoint),
+      featuredPractices.slice(midpoint),
+    ];
   }, [featuredPractices]);
 
   return (
