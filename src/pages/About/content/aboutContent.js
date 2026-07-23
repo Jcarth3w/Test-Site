@@ -42,7 +42,6 @@ export const firmPrinciples = {
 
 export const firmStats = {
   foundedYear: 2013,
-  combinedExperienceYears: 80,
   practiceAreaCount: 33,
   staticStats: [
     {

@@ -484,7 +484,7 @@
 
 @media (min-width: 900px) {
   .firm-stats-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.15rem;
   }
 }

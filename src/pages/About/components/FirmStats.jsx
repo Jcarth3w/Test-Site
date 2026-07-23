@@ -4,21 +4,23 @@ import { fetchPublicAttorneys } from '../../../services/attorneysApi';
 import { useCountUpStats, useInView } from '../../../hooks/useInView';
 import { firmStats } from '../content/aboutContent';
 
+function roundDownToNearestFive(value) {
+  if (!Number.isFinite(value) || value <= 0) return 0;
+  return Math.floor(value / 5) * 5;
+}
+
 const FirmStats = () => {
   const [ref, isInView] = useInView();
   const [counts, setCounts] = useState({
-    practiceCount: firmStats.practiceAreaCount ?? 0,
+    practiceCount: roundDownToNearestFive(firmStats.practiceAreaCount ?? 0),
     officeCount: 0,
     attorneyCount: 0,
-    yearsExperience: firmStats.combinedExperienceYears ?? 0,
   });
 
   useEffect(() => {
     let cancelled = false;
 
     const loadCounts = async () => {
-      const yearsExperience = firmStats.combinedExperienceYears ?? 0;
-      const practiceCount = firmStats.practiceAreaCount ?? 0;
       let officeCount = 0;
       let attorneyCount = 0;
 
@@ -37,7 +39,11 @@ const FirmStats = () => {
       }
 
       if (!cancelled) {
-        setCounts({ practiceCount, officeCount, attorneyCount, yearsExperience });
+        setCounts({
+          practiceCount: roundDownToNearestFive(firmStats.practiceAreaCount ?? 0),
+          officeCount,
+          attorneyCount: roundDownToNearestFive(attorneyCount),
+        });
       }
     };
 
@@ -52,11 +58,6 @@ const FirmStats = () => {
   const stats = useMemo(
     () => [
       {
-        value: animatedCounts.yearsExperience,
-        suffix: '+',
-        label: 'Years combined experience',
-      },
-      {
         value: animatedCounts.practiceCount,
         suffix: '+',
         label: 'Practice areas',
@@ -67,6 +68,7 @@ const FirmStats = () => {
       },
       {
         value: animatedCounts.attorneyCount,
+        suffix: '+',
         label: 'Attorneys',
       },
       ...firmStats.staticStats.map((stat) => ({
