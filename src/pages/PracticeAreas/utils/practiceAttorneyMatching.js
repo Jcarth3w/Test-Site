@@ -92,8 +92,13 @@ const PRACTICE_MATCH_CONFIG = {
 
 const PRACTICE_LABEL_ALIASES = {
   'bad faith litigation': 'bad-faith',
+  'bad faith defense': 'bad-faith',
   'breach of contract': 'liability',
   'construction defect litigation': 'construction-defect',
+  'construction litigation': 'construction',
+  'architects & engineers liability': 'architects-engineers',
+  'environmental and toxic tort defense': 'environmental',
+  'product defect and failure claims': 'product-liability',
   'excess and umbrella coverage litigation': 'excess-liability',
   'fire & explosions': 'fire-explosion',
   'fire and casualty claims': 'casualty',

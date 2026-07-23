@@ -38,6 +38,11 @@ export function resolveAttorneyLevel(attorney = {}) {
   return 'associate';
 }
 
+export function isPrincipalAttorney(attorney = {}) {
+  const title = String(attorney.title || '').trim().toLowerCase();
+  return title === 'principal' || /\bprincipal\b/.test(title);
+}
+
 export function isSeniorAttorney(attorney) {
   const level = resolveAttorneyLevel(attorney);
   return level === 'partner' || level === 'of_counsel';
@@ -73,14 +78,17 @@ function compareByDisplayOrder(left, right) {
   return compareByLastName(left, right);
 }
 
+/**
+ * Search/filter results: principals first (by display order), then everyone else (A–Z).
+ */
 export function sortAttorneysByDisplayPriority(attorneys = []) {
-  const partners = attorneys
-    .filter((attorney) => resolveAttorneyLevel(attorney) === 'partner')
+  const principals = attorneys
+    .filter((attorney) => isPrincipalAttorney(attorney))
     .sort(compareByDisplayOrder);
 
-  const priorityIds = new Set(partners.map((attorney) => attorney.id).filter(Boolean));
+  const priorityIds = new Set(principals.map((attorney) => attorney.id).filter(Boolean));
   const priorityNames = new Set(
-    partners.map((attorney) => normalizeComparableText(attorney.name)).filter(Boolean)
+    principals.map((attorney) => normalizeComparableText(attorney.name)).filter(Boolean)
   );
 
   const remaining = attorneys
@@ -89,9 +97,9 @@ export function sortAttorneysByDisplayPriority(attorneys = []) {
       const normalizedName = normalizeComparableText(attorney.name);
       return !normalizedName || !priorityNames.has(normalizedName);
     })
-    .sort(compareByDisplayOrder);
+    .sort(compareByLastName);
 
-  return [...partners, ...remaining];
+  return [...principals, ...remaining];
 }
 
 function escapeVCardValue(value = '') {

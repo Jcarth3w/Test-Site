@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchPracticeAreas, fetchPracticeCategories } from '../../services/practicesApi';
+import {
+  practiceCategorySlugAliases,
+} from '../../data/practiceCategorySections';
 import { getPracticeCategoryImage } from '../../content/siteImages';
 import { getPracticeLinkPathForLabel } from './utils/practiceAttorneyMatching';
 import './styles/PracticeDetail.css';
@@ -20,7 +23,8 @@ const PracticeCategoryDetail = () => {
           fetchPracticeCategories(),
           fetchPracticeAreas().catch(() => []),
         ]);
-        const match = categories.find((item) => item.slug === slug) || null;
+        const resolvedSlug = practiceCategorySlugAliases[slug] || slug;
+        const match = categories.find((item) => item.slug === resolvedSlug) || null;
         setCategory(match);
         setPracticeCatalog(practices);
       } catch {
