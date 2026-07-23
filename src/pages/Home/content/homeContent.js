@@ -46,24 +46,25 @@ export const homeContent = {
       'New articles and firm perspectives are in development. Check back soon or contact us to discuss a topic with our team.',
     showcaseImages: [
       {
-        src: homeImages.constructionDefect,
-        alt: 'Lithum Ion Battery failure',
-        description: 'Faulty lithum ion battery investigation.',
-      },
-      {
         src: homeImages.mllSiteInspection,
         alt: 'Site inspection at a catastrophic loss',
         description: 'Attorneys and experts on site at a catastrophic explosion loss.',
       },
       {
-        src: homeImages.liftAx,
-        alt: 'Construction Lift Crash',
-        description: 'Mechanical lift crash at construction site.',
-      },
-      {
         src: homeImages.sbWildFire,
         alt: 'Southern California wildfire loss',
         description: 'Southern California wildfire scene with widespread property damage.',
+      },
+      {
+        src: homeImages.constructionDefect,
+        alt: 'Lithum Ion Battery failure',
+        description: 'Faulty lithum ion battery investigation.',
+      },
+      {
+        src: homeImages.liftAx,
+        alt: 'Construction Lift Crash',
+        description: 'Mechanical lift crash at construction site.',
+        objectPosition: 'center 30%',
       },
     ],
     placeholders: [

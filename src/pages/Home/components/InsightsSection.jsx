@@ -143,7 +143,16 @@ const InsightsSection = ({ section }) => {
               <div className="insights-showcase-grid">
                 {showcaseImages.map((image) => (
                   <figure key={image.src} className="insights-showcase-figure">
-                    <img src={image.src} alt={image.alt} loading="lazy" />
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      loading="lazy"
+                      style={
+                        image.objectPosition
+                          ? { objectPosition: image.objectPosition }
+                          : undefined
+                      }
+                    />
                     {image.description ? (
                       <figcaption className="insights-showcase-caption">
                         <p>{image.description}</p>
