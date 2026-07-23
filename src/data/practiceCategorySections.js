@@ -34,7 +34,7 @@ export const practiceCategorySections = [
     slug: 'construction-defect-architect-engineer-liability',
     title: 'Construction Defect and Architect & Engineer Liability',
     description: [
-      'Construction defect and design professional claims sit at the intersection of building science, contract allocation, and professional standards of care. McCoy Leavitt Laskey LLC defends insurers, contractors, owners, and architects and engineers in multi-party disputes involving water intrusion, structural failure, envelope performance, and alleged design or coordination errors. 
+      'Construction defect and design professional claims sit at the intersection of building science, contract allocation, and professional standards of care. McCoy Leavitt Laskey LLC defends insurers, contractors, owners, and architects and engineers in multi-party disputes involving water intrusion, structural failure, envelope performance, and alleged design or coordination errors.',
     ],
     practices: [
       'Construction defect litigation',
@@ -77,7 +77,8 @@ export const practiceCategorySections = [
     slug: 'products-liability',
     title: 'Products Liability',
     description: [
-      'Product claims often allege a design flaw, a manufacturing deviation, an inadequate warning, or end-user misuse—frequently several theories at once. McCoy Leavitt Laskey LLC defends manufacturers, distributors, component suppliers, and their insurers in matters involving consumer, industrial, and commercial products, including failures that result in fire, property damage, or serious injury. 
+      'Product claims often allege a design flaw, a manufacturing deviation, an inadequate warning, or end-user misuse—frequently several theories at once. McCoy Leavitt Laskey LLC defends manufacturers, distributors, component suppliers, and their insurers in matters involving consumer, industrial, and commercial products, including failures that result in fire, property damage, or serious injury.',
+    ],
     practices: [
       'Products liability',
       'Product defect and failure claims',
