@@ -2,28 +2,39 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPublicArticles } from '../../services/articlesApi';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
-import { fetchPublicNewsletters } from '../../services/newslettersApi';
-import { resolveMediaUrl } from '../../services/apiBaseUrl';
-import { pageHeroImages, homeImages } from '../../content/siteImages';
-import {
-  CONTENT_GROUPS,
-  getArticleCategory,
-  getActiveGroupSlug,
-  getContentGroup,
-  getFilterMeta,
-  getSubcategoriesForGroup,
-  isGroupSlug,
-  matchesContentFilter,
-} from '../../content/articleCategories';
-import { AuthorByline, AuthorBylineText } from '../../components/AuthorByline';
-import NewsletterSection from './components/NewsletterSection';
+import { homeImages } from '../../content/siteImages';
+import { getArticleCategory } from '../../content/articleCategories';
+import { AuthorBylineText } from '../../components/AuthorByline';
+import { formatAuthorNames, getArticleAuthors } from '../../utils/articleAuthors';
+import { useInView } from '../../hooks/useInView';
 import './styles/Articles.css';
 
-function formatDate(dateString) {
+const SHOWCASE_IMAGES = [
+  {
+    src: homeImages.mllSiteInspection,
+    alt: 'Site inspection at a catastrophic loss',
+    objectPosition: 'center 35%',
+  },
+  {
+    src: homeImages.sbWildFire,
+    alt: 'Southern California wildfire scene',
+  },
+  {
+    src: homeImages.constructionDefect,
+    alt: 'Lithium ion battery investigation',
+  },
+  {
+    src: homeImages.contructionSite,
+    alt: 'Construction site incident',
+    objectPosition: 'center 30%',
+  },
+];
+
+function formatDate(dateString, { short = false } = {}) {
   if (!dateString) return null;
   return new Date(dateString).toLocaleDateString(undefined, {
     year: 'numeric',
-    month: 'long',
+    month: short ? 'short' : 'long',
     day: 'numeric',
   });
 }
@@ -37,279 +48,169 @@ function CategoryBadge({ category }) {
   );
 }
 
-function FeaturedSpotlight({ article, attorneys }) {
+function articleMatchesQuery(article, attorneys, query) {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+
   const category = getArticleCategory(article.category);
-  const group = getContentGroup(article.category);
-  const imageUrl = article.image_url
-    ? resolveMediaUrl(article.image_url)
-    : homeImages.constructionDefect;
+  const authors = formatAuthorNames(getArticleAuthors(article, attorneys));
+  const haystack = [
+    article.title,
+    category.label,
+    category.groupLabel,
+    authors,
+    article.content,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+
+  return haystack.includes(q);
+}
+
+function FeaturedEntry({ article, attorneys }) {
+  const category = getArticleCategory(article.category);
 
   return (
-    <article className={`articles-spotlight articles-spotlight--${group.slug}`}>
-      <Link to={`/articles/${article.slug}`} className="articles-spotlight-media">
-        <img src={imageUrl} alt="" loading="eager" />
-        <span className="articles-spotlight-badge">Latest</span>
-      </Link>
-      <div className="articles-spotlight-body">
+    <article className="articles-featured">
+      <p className="articles-featured-label">Most recent</p>
+      <div className="articles-featured-meta">
         <CategoryBadge category={article.category} />
         {article.publication_date && (
-          <time dateTime={article.publication_date} className="articles-spotlight-date">
+          <time dateTime={article.publication_date}>
             {formatDate(article.publication_date)}
           </time>
         )}
-        <Link to={`/articles/${article.slug}`} className="articles-spotlight-title-link">
-          <h2>{article.title}</h2>
-        </Link>
-        <div className="articles-spotlight-footer">
-          <AuthorByline article={article} attorneys={attorneys} />
-          <Link to={`/articles/${article.slug}`} className="articles-spotlight-cta">
-            Read {category.label.toLowerCase()} →
-          </Link>
-        </div>
       </div>
+      <Link to={`/articles/${article.slug}`} className="articles-featured-title-link">
+        <h2>{article.title}</h2>
+      </Link>
+      <AuthorBylineText article={article} attorneys={attorneys} className="articles-featured-author" />
+      <Link to={`/articles/${article.slug}`} className="articles-featured-cta">
+        Read {category.label.toLowerCase()}
+        <span aria-hidden="true">→</span>
+      </Link>
     </article>
   );
 }
 
-function FeedHeader({ activeFilter, activeFilterMeta, articleCount }) {
-  if (activeFilter === 'all') {
-    return (
-      <header className="articles-feed-header articles-feed-header--home">
-        <div>
-          <h2 className="articles-feed-heading-text">Recent publications</h2>
-          <p className="articles-feed-subheading">
-            {articleCount} {articleCount === 1 ? 'entry' : 'entries'} from our attorneys
-          </p>
-        </div>
-      </header>
-    );
-  }
-
-  const groupSlug = getActiveGroupSlug(activeFilter);
-  const headerClass = groupSlug ?? activeFilter;
-
-  return (
-    <header className={`articles-feed-header articles-feed-header--filtered articles-feed-header--${headerClass}`}>
-      <h2 className="articles-feed-heading-text">{activeFilterMeta.label}</h2>
-      <p className="articles-feed-subheading">
-        {articleCount} {articleCount === 1 ? 'publication' : 'publications'}
-      </p>
-    </header>
-  );
-}
-
-function FilterToolbar({ activeFilter, filterCounts, onSelectFilter }) {
-  const activeGroup = getActiveGroupSlug(activeFilter);
-  const subcategories = activeGroup ? getSubcategoriesForGroup(activeGroup) : [];
-  const activeGroupMeta = activeGroup
-    ? CONTENT_GROUPS.find((group) => group.slug === activeGroup)
-    : null;
-
-  return (
-    <div className="articles-filter-stack">
-      <nav className="articles-toolbar" aria-label="Filter by section">
-        <ul className="articles-toolbar-list">
-          {TOP_FILTER_OPTIONS.map((option) => (
-            <li key={option.slug}>
-              <button
-                type="button"
-                className={`articles-toolbar-item ${
-                  (option.slug === 'all' && activeFilter === 'all')
-                  || (option.slug !== 'all' && activeGroup === option.slug)
-                    ? 'articles-toolbar-item--active'
-                    : ''
-                }`}
-                aria-current={
-                  (option.slug === 'all' && activeFilter === 'all')
-                  || (option.slug !== 'all' && activeGroup === option.slug)
-                    ? 'true'
-                    : undefined
-                }
-                onClick={() => onSelectFilter(option.slug)}
-              >
-                {option.label}
-                <span className="articles-filter-count">{filterCounts[option.slug]}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      {activeGroup && activeGroupMeta && (
-        <nav className="articles-subtoolbar" aria-label={`Filter ${activeGroupMeta.label}`}>
-          <ul className="articles-subtoolbar-list">
-            <li>
-              <button
-                type="button"
-                className={`articles-subtoolbar-item ${activeFilter === activeGroup ? 'articles-subtoolbar-item--active' : ''}`}
-                aria-current={activeFilter === activeGroup ? 'true' : undefined}
-                onClick={() => onSelectFilter(activeGroup)}
-              >
-                All {activeGroupMeta.label}
-                <span className="articles-filter-count">{filterCounts[activeGroup]}</span>
-              </button>
-            </li>
-            {subcategories.map((subcategory) => (
-              <li key={subcategory.slug}>
-                <button
-                  type="button"
-                  className={`articles-subtoolbar-item ${activeFilter === subcategory.slug ? 'articles-subtoolbar-item--active' : ''}`}
-                  aria-current={activeFilter === subcategory.slug ? 'true' : undefined}
-                  onClick={() => onSelectFilter(subcategory.slug)}
-                >
-                  {subcategory.label}
-                  <span className="articles-filter-count">{filterCounts[subcategory.slug]}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
-    </div>
-  );
-}
-
-function CategoryAside({ activeFilter, activeFilterMeta, filterCounts, onSelectFilter }) {
-  if (activeFilter === 'all') return null;
-
-  const activeGroup = getActiveGroupSlug(activeFilter);
-  const activeGroupMeta = CONTENT_GROUPS.find((group) => group.slug === activeGroup);
-  const subcategories = activeGroup ? getSubcategoriesForGroup(activeGroup) : [];
-  const otherGroups = CONTENT_GROUPS.filter((group) => group.slug !== activeGroup);
-  const isSubcategoryFilter = !isGroupSlug(activeFilter);
-
-  return (
-    <aside className={`articles-category-aside articles-category-aside--${activeGroup}`} aria-label="Category navigation">
-      <button
-        type="button"
-        className="articles-category-aside-back"
-        onClick={() => onSelectFilter('all')}
-      >
-        ← All Insights & News
-      </button>
-      <h2 className="articles-category-aside-title">{activeFilterMeta.label}</h2>
-      <p className="articles-category-aside-desc">{activeFilterMeta.description}</p>
-
-      {subcategories.length > 0 && (
-        <div className="articles-category-aside-explore">
-          <h3>{activeGroupMeta.label} types</h3>
-          <ul>
-            <li>
-              <button
-                type="button"
-                className={activeFilter === activeGroup ? 'is-active' : ''}
-                onClick={() => onSelectFilter(activeGroup)}
-              >
-                All {activeGroupMeta.label}
-                <span>{filterCounts[activeGroup]}</span>
-              </button>
-            </li>
-            {subcategories.map((subcategory) => (
-              <li key={subcategory.slug}>
-                <button
-                  type="button"
-                  className={activeFilter === subcategory.slug ? 'is-active' : ''}
-                  onClick={() => onSelectFilter(subcategory.slug)}
-                >
-                  {subcategory.label}
-                  <span>{filterCounts[subcategory.slug]}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {otherGroups.length > 0 && (
-        <div className="articles-category-aside-explore">
-          <h3>Explore more</h3>
-          <ul>
-            {otherGroups.map((group) => (
-              <li key={group.slug}>
-                <button type="button" onClick={() => onSelectFilter(group.slug)}>
-                  {group.label}
-                  <span>{filterCounts[group.slug]}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {isSubcategoryFilter && (
-        <p className="articles-category-aside-note">
-          Part of {activeGroupMeta.label}
-        </p>
-      )}
-    </aside>
-  );
-}
-
-function ArticleRow({ article, isLead, attorneys, showReadCta = false }) {
-  const imageUrl = article.image_url
-    ? resolveMediaUrl(article.image_url)
-    : null;
+function RecentEntry({ article, attorneys }) {
+  const category = getArticleCategory(article.category);
 
   return (
     <li>
-      <Link
-        to={`/articles/${article.slug}`}
-        className={`articles-feed-row ${isLead ? 'articles-feed-row--lead' : ''}`}
-      >
-        {imageUrl && (
-          <div className="articles-feed-thumb">
-            <img src={imageUrl} alt="" loading={isLead ? 'eager' : 'lazy'} />
-          </div>
-        )}
-        <div className="articles-feed-main">
-          <div className="articles-feed-meta">
-            <CategoryBadge category={article.category} />
-            {article.publication_date && (
-              <time dateTime={article.publication_date}>
-                {formatDate(article.publication_date)}
-              </time>
-            )}
-          </div>
-          <h2>{article.title}</h2>
-          <AuthorBylineText article={article} attorneys={attorneys} className="articles-feed-author" />
-          {showReadCta && (
-            <span className="articles-feed-cta">
-              Read {getArticleCategory(article.category).label.toLowerCase()} →
-            </span>
+      <Link to={`/articles/${article.slug}`} className="articles-recent-row">
+        <div className="articles-recent-meta">
+          <CategoryBadge category={article.category} />
+          {article.publication_date && (
+            <time dateTime={article.publication_date}>
+              {formatDate(article.publication_date, { short: true })}
+            </time>
           )}
         </div>
+        <div className="articles-recent-main">
+          <h3>{article.title}</h3>
+          <AuthorBylineText article={article} attorneys={attorneys} className="articles-recent-author" />
+        </div>
+        <span className="articles-recent-cta">
+          Read {category.label.toLowerCase()}
+          <span aria-hidden="true">→</span>
+        </span>
       </Link>
     </li>
   );
 }
 
-const TOP_FILTER_OPTIONS = [
-  { slug: 'all', label: 'All' },
-  ...CONTENT_GROUPS.map(({ slug, label }) => ({ slug, label })),
-];
+function ArticlesShowcase() {
+  return (
+    <aside className="articles-showcase" aria-label="Firm photography">
+      <div className="articles-showcase-grid">
+        {SHOWCASE_IMAGES.map((image, index) => (
+          <figure
+            key={image.src}
+            className={`articles-showcase-figure articles-showcase-figure--${index + 1}`}
+          >
+            <img
+              src={image.src}
+              alt={image.alt}
+              loading={index < 2 ? 'eager' : 'lazy'}
+              style={
+                image.objectPosition
+                  ? { objectPosition: image.objectPosition }
+                  : undefined
+              }
+            />
+          </figure>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+function ArticlesBody({ articles, attorneys, query }) {
+  const [ref, isInView] = useInView({ threshold: 0.06 });
+  const featured = articles[0] ?? null;
+  const rest = articles.slice(1);
+
+  return (
+    <div ref={ref} className={`articles-layout${isInView ? ' is-in-view' : ''}`}>
+      <div className="articles-editorial">
+        {featured && (
+          <div className="articles-reveal" style={{ '--articles-reveal-delay': '80ms' }}>
+            <FeaturedEntry article={featured} attorneys={attorneys} />
+          </div>
+        )}
+
+        {rest.length > 0 && (
+          <section
+            className="articles-recent articles-reveal"
+            style={{ '--articles-reveal-delay': '160ms' }}
+            aria-labelledby="articles-recent-heading"
+          >
+            <header className="articles-recent-header">
+              <h2 id="articles-recent-heading">
+                {query.trim() ? 'More matches' : 'More recent'}
+              </h2>
+            </header>
+            <ul className="articles-recent-list">
+              {rest.map((article) => (
+                <RecentEntry
+                  key={article.id}
+                  article={article}
+                  attorneys={attorneys}
+                />
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+
+      <div className="articles-reveal" style={{ '--articles-reveal-delay': '120ms' }}>
+        <ArticlesShowcase />
+      </div>
+    </div>
+  );
+}
 
 const Articles = () => {
   const [articles, setArticles] = useState([]);
   const [attorneys, setAttorneys] = useState([]);
-  const [newsletters, setNewsletters] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [query, setQuery] = useState('');
+  const [sectionRef, sectionInView] = useInView({ threshold: 0.08 });
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [articlesData, attorneysData, newslettersData] = await Promise.all([
+        const [articlesData, attorneysData] = await Promise.all([
           fetchPublicArticles(),
           fetchPublicAttorneys(),
-          fetchPublicNewsletters(),
         ]);
         setArticles(articlesData);
         setAttorneys(attorneysData);
-        setNewsletters(newslettersData);
       } catch {
         setArticles([]);
         setAttorneys([]);
-        setNewsletters([]);
       } finally {
         setLoading(false);
       }
@@ -318,122 +219,71 @@ const Articles = () => {
     loadData();
   }, []);
 
-  const filteredArticles = useMemo(() => {
-    if (activeFilter === 'all') return articles;
-    return articles.filter((article) => matchesContentFilter(article.category, activeFilter));
-  }, [articles, activeFilter]);
-
-  const activeFilterMeta = activeFilter === 'all'
-    ? null
-    : getFilterMeta(activeFilter);
-
-  const filterCounts = useMemo(() => {
-    const counts = { all: articles.length };
-    CONTENT_GROUPS.forEach((group) => {
-      counts[group.slug] = articles.filter((article) => matchesContentFilter(article.category, group.slug)).length;
-      group.subcategories.forEach((subcategory) => {
-        counts[subcategory.slug] = articles.filter(
-          (article) => matchesContentFilter(article.category, subcategory.slug)
-        ).length;
-      });
-    });
-    return counts;
-  }, [articles]);
-
-  const isHomeView = activeFilter === 'all';
-  const spotlightArticle = isHomeView ? filteredArticles[0] ?? null : null;
-  const feedArticles = isHomeView ? filteredArticles.slice(1) : filteredArticles;
+  const filteredArticles = useMemo(
+    () => articles.filter((article) => articleMatchesQuery(article, attorneys, query)),
+    [articles, attorneys, query]
+  );
 
   return (
     <main className="articles-page">
       <section
-        className="articles-hero"
-        style={{ '--page-hero-image': `url("${pageHeroImages.articles}")` }}
+        ref={sectionRef}
+        className={`articles-stage${sectionInView ? ' is-in-view' : ''}`}
+        aria-labelledby="articles-heading"
       >
-        <div className="articles-hero-texture" aria-hidden="true" />
-        <div className="articles-hero-accent" aria-hidden="true" />
-        <div className="container articles-hero-layout">
-          <div className="articles-hero-intro">
-            <h1>Insights & News</h1>
-            <p className="articles-hero-lead">
-              Thought leadership, firm updates, and practical guidance from our attorneys.
-            </p>
-          </div>
-          {newsletters.length > 0 && (
-            <NewsletterSection newsletters={newsletters} />
-          )}
-        </div>
-      </section>
+        <div className="articles-stage-atmosphere" aria-hidden="true" />
+        <div className="container articles-stage-inner">
+          <header className="articles-stage-header">
+            <div className="articles-stage-heading">
+              <h1 id="articles-heading" className="articles-reveal" style={{ '--articles-reveal-delay': '40ms' }}>
+                Insights & News
+              </h1>
+              <div
+                className="articles-stage-rule articles-reveal"
+                style={{ '--articles-reveal-delay': '110ms' }}
+                aria-hidden="true"
+              />
+            </div>
 
-      <section className="articles-hub">
-        <div className="container">
-          <FilterToolbar
-            activeFilter={activeFilter}
-            filterCounts={filterCounts}
-            onSelectFilter={setActiveFilter}
-          />
+            <div className="articles-search articles-reveal" style={{ '--articles-reveal-delay': '160ms' }}>
+              <label htmlFor="articles-search-input" className="visually-hidden">
+                Search publications
+              </label>
+              <input
+                id="articles-search-input"
+                type="search"
+                className="articles-search-input"
+                placeholder="Search by title, topic, or author…"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                autoComplete="off"
+              />
+            </div>
+          </header>
 
           {loading ? (
             <p className="articles-status">Loading articles…</p>
+          ) : articles.length === 0 ? (
+            <div className="articles-empty">
+              <p>No articles available yet.</p>
+            </div>
           ) : filteredArticles.length === 0 ? (
             <div className="articles-empty">
-              <p>
-                {activeFilterMeta
-                  ? `No ${activeFilterMeta.label.toLowerCase()} published yet.`
-                  : 'No articles available yet.'}
-              </p>
-              {activeFilter !== 'all' && (
-                <button
-                  type="button"
-                  className="articles-empty-reset"
-                  onClick={() => setActiveFilter('all')}
-                >
-                  View all publications
-                </button>
-              )}
+              <p>No publications matched “{query.trim()}”.</p>
+              <button
+                type="button"
+                className="articles-empty-reset"
+                onClick={() => setQuery('')}
+              >
+                Clear search
+              </button>
             </div>
           ) : (
-            <div className="articles-columns">
-              <div className="articles-columns-left">
-                {spotlightArticle && (
-                  <FeaturedSpotlight article={spotlightArticle} attorneys={attorneys} />
-                )}
-                <CategoryAside
-                  activeFilter={activeFilter}
-                  activeFilterMeta={activeFilterMeta}
-                  filterCounts={filterCounts}
-                  onSelectFilter={setActiveFilter}
-                />
-              </div>
-
-              <div className="articles-columns-right">
-                <div className="articles-feed">
-                  <FeedHeader
-                    activeFilter={activeFilter}
-                    activeFilterMeta={activeFilterMeta}
-                    articleCount={filteredArticles.length}
-                  />
-
-                  {feedArticles.length > 0 ? (
-                    <ul className="articles-feed-list">
-                      {feedArticles.map((article, index) => (
-                        <ArticleRow
-                          key={article.id}
-                          article={article}
-                          isLead={isHomeView && index === 0}
-                          attorneys={attorneys}
-                          showReadCta
-                        />
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="articles-feed-solo-note">
-                      More publications will appear here as they are published.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
+            <ArticlesBody
+              articles={filteredArticles}
+              attorneys={attorneys}
+              query={query}
+            />
           )}
         </div>
       </section>

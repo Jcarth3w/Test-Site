@@ -8,6 +8,7 @@ export const homeImages = {
   foodTruck: `${HOME}/FoodTruck.jpg`,
   constructionDefect: `${HOME}/ConstructionDefect.JPG`,
   constructionDef: `${HOME}/ConstructionDefect.jpeg`,
+  contructionSite: `${HOME}/mll-construction-defect.jpg`,
   autoAx: `${HOME}/AutoAx.jpg`,
   boatFire: `${HOME}/BoatFire.jpg`,
   liftAx: `${HOME}/LiftAx.png`,
@@ -80,7 +81,7 @@ export const practiceCategoryImages = {
   'construction-defect-architect-engineer-liability': homeImages.houseWreck,
   'general-liability-casualty-defense': homeImages.generalLiability,
   'transportation-maritime-defense': homeImages.truckingCrash,
-  'products-liability': homeImages.hoverboardFire,
+  'products-liability': homeImages.burningGolfCart,
   'professional-healthcare-management-liability': homeImages.medMal,
 };
 

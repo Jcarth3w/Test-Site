@@ -14,7 +14,7 @@ export const homeContent = {
       tagline: 'Nationwide Trucking Defense When Every Mile Matters',
     },
     {
-      image: homeImages.hoverboardFire,
+      image: homeImages.burningGolfCart,
       eyebrow: 'Product Liability',
       tagline: 'Product Failure Defense Built on Causation Expertise',
     },
@@ -61,7 +61,7 @@ export const homeContent = {
         description: 'Faulty lithum ion battery investigation.',
       },
       {
-        src: homeImages.liftAx,
+        src: homeImages.contructionSite,
         alt: 'Construction Lift Crash',
         description: 'Mechanical lift crash at construction site.',
         objectPosition: 'center 30%',

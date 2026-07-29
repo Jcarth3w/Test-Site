@@ -96,6 +96,7 @@
   max-width: 640px;
   margin: 0.5rem auto 0;
   font-size: 0.98rem;
+  text-align: center;
 }
 
 /* Directory page only — avoid collision with ul.attorney-list on profile pages */
