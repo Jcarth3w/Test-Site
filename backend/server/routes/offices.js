@@ -4,6 +4,7 @@ const { db } = require('../db');
 const { authenticateToken } = require('../middleware');
 const { logOperation } = require('../logger');
 const { normalizeBoolean } = require('../helpers');
+const { isUniqueViolation } = require('../pgDb');
 
 // Public: active offices
 router.get('/public/offices', (req, res) => {
@@ -52,7 +53,7 @@ router.post('/offices', authenticateToken, (req, res) => {
     function (err) {
       if (err) {
         logOperation('OFFICE_CREATE_ERROR', { slug, error: err.message, by: req.user?.username });
-        if (err.message.includes('UNIQUE')) {
+        if (isUniqueViolation(err)) {
           return res.status(400).json({ error: 'Slug already exists' });
         }
         return res.status(500).json({ error: 'Database error' });
@@ -78,7 +79,7 @@ router.put('/offices/:id', authenticateToken, (req, res) => {
     function (err) {
       if (err) {
         logOperation('OFFICE_UPDATE_ERROR', { id: req.params.id, slug, error: err.message, by: req.user?.username });
-        if (err.message.includes('UNIQUE')) {
+        if (isUniqueViolation(err)) {
           return res.status(400).json({ error: 'Slug already exists' });
         }
         return res.status(500).json({ error: 'Database error' });

@@ -1,19 +1,19 @@
 /**
- * Download missing /uploads/* files referenced in the local SQLite DB from a
+ * Download missing /uploads/* files referenced in the database from a
  * remote backend (production by default). Skips SVG "image unavailable"
  * placeholders that the API returns when a file is missing on the server.
  *
  * Usage:
- *   npm run sync-uploads
+ *   DATABASE_URL=postgres://... npm run sync-uploads
  *   REMOTE_API_BASE_URL=https://example.com npm run sync-uploads
  */
 
 const fs = require('fs');
 const path = require('path');
-const sqlite3 = require('sqlite3');
+const { Pool } = require('pg');
 
 const backendRoot = path.join(__dirname, '..');
-const DB_PATH = process.env.SQLITE_PATH || path.join(backendRoot, 'attorneys.db');
+const DATABASE_URL = process.env.DATABASE_URL;
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(backendRoot, 'uploads');
 const REMOTE_BASE = String(process.env.REMOTE_API_BASE_URL || 'https://mll-backend.onrender.com').replace(
   /\/+$/,
@@ -66,27 +66,18 @@ function purgeInvalidUploads() {
   return removed;
 }
 
-function queryAll(db, sql) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
-}
-
-async function collectReferencedFilenames(db) {
+async function collectReferencedFilenames(pool) {
   const queries = [
-    'SELECT photo_url AS url FROM attorneys WHERE photo_url IS NOT NULL AND photo_url != ""',
-    'SELECT image_url AS url FROM offices WHERE image_url IS NOT NULL AND image_url != ""',
-    'SELECT image_url AS url FROM practices WHERE image_url IS NOT NULL AND image_url != ""',
-    'SELECT image_url AS url FROM articles WHERE image_url IS NOT NULL AND image_url != ""',
+    "SELECT photo_url AS url FROM attorneys WHERE photo_url IS NOT NULL AND photo_url != ''",
+    "SELECT image_url AS url FROM offices WHERE image_url IS NOT NULL AND image_url != ''",
+    "SELECT image_url AS url FROM practices WHERE image_url IS NOT NULL AND image_url != ''",
+    "SELECT image_url AS url FROM articles WHERE image_url IS NOT NULL AND image_url != ''",
   ];
 
   const filenames = new Set();
 
   for (const sql of queries) {
-    const rows = await queryAll(db, sql);
+    const { rows } = await pool.query(sql);
     for (const row of rows) {
       const filename = extractUploadFilename(row.url);
       if (filename) filenames.add(filename);
@@ -114,8 +105,8 @@ async function downloadFile(filename) {
 }
 
 async function main() {
-  if (!fs.existsSync(DB_PATH)) {
-    console.error(`Database not found: ${DB_PATH}`);
+  if (!DATABASE_URL) {
+    console.error('DATABASE_URL is required');
     process.exit(1);
   }
 
@@ -128,10 +119,18 @@ async function main() {
     console.log(`Purged ${removed} invalid local upload(s).`);
   }
 
-  const db = new sqlite3.Database(DB_PATH);
+  const pool = new Pool({
+    connectionString: DATABASE_URL,
+    ssl:
+      process.env.PGSSL === 'false' || process.env.PGSSL === '0'
+        ? false
+        : DATABASE_URL.includes('localhost') || DATABASE_URL.includes('127.0.0.1')
+          ? false
+          : { rejectUnauthorized: false },
+  });
 
   try {
-    const referenced = await collectReferencedFilenames(db);
+    const referenced = await collectReferencedFilenames(pool);
     const missing = [...referenced].filter((filename) => !fs.existsSync(path.join(UPLOAD_DIR, filename)));
 
     console.log(`Remote source: ${REMOTE_BASE}`);
@@ -165,7 +164,7 @@ async function main() {
       process.exitCode = 1;
     }
   } finally {
-    db.close();
+    await pool.end();
   }
 }
 

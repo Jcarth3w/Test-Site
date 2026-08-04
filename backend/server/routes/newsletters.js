@@ -4,6 +4,7 @@ const { db } = require('../db');
 const { authenticateToken } = require('../middleware');
 const { logOperation } = require('../logger');
 const { normalizeBoolean } = require('../helpers');
+const { isUniqueViolation } = require('../pgDb');
 
 function mapNewsletterRow(row) {
   return {
@@ -77,7 +78,7 @@ router.post('/newsletters', authenticateToken, (req, res) => {
     function (err) {
       if (err) {
         logOperation('NEWSLETTER_CREATE_ERROR', { slug: values.slug, error: err.message, by: req.user?.username });
-        if (err.message.includes('UNIQUE')) {
+        if (isUniqueViolation(err)) {
           return res.status(400).json({ error: 'Slug already exists' });
         }
         return res.status(500).json({ error: 'Database error' });
@@ -114,7 +115,7 @@ router.put('/newsletters/:id', authenticateToken, (req, res) => {
     function (err) {
       if (err) {
         logOperation('NEWSLETTER_UPDATE_ERROR', { id: req.params.id, slug: values.slug, error: err.message, by: req.user?.username });
-        if (err.message.includes('UNIQUE')) {
+        if (isUniqueViolation(err)) {
           return res.status(400).json({ error: 'Slug already exists' });
         }
         return res.status(500).json({ error: 'Database error' });

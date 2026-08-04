@@ -23,7 +23,7 @@ const PORT = getPort();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'jcarthew@mlllaw.com';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'MLLlaw2026!';
-const DB_PATH = process.env.SQLITE_PATH || path.join(__dirname, '..', 'attorneys.db');
+const DATABASE_URL = process.env.DATABASE_URL || '';
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, '..', 'uploads');
 
 const ALLOWED_ORIGINS = parseCsvEnv(process.env.ALLOWED_ORIGINS);
@@ -60,7 +60,7 @@ module.exports = {
   JWT_SECRET,
   ADMIN_USERNAME,
   ADMIN_PASSWORD,
-  DB_PATH,
+  DATABASE_URL,
   UPLOAD_DIR,
   EFFECTIVE_ALLOWED_ORIGINS,
   ATTORNEY_OFFICES,

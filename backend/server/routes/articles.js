@@ -4,6 +4,7 @@ const { db } = require('../db');
 const { authenticateToken } = require('../middleware');
 const { logOperation } = require('../logger');
 const { normalizeBoolean } = require('../helpers');
+const { isUniqueViolation } = require('../pgDb');
 const { isValidArticleCategory, normalizeArticleCategory, getCategoryFilterValues } = require('../articleCategories');
 const { normalizeAuthorIds, serializeAuthorIds, mapArticleRow } = require('../articleHelpers');
 
@@ -15,11 +16,7 @@ function buildPublicArticleQuery({ author_id, category } = {}) {
     const parsedAuthorId = Number.parseInt(author_id, 10);
     query += ` AND (
       author_id = ?
-      OR EXISTS (
-        SELECT 1
-        FROM json_each(COALESCE(NULLIF(author_ids, ''), '[]'))
-        WHERE CAST(json_each.value AS INTEGER) = ?
-      )
+      OR COALESCE(NULLIF(author_ids, ''), '[]')::jsonb @> to_jsonb(?::int)
     )`;
     params.push(parsedAuthorId, parsedAuthorId);
   }
@@ -135,7 +132,7 @@ router.post('/articles', authenticateToken, (req, res) => {
     function (err) {
       if (err) {
         logOperation('ARTICLE_CREATE_ERROR', { slug: values.slug, error: err.message, by: req.user?.username });
-        if (err.message.includes('UNIQUE')) {
+        if (isUniqueViolation(err)) {
           return res.status(400).json({ error: 'Slug already exists' });
         }
         return res.status(500).json({ error: 'Database error' });
@@ -188,7 +185,7 @@ router.put('/articles/:id', authenticateToken, (req, res) => {
           error: err.message,
           by: req.user?.username,
         });
-        if (err.message.includes('UNIQUE')) {
+        if (isUniqueViolation(err)) {
           return res.status(400).json({ error: 'Slug already exists' });
         }
         return res.status(500).json({ error: 'Database error' });

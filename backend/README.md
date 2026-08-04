@@ -1,6 +1,6 @@
 # Attorney CMS Backend
 
-This is a simple Node.js/Express backend with SQLite database for managing attorneys.
+Node.js/Express CMS backed by PostgreSQL.
 
 ## Setup
 
@@ -14,8 +14,9 @@ This is a simple Node.js/Express backend with SQLite database for managing attor
    npm install
    ```
 
-3. Start the server:
+3. Set `DATABASE_URL` to your Postgres connection string, then start:
    ```bash
+   export DATABASE_URL=postgres://postgres:postgres@localhost:5433/test_site
    npm run dev
    ```
 
@@ -47,13 +48,37 @@ Visit http://localhost:5001/admin to access the CMS interface.
 
 ## Database
 
-The app uses SQLite (`attorneys.db`) which will be created automatically on first run.
+The app uses PostgreSQL via `DATABASE_URL`. Schema is created automatically on startup.
+
+### Local Docker Postgres (optional)
+
+```bash
+docker start test-site-pg
+# or create once:
+# docker run -d --name test-site-pg -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=test_site -p 5433:5432 postgres:16-alpine
+```
+
+Connection string:
+
+```
+DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5433/test_site
+```
+
+### Loading a backup into another Postgres (e.g. Render)
+
+If you have `backend/.db-backup/test_site.dump`:
+
+```bash
+pg_restore --clean --if-exists --no-owner --no-acl \
+  -d "$DATABASE_URL" backend/.db-backup/test_site.dump
+```
+
+For Render, use the **External Database URL** as `DATABASE_URL`.
 
 ## Security Notes
 
 - Set strong values for `ADMIN_PASSWORD` and `JWT_SECRET` in production
 - Set `ALLOWED_ORIGINS` to your frontend domain(s)
-- Consider using a more robust database like PostgreSQL for production
 
 ## Render Deployment (Web Service)
 
@@ -62,17 +87,17 @@ Use these settings:
 - Root Directory: `backend`
 - Build Command: `npm install`
 - Start Command: `npm start`
-- Disk mount (recommended): `/var/data`
+- Disk mount (recommended): `/var/data` for uploaded files
+- Attach a Render Postgres instance and set `DATABASE_URL` from it (Blueprint does this via `render.yaml`)
 
 Required env vars:
 
+- `DATABASE_URL=<postgres connection string>`
 - `JWT_SECRET=<strong random value>`
 - `ADMIN_USERNAME=<admin email>`
 - `ADMIN_PASSWORD=<strong password>`
 - `ALLOWED_ORIGINS=https://<your-frontend>.onrender.com,https://<your-backend>.onrender.com`
-- `SQLITE_PATH=/var/data/attorneys.db`
 - `UPLOAD_DIR=/var/data/uploads`
-- `SYNC_BUNDLED_DB=true` — on each deploy, copies `backend/attorneys.db` from the repo onto the persistent disk when the bundled file is newer (so git-pushed DB updates reach production)
 
 You can provide multiple origins as CSV:
 

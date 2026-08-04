@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import pg from 'pg';
 import { getPracticeContent } from '../../src/data/practiceContent.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dbPath = path.join(__dirname, '..', 'attorneys.db');
 const sqlPath = path.join(__dirname, 'update-practice-descriptions.sql');
 
 const slugs = [
@@ -50,7 +50,26 @@ fs.writeFileSync(sqlPath, `${sql}\n`);
 console.log(`Wrote ${sqlPath}`);
 
 if (process.argv.includes('--apply')) {
-  const { execSync } = await import('node:child_process');
-  execSync(`sqlite3 "${dbPath}" < "${sqlPath}"`, { stdio: 'inherit' });
-  console.log('Applied updates to attorneys.db');
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    console.error('DATABASE_URL is required to apply updates');
+    process.exit(1);
+  }
+
+  const pool = new pg.Pool({
+    connectionString: databaseUrl,
+    ssl:
+      process.env.PGSSL === 'false' || process.env.PGSSL === '0'
+        ? false
+        : databaseUrl.includes('localhost') || databaseUrl.includes('127.0.0.1')
+          ? false
+          : { rejectUnauthorized: false },
+  });
+
+  try {
+    await pool.query(sql);
+    console.log('Applied updates to Postgres practices table');
+  } finally {
+    await pool.end();
+  }
 }

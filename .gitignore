@@ -12,7 +12,8 @@ dist
 dist-ssr
 *.local
 
-# Database (uploads are tracked so Render can seed its persistent disk on deploy)
+# Local DB backups (do not commit)
+backend/.db-backup/
 
 # Setup files
 .github/copilot-instructions.md

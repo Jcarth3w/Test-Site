@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const { PORT, UPLOAD_DIR } = require('./config');
+const { ready: dbReady } = require('./db');
 const { corsOriginHandler, requestLogger } = require('./middleware');
 const attorneyRoutes = require('./routes/attorneys');
 const practiceRoutes = require('./routes/practices');
@@ -96,16 +97,23 @@ app.get('/admin/newsletters/form', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'newsletter-form.html'));
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+dbReady
+  .then(() => {
+    const server = app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
 
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is already in use. Stop the other server process, then restart.`);
-    console.error(`  lsof -ti :${PORT} | xargs kill -9`);
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use. Stop the other server process, then restart.`);
+        console.error(`  lsof -ti :${PORT} | xargs kill -9`);
+        process.exit(1);
+      }
+
+      throw err;
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to initialize database:', err.message);
     process.exit(1);
-  }
-
-  throw err;
-});
+  });

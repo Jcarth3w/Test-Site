@@ -18,10 +18,10 @@ services:
         sync: false
       - key: ALLOWED_ORIGINS
         value: https://test-site-vtfd.onrender.com,https://mll-backend.onrender.com
-      - key: SQLITE_PATH
-        value: /var/data/attorneys.db
-      - key: SYNC_BUNDLED_DB
-        value: "true"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: test-site-db
+          property: connectionString
       - key: UPLOAD_DIR
         value: /var/data/uploads
     disks:
@@ -43,3 +43,7 @@ services:
         value: 20
       - key: VITE_API_BASE_URL
         value: https://mll-backend.onrender.com
+
+databases:
+  - name: test-site-db
+    plan: basic-256mb
