@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-ssr
+.env
+.git
+.github
+*.log
+.DS_Store
+backend/node_modules
+backend/uploads
+backend/.db-backup
+backend/.env
