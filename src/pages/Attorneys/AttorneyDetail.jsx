@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchPublicAttorneys } from '../../services/attorneysApi';
 import { fetchPublicArticlesByAuthor } from '../../services/articlesApi';
+import { fetchPublicOffices } from '../../services/officesApi';
+import { attorneyMatchesOffice } from '../Offices/officeAttorneyMatch';
 import AttorneyProfileHero from './components/AttorneyProfileHero';
 import AttorneyDetailBody from './components/AttorneyDetailBody';
 import AttorneyInsightsSection from './components/AttorneyInsightsSection';
@@ -16,16 +18,22 @@ import './styles/Attorneys.css';
 const AttorneyDetail = () => {
   const { slug } = useParams();
   const [attorneys, setAttorneys] = useState([]);
+  const [offices, setOffices] = useState([]);
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const items = await fetchPublicAttorneys();
+        const [items, officeList] = await Promise.all([
+          fetchPublicAttorneys(),
+          fetchPublicOffices().catch(() => []),
+        ]);
         setAttorneys(items);
+        setOffices(Array.isArray(officeList) ? officeList : []);
       } catch {
         setAttorneys([]);
+        setOffices([]);
       } finally {
         setLoading(false);
       }
@@ -38,6 +46,12 @@ const AttorneyDetail = () => {
     () => attorneys.find((item) => slugifyName(item.name) === slug),
     [attorneys, slug]
   );
+
+  const officeHref = useMemo(() => {
+    if (!attorney?.location || !offices.length) return null;
+    const match = offices.find((office) => attorneyMatchesOffice(attorney.location, office.name));
+    return match?.slug ? `/offices/${match.slug}` : null;
+  }, [attorney, offices]);
 
   useEffect(() => {
     if (attorney?.id) {
@@ -90,7 +104,11 @@ const AttorneyDetail = () => {
 
   return (
     <div className="attorneys-page attorney-detail-page">
-      <AttorneyProfileHero attorney={attorney} photoOnRight={photoOnRight} />
+      <AttorneyProfileHero
+        attorney={attorney}
+        photoOnRight={photoOnRight}
+        officeHref={officeHref}
+      />
 
       <div className="attorney-detail-content-band">
         <div className="attorney-detail-page-inner">

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AttorneyPhoto from './AttorneyPhoto';
 import { downloadVCard } from '../utils/attorneyUtils';
 
@@ -11,7 +11,13 @@ const VCardIcon = () => (
   </svg>
 );
 
-const AttorneyProfileHero = ({ attorney, photoOnRight = false }) => {
+const AttorneyProfileHero = ({ attorney, photoOnRight = false, officeHref = null }) => {
+  const location = useLocation();
+  const attorneysListSearch = location.state?.attorneysSearch;
+  const backToAttorneys = attorneysListSearch
+    ? { pathname: '/attorneys', search: attorneysListSearch }
+    : '/attorneys';
+
   const headerClass = photoOnRight
     ? 'attorney-detail-header-layout attorney-detail-header-layout--photo-right'
     : 'attorney-detail-header-layout';
@@ -20,7 +26,7 @@ const AttorneyProfileHero = ({ attorney, photoOnRight = false }) => {
     <header className="attorney-detail-header-band" aria-label="Attorney profile">
       <div className="attorney-detail-header-topbar">
         <div className="attorney-detail-header-topbar-inner">
-          <Link className="attorney-detail-back-link" to="/attorneys">
+          <Link className="attorney-detail-back-link" to={backToAttorneys}>
             <span className="attorney-detail-back-arrow" aria-hidden="true">←</span>
             <span>All Attorneys</span>
           </Link>
@@ -48,7 +54,13 @@ const AttorneyProfileHero = ({ attorney, photoOnRight = false }) => {
 
             <div className="attorney-detail-contact-block">
               {attorney.location && (
-                <p className="attorney-detail-location">{attorney.location}</p>
+                officeHref ? (
+                  <Link className="attorney-detail-location attorney-detail-location-link" to={officeHref}>
+                    {attorney.location}
+                  </Link>
+                ) : (
+                  <p className="attorney-detail-location">{attorney.location}</p>
+                )
               )}
               {attorney.email && (
                 <a className="attorney-detail-contact-link-item" href={`mailto:${attorney.email}`}>

@@ -754,6 +754,18 @@ section.attorney-list .container {
   line-height: 1.45;
 }
 
+a.attorney-detail-location-link {
+  display: inline-block;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a.attorney-detail-location-link:hover,
+a.attorney-detail-location-link:focus-visible {
+  color: #12355d;
+  text-decoration: underline;
+}
+
 .attorney-detail-contact-link-item {
   margin: 0;
   color: #12355d;
