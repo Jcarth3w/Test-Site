@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+
 # Local DB backups (do not commit)
 backend/.db-backup/
 
