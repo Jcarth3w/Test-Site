@@ -12,8 +12,11 @@ dist
 dist-ssr
 *.local
 
-# Environment variables
+# Environment variables / secrets
 .env
+backend/.env
+credentials.json
+**/credentials.json
 
 # Local DB backups (do not commit)
 backend/.db-backup/

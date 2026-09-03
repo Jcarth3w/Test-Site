@@ -532,16 +532,19 @@ section.attorney-list .container {
   z-index: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex: 1 1 auto;
   padding: 0.9rem 1rem 1.05rem;
   background: #f8fbfe;
   border-top: 1px solid #e2eaf3;
+  text-align: center;
 }
 
 .attorney-card h3 {
   color: #203f5f;
   margin: 0 0 0.25rem;
   font-size: 1.12rem;
+  width: 100%;
 }
 
 .attorney-card h3 a {
@@ -560,6 +563,8 @@ section.attorney-list .container {
   margin: 0;
   line-height: 1.4;
   font-size: 0.96rem;
+  width: 100%;
+  text-align: center;
 }
 
 .attorney-card .title {
@@ -570,10 +575,12 @@ section.attorney-list .container {
 .attorney-card-contact {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.15rem;
   margin-top: auto;
   padding-top: 0.7rem;
   border-top: 1px solid #dde6f0;
+  width: 100%;
 }
 
 .attorney-card-phone,
