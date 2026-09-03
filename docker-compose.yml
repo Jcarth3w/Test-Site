@@ -1,6 +1,8 @@
 services:
   db:
-    image: postgres:17-alpine
+    # Must match the major version that initialized postgres_data (PG16).
+    # Bumping to 17+ without migrating/recreating the volume will refuse to start.
+    image: postgres:16-alpine
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
@@ -34,7 +36,8 @@ services:
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
       PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-}
     volumes:
-      - uploads_data:/var/data/uploads
+      # Prefer local uploads for Mac/dev; fall back to named volume in prod-like runs
+      - ${UPLOADS_HOST_PATH:-./backend/uploads}:/var/data/uploads
     ports:
       - "127.0.0.1:5001:5001"
     healthcheck:
@@ -52,4 +55,3 @@ services:
 
 volumes:
   postgres_data:
-  uploads_data:

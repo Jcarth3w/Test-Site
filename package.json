@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:db": "docker start test-site-pg 2>/dev/null || docker compose up -d db",
+    "dev:db": "docker compose up -d db",
     "dev:api": "npm --prefix backend run dev",
     "build": "vite build",
     "lint": "eslint .",
